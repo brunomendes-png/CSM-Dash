@@ -265,7 +265,6 @@ function buildAccounts(cxRows, metaRows) {
       abaixoFaixa: pos === 'Sem faixa na tag' ? null : (pos === 'Abaixo do intervalo' ? 1 : 0),
       situacaoMeta: m ? S(col(m, 'Situação')) : '', link: S(col(r, 'Link Admin de Empresas')),
       ultLogin, diasLogin, ultContato, diasContato, diasTarefa, diasInteracao, tipoContato, nps,
-      hsCx: Nraw(col(r, 'HS')), // Health Score oficial: coluna X (HS) da Exportação de Clientes
     };
   }).map(a => {
     const pen = [];
@@ -282,11 +281,9 @@ function buildAccounts(cxRows, metaRows) {
     if (a.diasLogin != null) { if (a.diasLogin > 15) add('semLogin15', 'Sem login há 15+ dias'); else if (a.diasLogin > 7) add('semLogin7', 'Sem login há 7+ dias'); }
     if (a.abaixoFaixa === 1) add('abaixoFaixa', 'Volume abaixo da faixa');
     if (a.nps != null) { if (a.nps <= 6) add('npsDetrator', 'NPS detrator'); else if (a.nps >= 9) add('npsPromotor', 'NPS promotor'); }
-    const scoreCalc = Math.max(0, Math.min(100, 100 - pen.reduce((s, p) => s + p[1], 0)));
-    // Score oficial: coluna HS da Exportação de Clientes. O cálculo interno só entra se a conta não tiver HS na planilha.
-    const score = a.hsCx != null ? Math.max(0, Math.min(100, Math.round(a.hsCx))) : scoreCalc;
+    const score = Math.max(0, Math.min(100, 100 - pen.reduce((s, p) => s + p[1], 0)));
     const banda = score >= HEALTH_BANDS.saudavel ? 'Saudável' : score >= HEALTH_BANDS.atencao ? 'Atenção' : 'Crítico';
-    return Object.assign(a, { score, scoreCalc, scoreFonte: a.hsCx != null ? 'HS (planilha)' : 'calculado', banda, penalidades: pen });
+    return Object.assign(a, { score, banda, penalidades: pen });
   });
 }
 // ===== Interface =====
@@ -310,7 +307,7 @@ function openList(i) {
   const L = LISTS[i]; if (!L) return;
   const rows = [...L.acc].sort((a, b) => a.score - b.score || (b.gmv || 0) - (a.gmv || 0));
   $('#mtitle').textContent = `${L.title} · ${rows.length} conta${rows.length === 1 ? '' : 's'}`;
-  $('#mbody').innerHTML = rows.length ? `<table><thead><tr><th>Empresa</th><th>Score</th><th>CSM</th><th>IF</th><th>Faixa</th><th>Segmento (Cx)</th><th>Plano</th><th>MRR</th><th>GMV último mês</th><th>Pedidos (média 3m)</th><th>Tickets 30d</th><th>Último login</th><th>Última interação</th><th>Armazenamento</th><th>Saúde API</th><th>Posição vs faixa</th><th>Motivo do risco</th><th>Integrações</th></tr></thead><tbody>${rows.map(a => `<tr><td>${nomeLink(a)}<span class="mut sm">${esc(a.razao !== a.nome ? a.razao : '')}</span></td><td class="${scoreCls(a.score)}" title="${esc('Score: ' + a.scoreFonte + (a.penalidades.length ? ' · Sinais: ' + a.penalidades.map(p => p[0]).join(' · ') : ''))}">${a.score}</td><td>${esc(a.csm)}</td><td>${a.IF}</td><td>${a.fx ? 'Faixa ' + a.fx : '–'}</td><td>${esc(a.seg)}</td><td>${esc(a.plano) || '–'}</td><td>${fmtMil(a.mrr)}</td><td>${fmtMi(a.gmv)}</td><td>${fmtInt(a.media)}</td><td>${a.tickets == null ? '–' : fmtInt(a.tickets)}</td><td class="${a.diasLogin != null && a.diasLogin > 15 ? 'c-red' : a.diasLogin != null && a.diasLogin > 7 ? 'c-yel' : ''}">${fmtDays(a.diasLogin)}</td><td class="${a.diasInteracao != null && a.diasInteracao > 60 ? 'c-red' : a.diasInteracao != null && a.diasInteracao > 30 ? 'c-yel' : ''}">${fmtDays(a.diasInteracao)}</td><td class="${armCls(a.arm)}">${a.arm == null ? '–' : Math.round(a.arm) + '%'}</td><td class="${apiCls(a.api)}">${a.api == null ? '–' : Math.round(a.api) + '%'}</td><td>${esc(a.pos)}</td><td>${esc(a.motivo) || '–'}</td><td class="wrap">${esc(a.integ.join(', ')) || '–'}</td></tr>`).join('')}</tbody></table>` : '<p class="mut">Nenhuma conta neste recorte.</p>';
+  $('#mbody').innerHTML = rows.length ? `<table><thead><tr><th>Empresa</th><th>Score</th><th>CSM</th><th>IF</th><th>Faixa</th><th>Segmento (Cx)</th><th>Plano</th><th>MRR</th><th>GMV último mês</th><th>Pedidos (média 3m)</th><th>Tickets 30d</th><th>Último login</th><th>Última interação</th><th>Armazenamento</th><th>Saúde API</th><th>Posição vs faixa</th><th>Motivo do risco</th><th>Integrações</th></tr></thead><tbody>${rows.map(a => `<tr><td>${nomeLink(a)}<span class="mut sm">${esc(a.razao !== a.nome ? a.razao : '')}</span></td><td class="${scoreCls(a.score)}" title="${esc(a.penalidades.map(p => p[0] + ' −' + p[1]).join(' · '))}">${a.score}</td><td>${esc(a.csm)}</td><td>${a.IF}</td><td>${a.fx ? 'Faixa ' + a.fx : '–'}</td><td>${esc(a.seg)}</td><td>${esc(a.plano) || '–'}</td><td>${fmtMil(a.mrr)}</td><td>${fmtMi(a.gmv)}</td><td>${fmtInt(a.media)}</td><td>${a.tickets == null ? '–' : fmtInt(a.tickets)}</td><td class="${a.diasLogin != null && a.diasLogin > 15 ? 'c-red' : a.diasLogin != null && a.diasLogin > 7 ? 'c-yel' : ''}">${fmtDays(a.diasLogin)}</td><td class="${a.diasInteracao != null && a.diasInteracao > 60 ? 'c-red' : a.diasInteracao != null && a.diasInteracao > 30 ? 'c-yel' : ''}">${fmtDays(a.diasInteracao)}</td><td class="${armCls(a.arm)}">${a.arm == null ? '–' : Math.round(a.arm) + '%'}</td><td class="${apiCls(a.api)}">${a.api == null ? '–' : Math.round(a.api) + '%'}</td><td>${esc(a.pos)}</td><td>${esc(a.motivo) || '–'}</td><td class="wrap">${esc(a.integ.join(', ')) || '–'}</td></tr>`).join('')}</tbody></table>` : '<p class="mut">Nenhuma conta neste recorte.</p>';
   $('#modal').showModal();
 }
 document.addEventListener('click', e => { const t = e.target.closest('[data-l]'); if (t) openList(+t.dataset.l); });
@@ -395,7 +392,7 @@ function render() {
   h += `<h2>Health Score e engajamento</h2><p class="lead">Score de 0 a 100 por conta: começa em 100 e desconta pontos por IF, queda de pedidos, API, armazenamento, tickets, inadimplência, engajamento, preço, dias sem interação e sem login. Pesos editáveis no código (HEALTH). Data de referência: ${fmtDate(ref)}.</p><div class="grid">`
     + card('Distribuição do Health Score', `média ${Math.round(avg(ACC, a => a.score))} · Saudável ≥ ${HEALTH_BANDS.saudavel} · Atenção ≥ ${HEALTH_BANDS.atencao}`, pie(bands.map(b => ({ label: b.label, value: b.acc.length, color: BAND_COLOR[b.label], text: b.acc.length + ' emp.', acc: b.acc })), 'Health Score'))
     + card('Score médio por IF', 'quanto menor, mais frágil', barList(ifPresent.map(g => ({ label: g.label, value: Math.round(avg(g.acc, a => a.score)), color: IF_COLOR[g.key], acc: g.acc })), v => v + ' pts'))
-    + card('Sinais de risco mais comuns', 'contas afetadas por cada sinal (informativo; o score vem da coluna HS da Exportação)', barList(Object.entries(penTop).filter(([k]) => !IF_ORDER.some(i => k.startsWith(i))).sort((a, b) => b[1].length - a[1].length).slice(0, 10).map(([k, acc], i) => ({ label: k, value: acc.length, color: hue(i), acc })), v => v + ' emp.'))
+    + card('O que mais derruba o score', 'contas afetadas por cada fator', barList(Object.entries(penTop).filter(([k]) => !IF_ORDER.some(i => k.startsWith(i))).sort((a, b) => b[1].length - a[1].length).slice(0, 10).map(([k, acc], i) => ({ label: k, value: acc.length, color: hue(i), acc })), v => v + ' emp.'))
     + '</div><div class="grid">'
     + card('Último login no Bling', `${cnt(ACC, a => a.diasLogin)} contas com dado (Tabela Meta) · ref. ${fmtDate(ref)}`, pie(mkBuckets(a => a.diasLogin, loginCuts), 'Último login'))
     + card('Última interação do CSM', `${cnt(ACC, a => a.diasInteracao)} contas com dado · menor entre "Último contato" e "Dias da última tarefa concluída"`, pie(mkBuckets(a => a.diasInteracao, interCuts), 'Última interação'))
