@@ -17,9 +17,10 @@ h1{font-size:28px;margin:0 0 4px;letter-spacing:-.01em;font-weight:700;color:var
 .loader{background:var(--card);border:1px solid var(--bd);border-radius:8px;box-shadow:var(--sh);padding:14px 18px;margin:14px 0 18px;display:grid;gap:10px}
 .loader .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.loader input[type=text]{flex:1;min-width:240px;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--input);color:var(--tx);font:inherit}
 .loader button,.loader label.btn{padding:8px 16px;border-radius:8px;border:1px solid var(--ac);background:var(--ac);color:#fff;font:inherit;font-weight:600;cursor:pointer}.loader button:hover{background:var(--ac2)}
-.loader label.btn{background:var(--card);color:var(--ac)}.loader label.btn:hover{background:var(--acbg)}.loader input[type=file]{display:none}.loader select{padding:8px 10px;border:1px solid var(--bd2);border-radius:8px;background:var(--input);color:var(--tx);font:inherit}
-#theme{margin-left:auto;background:var(--card);color:var(--tx);border:1px solid var(--bd2);font-weight:500}
-.loader small{color:var(--mut)}#status{font-size:12.5px;color:var(--mut)}#status.err{color:var(--rk)}#status.ok{color:var(--ac)}
+.loader label.btn{background:var(--card);color:var(--ac)}.loader label.btn:hover{background:var(--acbg)}.loader input[type=file]{display:none}.loader select{padding:8px 10px;border:1px solid var(--bd2);border-radius:8px;background:var(--input);color:var(--tx);font:inherit}.heatctl select{padding:6px 10px;margin-left:6px;border:1px solid var(--bd2);border-radius:8px;background:var(--input);color:var(--tx);font:inherit}.heatctl label{color:var(--mut)}
+#manualBtn{margin-left:auto;background:var(--card);color:var(--tx);border:1px solid var(--bd2);font-weight:500}#manualBtn[aria-expanded="true"]{border-color:var(--ac);color:var(--ac)}#manual{display:grid;gap:10px;padding-top:10px;border-top:1px dashed var(--bd2)}
+#theme{background:var(--card);color:var(--tx);border:1px solid var(--bd2);font-weight:500}
+[hidden]{display:none!important}.loader small{color:var(--mut)}#status{font-size:12.5px;color:var(--mut)}#status.err{color:var(--rk)}#status.ok{color:var(--ac)}
 .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:6px}.topbar img{height:40px;flex:none;margin-top:4px}
 .tagline{color:var(--mut);font-size:13px}.tagline b{color:var(--ac2)}
 .pills{height:4px;margin:14px 0 4px;background:linear-gradient(90deg,var(--ac) 0 60%,#12B8A2 60% 80%,#7C5CE6 80%);border-radius:2px}
@@ -36,10 +37,11 @@ h1{font-size:28px;margin:0 0 4px;letter-spacing:-.01em;font-weight:700;color:var
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
 .tw{overflow-x:auto;background:var(--card);border:1px solid var(--bd);border-radius:8px;margin-top:10px;box-shadow:var(--sh)}
 table{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:500;font-size:12px;background:var(--card2)}tr:hover td{background:var(--hover)}tr:last-child td{border-bottom:0}.mut{color:var(--mut)}
-table.mx td.hm{text-align:center;color:var(--tx2);font-variant-numeric:tabular-nums}table.mx td.hm span,table.mx th span{display:block;font-size:10.5px;color:var(--mut);font-weight:400}table.mx th{text-align:center}table.mx th:first-child,table.mx td:first-child{text-align:left}
+table.mx td.hm{text-align:center;color:var(--tx2);font-variant-numeric:tabular-nums}table.mx td.hm span,table.mx th span{display:block;font-size:10.5px;color:var(--mut);font-weight:400}table.mx th{text-align:center}table.mx td.hm span.sd{color:var(--yl);font-size:10px;margin-top:1px}table.mx th:first-child,table.mx td:first-child{text-align:left}
 .tag{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:4px;margin-bottom:6px}.t-e{background:var(--acbg);color:var(--ac2)}
 .note{font-size:12.5px;color:var(--mut);margin-top:10px}
-.sb{display:grid;grid-template-columns:150px 1fr auto;gap:10px;align-items:center;margin:7px 0;font-size:12.5px}.sl small{color:var(--mut);margin-left:4px}
+.chk{margin:12px 0 0}.chk summary{cursor:pointer;color:var(--mut);font-size:12.5px}
+.sb{display:grid;grid-template-columns:210px 1fr 84px;gap:10px;align-items:center;margin:7px 0;font-size:12.5px}.sl small{color:var(--mut);margin-left:4px}
 .sbar{display:flex;height:26px;border-radius:6px;overflow:hidden;background:var(--card2)}.sbar i{display:flex;align-items:center;justify-content:center;color:#fff;font-style:normal;font-size:11.5px;font-weight:600;overflow:hidden;white-space:nowrap;min-width:0}
 .bl{display:grid;gap:5px;font-size:12.5px}.blr{display:grid;grid-template-columns:170px 1fr auto;gap:8px;align-items:center}.blb{height:14px;background:var(--card2);border-radius:4px;overflow:hidden}.blb i{display:block;height:100%}
 a{color:var(--link)}
@@ -57,12 +59,17 @@ dialog{border:1px solid var(--bd);border-radius:8px;box-shadow:0 16px 24px -2px 
 <div class="topbar"><div><h1 id="title">Carteira Elite</h1><p class="lead" style="margin:0">Análise por IF, faixa Elite e segmento · gerada no navegador a partir das Tabelas Cx e Meta</p><p class="tagline">O <b>crescimento do empreendedor</b> flui <b>primeiro</b> através de nós</p></div><img src="data:image/png;base64,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" alt="Bling"></div>
 <div class="pills" aria-hidden="true"></div>
 <div class="loader">
+  <div class="row"><label for="csm">Carteira (CSM):</label><select id="csm"><option>—</option></select><button id="manualBtn" type="button" aria-expanded="false" aria-controls="manual">📂 Carregar arquivos manualmente</button><button id="theme" type="button" title="Alternar tema">🌙 Modo escuro</button></div>
+  <div id="manual" hidden>
   <div class="row"><input type="text" id="gurl" placeholder="Link da Planilha Google com as abas Tabela Cx e Tabela Meta"><button id="gload">Carregar da Google Sheets</button><label class="btn">Subir os 2 arquivos .xlsx<input type="file" id="file" accept=".xlsx,.xls,.csv" multiple></label></div>
-  <div class="row"><label for="csm">Carteira (CSM):</label><select id="csm"><option>—</option></select><button id="theme" type="button" title="Alternar tema">🌙 Modo escuro</button><small>Envie os 2 arquivos crus: o que começa com <b>empresas_elite___cadastro</b> (dados Meta) e o que começa com <b>Exportação de Clientes (Completa)</b> (dados CSM). Pode selecionar os dois de uma vez. Valem só para o seu navegador.</small></div>
+    <div class="row"><small>Envie os 2 arquivos crus: o que começa com <b>empresas_elite___cadastro</b> (dados Meta) e o que começa com <b>Exportação de Clientes (Completa)</b> (dados CSM). Pode selecionar os dois de uma vez. Valem só para o seu navegador.</small></div>
+  </div>
+  <div class="row" id="autoRow" hidden><label for="periodo">Dados de:</label><select id="periodo"><option value="atual">Hoje</option></select><span id="tokenBox" hidden><input type="password" id="wtoken" placeholder="Código de acesso" style="min-width:200px"> <button id="wtokenOk" type="button">Conectar</button></span></div>
   <p class="hint">Clique em qualquer célula, fatia ou barra para ver a lista de clientes daquele recorte.</p>
   <div id="status">Suba os 2 arquivos crus (empresas_elite___cadastro + Exportação de Clientes) ou cole o link da planilha para começar.</div>
 </div>
 <div class="kpis" id="kpis"></div>
+<div id="check"></div>
 <div id="body"><p class="note">Aguardando dados.</p></div>
 <dialog id="modal"><div class="mh"><h3 id="mtitle"></h3><button onclick="document.getElementById('modal').close()">Fechar</button></div><div id="mbody"></div></dialog>
 </main>
@@ -76,6 +83,9 @@ const DEFAULT_SHEET = '';
 // Limites de cor: armazenamento acima de ARM_RED % fica vermelho; API abaixo de API_RED % vermelha, até API_GREEN % amarela, acima verde.
 const ARM_RED = 90, API_RED = 80, API_GREEN = 90;
 const DEFAULT_FILES = ['dados.xlsx'];
+// Dados automáticos (Google Drive): cole aqui o link do App da Web do Apps Script (termina em /exec).
+// O código de acesso NÃO vai aqui: cada pessoa digita uma vez na página e ele fica salvo no navegador dela.
+const WEBAPP_URL = 'https://script.google.com/a/macros/bling.com.br/s/AKfycbzDURj5Ig9IQQlQBmzmnJ43SIQsVINBynp-XV2qkkx81rG_QzTR6uVq5sDyd0bLjQdNWQ/exec';
 </script>
 <script>
 // ===== Motor de dados: transforma as abas "Tabela Cx" e "Tabela Meta" em contas tratadas =====
@@ -109,8 +119,20 @@ const HEALTH_BANDS = { saudavel: 75, atencao: 50 };
 const RISCOS = [['Preço','preço'],['Produto','produto'],['Suporte','suporte'],['Funcionalidade','funcionalidade'],['Armazenamento','armazenamento'],['Instabilidade','instabilidade'],['Lentidão','lentid'],['Plano','plano'],['Integrações','integra'],['CSM','csm']];
 
 const S = v => (v == null ? '' : String(v)).trim();
-const N = v => { if (v == null || v === '') return null; if (typeof v === 'number') return isNaN(v) ? null : v; const x = parseFloat(String(v).replace(/\./g,'').replace(',','.')); return isNaN(x) ? null : x; };
-const Nraw = v => { if (v == null || v === '') return null; if (typeof v === 'number') return isNaN(v) ? null : v; const x = parseFloat(String(v).replace(',','.')); return isNaN(x) ? null : x; };
+const cleanNum = v => S(v).replace(/[\s\u00a0]/g, '').replace(/^R\$/i, '').replace(/%$/, '').replace(/^\((.*)\)$/, '-$1');
+// Lê número em qualquer formato (1.941,67 · 1,941.67 · 1941.67 · 2.250 · 100,4% · R$ 2.250). pct=true: nunca trata ponto/vírgula como milhar.
+const parseNum = (v, pct) => {
+  if (v == null || v === '') return null;
+  if (typeof v === 'number') return isNaN(v) ? null : v;
+  let t = cleanNum(v); if (t === '' || t === '-') return null;
+  const hasC = t.includes(','), hasD = t.includes('.');
+  if (hasC && hasD) { t = t.lastIndexOf(',') > t.lastIndexOf('.') ? t.replace(/\./g, '').replace(',', '.') : t.replace(/,/g, ''); }
+  else if (hasC) { t = (!pct && /^-?\d{1,3}(,\d{3})+$/.test(t)) ? t.replace(/,/g, '') : t.replace(',', '.'); }
+  else if (hasD) { if (!pct && /^-?\d{1,3}(\.\d{3})+$/.test(t)) t = t.replace(/\./g, ''); }
+  const x = Number(t); return isNaN(x) ? null : x;
+};
+const N = v => parseNum(v, false);
+const Nraw = v => parseNum(v, true);
 const has = (t, k) => S(t).toLowerCase().includes(k.toLowerCase());
 const toDate = v => { if (v == null || v === '') return null; if (v instanceof Date) return isNaN(v) ? null : v; if (typeof v === 'number') return new Date(Math.round((v - 25569) * 864e5)); const s = String(v).trim(); let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if (m) return new Date(+m[1], m[2] - 1, +m[3]); m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); if (m) return new Date(+m[3], m[2] - 1, +m[1]); const d = new Date(s); return isNaN(d) ? null : d; };
 const daysBetween = (a, b) => (a && b) ? Math.round((b - a) / 864e5) : null;
@@ -222,6 +244,10 @@ function buildAccounts(cxRows, metaRows) {
     if (fx && media != null) { const [lo, hi] = FAIXAS[fx]; pos = media > hi ? 'Acima do intervalo' : media < lo ? 'Abaixo do intervalo' : 'Dentro do intervalo'; if (media > hi) acima = media / hi - 1; }
     const mkts = m ? S(col(m, 'Marketplaces Configurados')) : '';
     const nMkt = mkts ? mkts.split(',').filter(x => x.trim()).length : 0;
+    const splitList = t => S(t).split(',').map(x => x.trim()).filter(Boolean);
+    const mktList = m ? splitList(col(m, 'Marketplaces Configurados')) : null;   // null = sem dado na Tabela Meta
+    const ecomList = m ? splitList(col(m, 'E-commerces Configurados')) : null;
+    const mrrRaw = m ? S(col(m, 'MRR')) : (S(col(r, 'Último MRR Ativo')) || S(col(r, 'MRR')));
     const ecomTxt = m ? S(col(m, 'E-commerces Configurados')) : (ECOM_CX.some(e => S(col(r, 'Integrações ativas')).toLowerCase().includes(e)) ? '(integração Cx)' : '');
     const temEcom = ecomTxt ? 1 : 0;
     const logs = m ? S(col(m, 'Logísticas Configuradas')) : '';
@@ -233,6 +259,7 @@ function buildAccounts(cxRows, metaRows) {
     const riscos = {}; RISCOS.forEach(([k, key]) => riscos[k] = has(motivo, key) ? 1 : 0);
     const api = m ? Nraw(col(m, 'Saúde da API (% 2xx)')) : null;
     const arm = m ? Nraw(col(m, '% Armazenamento Utilizado')) : null;
+    const apiRaw = m ? S(col(m, 'Saúde da API (% 2xx)')) : '', armRaw = m ? S(col(m, '% Armazenamento Utilizado')) : '';
     const sim = k => m ? (S(col(m, k)).toLowerCase() === 'sim' ? 1 : 0) : null;
     const cert = m ? (['não','nao',''].includes(S(col(m, 'Comprou Certificado pelo Bling')).toLowerCase()) ? 0 : 1) : null;
     const ultLogin = m ? toDate(col(m, 'Último Login')) : null; const diasLogin = daysBetween(ultLogin, REF);
@@ -249,10 +276,10 @@ function buildAccounts(cxRows, metaRows) {
     const integ = S(col(r, 'Integrações ativas')).split(',').map(x => x.trim()).filter(Boolean);
     return {
       id, razao: S(col(r, 'Razão Social')), nome: S(col(r, 'Fantasia')) || S(col(r, 'Razão Social')),
-      csm: S(col(r, 'Carteira')), statusCx: S(col(r, 'Status')), seg, segGrupo, mrr, plano: m ? S(col(m, 'Plano Contratado')) : '', tickets, ticketsAlto: tickets == null ? null : (tickets >= 3 ? 1 : 0), nApps, integ, hubs: integ.filter(i => HUBS.map(h => h.toLowerCase()).includes(i.toLowerCase())), apiGenerica: integ.some(i => i.toLowerCase() === 'api') ? 1 : 0, grupo: S(col(r, 'Grupo')), tags, IF, ifLabel: IF_LABEL[IF] || IF,
+      csm: S(col(r, 'Carteira')), statusCx: S(col(r, 'Status')), seg, segGrupo, mrr, plano: m ? S(col(m, 'Plano Contratado')) : '', tickets, ticketsAlto: tickets == null ? null : (tickets >= 3 ? 1 : 0), nApps, integ, hubList: integ.filter(i => i.toLowerCase() === 'api' || HUBS.map(h => h.toLowerCase()).includes(i.toLowerCase())).map(i => i.toLowerCase() === 'api' ? 'Api (Magis5, Base e outros hubs via API)' : i), hubs: integ.filter(i => HUBS.map(h => h.toLowerCase()).includes(i.toLowerCase())), apiGenerica: integ.some(i => i.toLowerCase() === 'api') ? 1 : 0, grupo: S(col(r, 'Grupo')), tags, IF, ifLabel: IF_LABEL[IF] || IF,
       fx, fxLabel: FAIXA_LABEL[fx], fxMin: fx ? FAIXAS[fx][0] : null, fxMax: fx ? FAIXAS[fx][1] : null,
       naMeta: m ? 1 : 0, gmv, pedUlt, media, pedMkt: m ? N(col(m, 'Pedido importado de marketplace')) : null, pedApi: m ? N(col(m, 'Pedido API')) : null,
-      pos, acima, mkts, nMkt, ecomTxt, temEcom, logs, nLog: logList.length, logPropria, cobertura,
+      pos, acima, mkts, nMkt, mktList, ecomList, mrrRaw, armRaw, apiRaw, ecomTxt, temEcom, logs, nLog: logList.length, logPropria, cobertura,
       motivo, temMotivo, riscos,
       queda: (m && media && pedUlt != null) ? (pedUlt < 0.75 * media ? 1 : 0) : null,
       api, apiBaixa: api == null ? null : (api < (typeof API_GREEN !== 'undefined' ? API_GREEN : 90) ? 1 : 0), usaApi: sim('Usou API'),
@@ -292,6 +319,9 @@ function buildAccounts(cxRows, metaRows) {
 // ===== Interface =====
 const $ = s => document.querySelector(s);
 const fmtInt = n => (n == null ? '–' : Math.round(n).toLocaleString('pt-BR'));
+const fmtMoney = n => n == null ? '–' : 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2 });
+const fmtPctExact = n => n == null ? '–' : n.toLocaleString('pt-BR', { maximumFractionDigits: 10 }) + '%';
+const fmtPct1 = n => n == null ? '–' : n.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%';
 const fmtMil = n => (n == null ? '–' : 'R$ ' + Math.round(n).toLocaleString('pt-BR'));
 const fmtMi = n => (n == null ? '–' : 'R$ ' + (n / 1e6).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' mi');
 const pct = (a, b) => (b ? (100 * a / b).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%' : '–');
@@ -310,7 +340,7 @@ function openList(i) {
   const L = LISTS[i]; if (!L) return;
   const rows = [...L.acc].sort((a, b) => a.score - b.score || (b.gmv || 0) - (a.gmv || 0));
   $('#mtitle').textContent = `${L.title} · ${rows.length} conta${rows.length === 1 ? '' : 's'}`;
-  $('#mbody').innerHTML = rows.length ? `<table><thead><tr><th>Empresa</th><th>Score</th><th>CSM</th><th>IF</th><th>Faixa</th><th>Segmento (Cx)</th><th>Plano</th><th>MRR</th><th>GMV último mês</th><th>Pedidos (média 3m)</th><th>Tickets 30d</th><th>Último login</th><th>Última interação</th><th>Armazenamento</th><th>Saúde API</th><th>Posição vs faixa</th><th>Motivo do risco</th><th>Integrações</th></tr></thead><tbody>${rows.map(a => `<tr><td>${nomeLink(a)}<span class="mut sm">${esc(a.razao !== a.nome ? a.razao : '')}</span></td><td class="${scoreCls(a.score)}" title="${esc('Score: ' + a.scoreFonte + (a.penalidades.length ? ' · Sinais: ' + a.penalidades.map(p => p[0]).join(' · ') : ''))}">${a.score}</td><td>${esc(a.csm)}</td><td>${a.IF}</td><td>${a.fx ? 'Faixa ' + a.fx : '–'}</td><td>${esc(a.seg)}</td><td>${esc(a.plano) || '–'}</td><td>${fmtMil(a.mrr)}</td><td>${fmtMi(a.gmv)}</td><td>${fmtInt(a.media)}</td><td>${a.tickets == null ? '–' : fmtInt(a.tickets)}</td><td class="${a.diasLogin != null && a.diasLogin > 15 ? 'c-red' : a.diasLogin != null && a.diasLogin > 7 ? 'c-yel' : ''}">${fmtDays(a.diasLogin)}</td><td class="${a.diasInteracao != null && a.diasInteracao > 60 ? 'c-red' : a.diasInteracao != null && a.diasInteracao > 30 ? 'c-yel' : ''}">${fmtDays(a.diasInteracao)}</td><td class="${armCls(a.arm)}">${a.arm == null ? '–' : Math.round(a.arm) + '%'}</td><td class="${apiCls(a.api)}">${a.api == null ? '–' : Math.round(a.api) + '%'}</td><td>${esc(a.pos)}</td><td>${esc(a.motivo) || '–'}</td><td class="wrap">${esc(a.integ.join(', ')) || '–'}</td></tr>`).join('')}</tbody></table>` : '<p class="mut">Nenhuma conta neste recorte.</p>';
+  $('#mbody').innerHTML = rows.length ? `<table><thead><tr><th>Empresa</th><th>Score</th><th>CSM</th><th>IF</th><th>Faixa</th><th>Segmento (Cx)</th><th>Plano</th><th>MRR</th><th>GMV último mês</th><th>Pedidos (média 3m)</th><th>Tickets 30d</th><th>Último login</th><th>Última interação</th><th>Armazenamento</th><th>Saúde API</th><th>Posição vs faixa</th><th>Motivo do risco</th><th>Integrações</th></tr></thead><tbody>${rows.map(a => `<tr><td>${nomeLink(a)}<span class="mut sm">${esc(a.razao !== a.nome ? a.razao : '')}</span></td><td class="${scoreCls(a.score)}" title="${esc('Score: ' + a.scoreFonte + (a.penalidades.length ? ' · Sinais: ' + a.penalidades.map(p => p[0]).join(' · ') : ''))}">${a.score}</td><td>${esc(a.csm)}</td><td>${a.IF}</td><td>${a.fx ? 'Faixa ' + a.fx : '–'}</td><td>${esc(a.seg)}</td><td>${esc(a.plano) || '–'}</td><td title="Valor na planilha: ${esc(a.mrrRaw)}">${fmtMoney(a.mrr)}</td><td>${fmtMi(a.gmv)}</td><td>${fmtInt(a.media)}</td><td>${a.tickets == null ? '–' : fmtInt(a.tickets)}</td><td class="${a.diasLogin != null && a.diasLogin > 15 ? 'c-red' : a.diasLogin != null && a.diasLogin > 7 ? 'c-yel' : ''}">${fmtDays(a.diasLogin)}</td><td class="${a.diasInteracao != null && a.diasInteracao > 60 ? 'c-red' : a.diasInteracao != null && a.diasInteracao > 30 ? 'c-yel' : ''}">${fmtDays(a.diasInteracao)}</td><td class="${armCls(a.arm)}" title="Valor na planilha: ${esc(a.armRaw)}">${fmtPctExact(a.arm)}</td><td class="${apiCls(a.api)}" title="Valor na planilha: ${esc(a.apiRaw)}">${fmtPctExact(a.api)}</td><td>${esc(a.pos)}</td><td>${esc(a.motivo) || '–'}</td><td class="wrap">${esc(a.integ.join(', ')) || '–'}</td></tr>`).join('')}</tbody></table>` : '<p class="mut">Nenhuma conta neste recorte.</p>';
   $('#modal').showModal();
 }
 document.addEventListener('click', e => { const t = e.target.closest('[data-l]'); if (t) openList(+t.dataset.l); });
@@ -333,11 +363,20 @@ function stack(rows) {
   return rows.map(r => { const n = sum(r.parts, p => p.count); return `<div class="sb"><div class="sl">${esc(r.label)}<small>n=${n}</small></div><div class="sbar">${r.parts.filter(p => p.count).map(p => `<i ${p.acc ? `data-l="${reg(r.label + ' · ' + p.label, p.acc)}" class="ck"` : ''} style="flex:${p.count};background:${p.color}" title="${esc(p.label)}: ${p.count} · ${pct(p.count, n)}">${p.count / n < 0.12 ? p.count : p.count + ' · ' + pct(p.count, n)}</i>`).join('')}</div><div class="mut">${r.extra || ''}</div></div>`; }).join('');
 }
 function barList(items, fmt) { const mx = Math.max(...items.map(i => i.value), 1); return `<div class="bl">${items.map(i => `<div class="blr ${i.acc ? 'ck' : ''}" ${i.acc ? `data-l="${reg(i.label, i.acc)}"` : ''}><span>${esc(i.label)}</span><div class="blb"><i style="width:${100 * i.value / mx}%;background:${i.color}"></i></div><b>${fmt(i.value)}</b></div>`).join('')}</div>`; }
-function heat(groups, indicators) {
-  // groups: [{label, acc}], indicators: [{name, f}] with f(acc) -> 1/0/null
+function heat(groups, indicators, totalAcc) {
+  totalAcc = totalAcc || ACC;
+  // groups: [{label, acc}], indicators: [{name, f, semDado?}] with f(acc) -> 1/0/null (null = conta sem dado para o indicador)
+  // Base do %: sempre o total de empresas do grupo (IF ou faixa). Conta sem dado conta como "não tem", mas aparece no aviso "k sem dado".
   const th = groups.map(g => `<th>${esc(g.short || g.label)}<span>n=${g.acc.length}</span></th>`).join('');
-  const rows = indicators.map(ind => { const cells = [...groups, { label: 'Total', acc: ACC }].map(g => { const n = cnt(g.acc, ind.f), x = sum(g.acc, ind.f); if (!n) return '<td class="hm"><span>–</span></td>'; const p = x / n; const li = reg(`${ind.name} · ${g.short || g.label}`, g.acc.filter(a => ind.f(a) === 1)); const rgb = ind.tone === 'red' ? '240,81,67' : '52,173,97'; return `<td class="hm ck" data-l="${li}" style="background:rgba(${rgb},${(0.08 + 0.45 * p).toFixed(2)})">${x}/${n}<span>${pct(x, n)}</span></td>`; }).join(''); return `<tr><td>${esc(ind.name)}</td>${cells}</tr>`; }).join('');
-  return `<div class="tw"><table class="mx"><thead><tr><th>Indicador</th>${th}<th>Total<span>n=${ACC.length}</span></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  const rows = indicators.map(ind => { const cells = [...groups, { label: 'Total', acc: totalAcc }].map(g => {
+    const nome = g.short || g.label, N = g.acc.length, comInd = g.acc.filter(a => ind.f(a) === 1), x = comInd.length;
+    const semDado = g.acc.filter(a => ind.f(a) == null);
+    const sd = semDado.length ? `<span class="ck lk sd" data-l="${reg(`${ind.name} · ${nome} · sem dado (${ind.semDado || 'sem dado'})`, semDado)}" title="Sem dado: ${esc(ind.semDado || 'sem dado')}">${semDado.length} sem dado</span>` : '';
+    if (!N) return '<td class="hm"><span>–</span></td>';
+    const p = x / N; const li = reg(`${ind.name} · ${nome}`, comInd); const rgb = ind.tone === 'red' ? '240,81,67' : '52,173,97';
+    return `<td class="hm ck" data-l="${li}" style="background:rgba(${rgb},${(0.08 + 0.45 * p).toFixed(2)})">${x}/${N}<span>${pct(x, N)}</span>${sd}</td>`; }).join('');
+    return `<tr><td>${esc(ind.name)}</td>${cells}</tr>`; }).join('');
+  return `<div class="tw"><table class="mx"><thead><tr><th>Indicador</th>${th}<th>Total<span>n=${totalAcc.length}</span></th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 function matrix(rowGroups, colGroups, rowLabel) {
   const th = colGroups.map(c => `<th>${esc(c.label)}</th>`).join('');
@@ -354,15 +393,32 @@ const armCls = v => v == null ? '' : v > ARM_RED ? 'c-red' : '';
 const nomeLink = a => a.link ? `<a href="${esc(a.link)}" target="_blank" rel="noopener">${esc(a.nome)}</a>` : esc(a.nome);
 
 const RISK_IND = [
-  { name: 'Pedidos −25% vs. média 3m', f: a => a.queda }, { name: `Saúde da API < ${API_GREEN}%`, f: a => a.apiBaixa, tone: 'red' }, { name: 'Preço citado como risco', f: a => a.riscos['Preço'] },
-  { name: `Armazenamento > ${ARM_RED}% ou tag storage`, f: a => a.storage, tone: 'red' }, { name: 'Baixo engajamento (tag)', f: a => a.baixoEng }, { name: 'Inadimplente', f: a => a.inad }, { name: '3+ tickets nos últimos 30 dias', f: a => a.ticketsAlto }, { name: 'Sem login há mais de 15 dias', f: a => a.diasLogin == null ? null : (a.diasLogin > 15 ? 1 : 0), tone: 'red' }, { name: 'Sem interação do CSM há mais de 60 dias', f: a => a.diasInteracao == null ? null : (a.diasInteracao > 60 ? 1 : 0), tone: 'red' }, { name: 'Volume abaixo da faixa contratada', f: a => a.abaixoFaixa }];
+  { name: 'Pedidos −25% vs. média 3m', f: a => a.queda, semDado: 'sem linha na Tabela Meta ou sem pedidos do último mês' }, { name: `Saúde da API < ${API_GREEN}%`, f: a => a.apiBaixa, tone: 'red', semDado: 'não usa API ou sem linha na Tabela Meta' }, { name: 'Preço citado como risco', f: a => a.riscos['Preço'] },
+  { name: `Armazenamento > ${ARM_RED}% ou tag storage`, f: a => a.storage, tone: 'red' }, { name: 'Baixo engajamento (tag)', f: a => a.baixoEng }, { name: 'Inadimplente', f: a => a.inad }, { name: '3+ tickets nos últimos 30 dias', f: a => a.ticketsAlto, semDado: 'sem linha na Tabela Meta' }, { name: 'Sem login há mais de 15 dias', f: a => a.diasLogin == null ? null : (a.diasLogin > 15 ? 1 : 0), tone: 'red', semDado: 'sem data de último login' }, { name: 'Sem interação do CSM há mais de 60 dias', f: a => a.diasInteracao == null ? null : (a.diasInteracao > 60 ? 1 : 0), tone: 'red', semDado: 'sem último contato e sem tarefa concluída na Cx' }, { name: 'Volume abaixo da faixa contratada', f: a => a.abaixoFaixa, semDado: 'sem faixa na tag' }];
 const EXP_IND = [
-  { name: 'Volume acima da faixa contratada', f: a => a.acimaFaixa }, { name: 'Pagamento de faixa incorreta (tag)', f: a => a.faixaIncorreta }, { name: 'Aproximando próxima faixa Elite', f: a => a.aproximando },
-  { name: 'Sem Bling Conta Digital', f: a => a.contaDigital == null ? null : 1 - a.contaDigital }, { name: 'Sem certificado pelo Bling', f: a => a.cert == null ? null : 1 - a.cert }, { name: 'Sem Checkout', f: a => a.checkout == null ? null : 1 - a.checkout },
-  { name: 'Sem PDV', f: a => a.pdv == null ? null : 1 - a.pdv }, { name: 'Sem Meu Negócio', f: a => a.meuNegocio == null ? null : 1 - a.meuNegocio }, { name: 'Sem uso de API', f: a => a.usaApi == null ? null : 1 - a.usaApi },
-  { name: 'Sem e-commerce → Bling Loja Virtual', f: a => 1 - a.temEcom }, { name: 'E-commerce sem nenhuma logística → Bling Envios', f: a => a.temEcom && a.naMeta ? (a.nLog ? 0 : 1) : null },
-  { name: 'E-commerce só com logística de marketplace → Bling Envios', f: a => a.temEcom && a.naMeta ? (a.nLog && !a.logPropria ? 1 : 0) : null }];
+  { name: 'Volume acima da faixa contratada', f: a => a.acimaFaixa, semDado: 'sem faixa na tag' }, { name: 'Pagamento de faixa incorreta (tag)', f: a => a.faixaIncorreta }, { name: 'Aproximando próxima faixa Elite', f: a => a.aproximando },
+  { name: 'Sem Bling Conta Digital', f: a => a.contaDigital == null ? null : 1 - a.contaDigital , semDado: 'sem linha na Tabela Meta' }, { name: 'Sem certificado pelo Bling', f: a => a.cert == null ? null : 1 - a.cert , semDado: 'sem linha na Tabela Meta' }, { name: 'Sem Checkout', f: a => a.checkout == null ? null : 1 - a.checkout , semDado: 'sem linha na Tabela Meta' },
+  { name: 'Sem PDV', f: a => a.pdv == null ? null : 1 - a.pdv , semDado: 'sem linha na Tabela Meta' }, { name: 'Sem Meu Negócio', f: a => a.meuNegocio == null ? null : 1 - a.meuNegocio , semDado: 'sem linha na Tabela Meta' }, { name: 'Sem uso de API', f: a => a.usaApi == null ? null : 1 - a.usaApi , semDado: 'sem linha na Tabela Meta' },
+  { name: 'Sem e-commerce → Bling Loja Virtual', f: a => 1 - a.temEcom }, { name: 'E-commerce sem nenhuma logística → Bling Envios', f: a => a.temEcom && a.naMeta ? (a.nLog ? 0 : 1) : null, semDado: 'sem e-commerce ou sem linha na Tabela Meta' },
+  { name: 'E-commerce só com logística de marketplace → Bling Envios', f: a => a.temEcom && a.naMeta ? (a.nLog && !a.logPropria ? 1 : 0) : null, semDado: 'sem e-commerce ou sem linha na Tabela Meta' }];
 
+// Seletores dos mapas de Riscos e de Expansão: ver por IF ou por Faixa, todos ou um só
+const HV = { risco: { by: 'IF', sel: '' }, exp: { by: 'IF', sel: '' } };
+document.addEventListener('change', e => {
+  const t = e.target.closest('[data-hv]'); if (!t) return;
+  const v = HV[t.dataset.hv]; v[t.dataset.k] = t.value; if (t.dataset.k === 'by') v.sel = '';
+  const y = window.scrollY; render(); window.scrollTo(0, y);
+});
+function heatCtl(view, groupsIF, groupsFx) {
+  const v = HV[view], gs = v.by === 'IF' ? groupsIF : groupsFx;
+  const id = g => String(g.key);
+  if (v.sel && !gs.some(g => id(g) === v.sel)) v.sel = '';
+  const opts = gs.map(g => `<option value="${esc(id(g))}"${id(g) === v.sel ? ' selected' : ''}>${esc(g.label)}</option>`).join('');
+  const html = `<div class="heatctl" style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:4px 0 12px">
+    <label>Ver por: <select data-hv="${view}" data-k="by"><option value="IF"${v.by === 'IF' ? ' selected' : ''}>IF</option><option value="Faixa"${v.by === 'Faixa' ? ' selected' : ''}>Faixa</option></select></label>
+    <label>Mostrar: <select data-hv="${view}" data-k="sel"><option value="">Todos</option>${opts}</select></label></div>`;
+  return { html, groups: v.sel ? gs.filter(g => id(g) === v.sel) : gs, by: v.by };
+}
 function render() {
   LISTS = [];
   const csm = $('#csm').value; ACC = csm === '__all__' ? ALL : ALL.filter(a => a.csm === csm);
@@ -370,6 +426,12 @@ function render() {
   const gmvT = sum(ACC, a => a.gmv), pedT = sum(ACC, a => a.media), comp = ACC.filter(a => a.acimaFaixa != null);
   const segs = groupBy(ACC, a => a.segGrupo), nSeg = [...segs.keys()].filter(k => k !== 'Sem segmento na Cx').length;
   $('#kpis').innerHTML = [[`${Math.round(avg(ACC, a => a.score))}`, `Health Score médio · ${ACC.filter(a => a.banda === 'Crítico').length} crítica${ACC.filter(a => a.banda === 'Crítico').length === 1 ? '' : 's'}`], [fmtInt(ACC.length), 'empresas'], [fmtMi(gmvT), 'GMV último mês'], [fmtInt(pedT), 'pedidos/mês (média 3 meses)'], [fmtMil(sum(ACC, a => a.mrr)), `MRR (${cnt(ACC, a => a.mrr)} contas com dado)`], [fmtInt(sum(ACC, a => a.tickets)), `tickets nos últimos 30 dias · ${sum(ACC, a => a.ticketsAlto)} conta${sum(ACC, a => a.ticketsAlto) === 1 ? '' : 's'} com 3+`], [nSeg, `grupos de segmento (+${(segs.get('Sem segmento na Cx') || []).length} sem segmento)`], [`${sum(comp, a => a.acimaFaixa)}/${comp.length}`, 'contas com volume acima da faixa'], [`${sum(ACC, a => a.temMotivo)}/${ACC.length}`, 'contas com motivo de risco']].map(([b, s]) => `<div class="kpi"><b>${b}</b><span>${s}</span></div>`).join('');
+  { // Conferência: valores lidos da planilha (para comparar com o Excel)
+    const st = arr => { const v = arr.filter(x => x != null).sort((p, q) => p - q); return v.length ? { n: v.length, min: v[0], med: v[v.length >> 1], max: v[v.length - 1], sum: v.reduce((p, q) => p + q, 0), acima100: v.filter(x => x > 100).length } : null; };
+    const sm = st(ACC.map(a => a.mrr)), sa = st(ACC.map(a => a.arm)), sp = st(ACC.map(a => a.api));
+    const row = (nome, x, f, extra) => x ? `<tr><td>${nome}</td><td>${x.n}</td><td>${f(x.min)}</td><td>${f(x.med)}</td><td>${f(x.max)}</td><td>${extra(x)}</td></tr>` : `<tr><td>${nome}</td><td colspan="5" class="mut">sem dado</td></tr>`;
+    $('#check').innerHTML = `<details class="chk"><summary>Conferência dos valores lidos da planilha (MRR, armazenamento, API)</summary><div class="tw"><table><thead><tr><th>Campo</th><th>Contas com valor</th><th>Menor</th><th>Mediana</th><th>Maior</th><th>Observação</th></tr></thead><tbody>${row('MRR', sm, fmtMoney, x => 'soma ' + fmtMoney(x.sum))}${row('% Armazenamento Utilizado', sa, fmtPctExact, x => x.acima100 + ' conta(s) acima de 100%')}${row('Saúde da API (% 2xx)', sp, fmtPctExact, x => x.acima100 + ' conta(s) acima de 100%')}</tbody></table></div><p class="note">Passe o mouse sobre o MRR, o armazenamento ou a API na lista de clientes para ver o texto exato que veio na planilha. Contas sem linha na Tabela Meta: ${ACC.filter(a => !a.naMeta).length}.</p></details>`;
+  }
   if (!ACC.length) { $('#body').innerHTML = '<p class="note">Nenhuma empresa para este filtro.</p>'; return; }
 
   const ifGroups = IF_ORDER.map(k => ({ key: k, short: k, label: IF_LABEL[k], acc: ACC.filter(a => a.IF === k) })).filter(g => g.acc.length || ['IF1', 'IF2', 'IF3', 'IF4', 'IF5', 'Sem IF'].includes(g.key));
@@ -417,18 +479,24 @@ function render() {
 
   // 2. Comparativo
   h += `<h2>2. Comparativo entre os IFs</h2>` + table(['IF', 'Empresas', 'Score médio', 'GMV', 'GMV médio', 'MRR', 'MRR médio', 'Pedidos (mediana)', 'Tickets 30d (total)', 'Marketplaces (média)', 'Armazenamento médio', 'Saúde API média', 'Usa API', 'Segmentos distintos'],
-    ifGroups.map(g => g.acc.length ? ((arr) => arr.map(c => L(g.label, g.acc, c)))([esc(g.label), g.acc.length, `<span class="${scoreCls(avg(g.acc, a => a.score))}" style="padding:2px 6px;border-radius:6px">${Math.round(avg(g.acc, a => a.score))}</span>`, fmtMi(sum(g.acc, a => a.gmv)), fmtMi(avg(g.acc, a => a.gmv)), fmtMil(sum(g.acc, a => a.mrr)), fmtMil(avg(g.acc, a => a.mrr)), fmtInt(median(g.acc, a => a.media)), fmtInt(sum(g.acc, a => a.tickets)), (avg(g.acc, a => a.naMeta ? a.nMkt : null) ?? 0).toFixed(1), avg(g.acc, a => a.arm) == null ? '–' : `<span class="${armCls(avg(g.acc, a => a.arm))}" style="padding:2px 6px;border-radius:6px">${Math.round(avg(g.acc, a => a.arm))}%</span>`, avg(g.acc, a => a.api) == null ? '–' : `<span class="${apiCls(avg(g.acc, a => a.api))}" style="padding:2px 6px;border-radius:6px">${Math.round(avg(g.acc, a => a.api))}%</span>`, avg(g.acc, a => a.usaApi) == null ? '–' : Math.round(100 * avg(g.acc, a => a.usaApi)) + '%', new Set(g.acc.map(a => a.seg)).size]) : [esc(g.label), 0, `<span class="mut">Nenhuma empresa da carteira com esse IF</span>`, '', '', '', '', '', '', '', '', '', '', '']));
+    ifGroups.map(g => g.acc.length ? ((arr) => arr.map(c => L(g.label, g.acc, c)))([esc(g.label), g.acc.length, `<span class="${scoreCls(avg(g.acc, a => a.score))}" style="padding:2px 6px;border-radius:6px">${Math.round(avg(g.acc, a => a.score))}</span>`, fmtMi(sum(g.acc, a => a.gmv)), fmtMi(avg(g.acc, a => a.gmv)), fmtMil(sum(g.acc, a => a.mrr)), fmtMil(avg(g.acc, a => a.mrr)), fmtInt(median(g.acc, a => a.media)), fmtInt(sum(g.acc, a => a.tickets)), (avg(g.acc, a => a.naMeta ? a.nMkt : null) ?? 0).toFixed(1), avg(g.acc, a => a.arm) == null ? '–' : `<span class="${armCls(avg(g.acc, a => a.arm))}" style="padding:2px 6px;border-radius:6px">${fmtPct1(avg(g.acc, a => a.arm))}</span>`, avg(g.acc, a => a.api) == null ? '–' : `<span class="${apiCls(avg(g.acc, a => a.api))}" style="padding:2px 6px;border-radius:6px">${fmtPct1(avg(g.acc, a => a.api))}</span>`, avg(g.acc, a => a.usaApi) == null ? '–' : Math.round(100 * avg(g.acc, a => a.usaApi)) + '%', new Set(g.acc.map(a => a.seg)).size]) : [esc(g.label), 0, `<span class="mut">Nenhuma empresa da carteira com esse IF</span>`, '', '', '', '', '', '', '', '', '', '', '']));
   h += `<p class="note">MRR, tickets, marketplaces, armazenamento, saúde da API e uso de API só existem na Tabela Meta e cobrem as ${sum(ACC, a => a.naMeta)} contas dessa tabela.</p>`;
 
   // 3. Riscos
-  h += `<h2>3. Riscos por IF</h2><p class="lead">Cada célula mostra quantas contas do IF têm o indicador sobre quantas têm dado para ele.</p>` + heat(ifPresent, RISK_IND);
-  const motivoPie = g => { const items = RISCOS.map(([k], i) => ({ label: k, value: sum(g.acc, a => a.riscos[k]), color: hue(i + 3), text: sum(g.acc, a => a.riscos[k]) + ' citações', acc: g.acc.filter(a => a.riscos[k]) })).filter(i => i.value).sort((a, b) => b.value - a.value); return items.length ? card('Motivos de risco · ' + g.key, `${g.acc.length} contas · uma conta pode citar mais de um motivo`, pie(items, 'Motivos ' + g.key)) : ''; };
+  const hr = heatCtl('risco', ifPresent, fxGroups);
+  h += `<h2>3. Riscos por ${hr.by === 'IF' ? 'IF' : 'faixa'}</h2><p class="lead">Cada célula mostra quantas empresas do grupo têm o indicador sobre o total de empresas do grupo (n do cabeçalho). Embaixo aparece quantas empresas não têm a informação daquele indicador (contam como "não tem"); clique para ver quais são.</p>` + hr.html + heat(hr.groups, RISK_IND);
+  const motivoPie = g => { const items = RISCOS.map(([k], i) => ({ label: k, value: sum(g.acc, a => a.riscos[k]), color: hue(i + 3), text: sum(g.acc, a => a.riscos[k]) + ' citações', acc: g.acc.filter(a => a.riscos[k]) })).filter(i => i.value).sort((a, b) => b.value - a.value); const tit = g.key === 'IF0' ? 'Motivo do cancelamento · IF0' : 'Motivos de risco · ' + g.key; return items.length ? card(tit, `${g.acc.length} contas · uma conta pode citar mais de um motivo`, pie(items, g.key === 'IF0' ? 'Motivo do cancelamento IF0' : 'Motivos ' + g.key)) : ''; };
   const topIfs = ifPresent.filter(g => sum(g.acc, a => a.temMotivo) > 0);
   h += `<h3 class="sp">Motivos de risco por IF</h3><p class="lead">Um gráfico para cada IF que tem ao menos uma conta com motivo de risco.</p><div class="grid">${topIfs.map(motivoPie).join('')}</div>`;
   const semMotivo = ifPresent.filter(g => !sum(g.acc, a => a.temMotivo)); if (semMotivo.length) h += `<p class="note">Sem motivo de risco registrado: ${semMotivo.map(g => g.key).join(', ')}.</p>`;
 
   // 4. Expansão
-  h += `<h2>4. Oportunidades de expansão por IF</h2><p class="lead">A faixa Elite é de volume de pedidos. ${sum(comp, a => a.acimaFaixa)} de ${comp.length} contas têm volume acima do teto da faixa.</p>` + heat(ifPresent, EXP_IND);
+  // IF0 = cliente que cancelou: fica fora das oportunidades de expansão
+  const accExp = ACC.filter(a => a.IF !== 'IF0');
+  const fxExp = fxGroups.map(g => ({ ...g, acc: g.acc.filter(a => a.IF !== 'IF0') })).filter(g => g.acc.length);
+  const he = heatCtl('exp', ifPresent.filter(g => g.key !== 'IF0'), fxExp);
+  const compExp = comp.filter(a => a.IF !== 'IF0');
+  h += `<h2>4. Oportunidades de expansão por ${he.by === 'IF' ? 'IF' : 'faixa'}</h2><p class="lead">A faixa Elite é de volume de pedidos. ${sum(compExp, a => a.acimaFaixa)} de ${compExp.length} contas têm volume acima do teto da faixa. Clientes IF0 (cancelados) não entram aqui.</p><p class="lead">Cada célula mostra quantas empresas do grupo têm o indicador sobre o total de empresas do grupo (n do cabeçalho). Embaixo aparece quantas empresas não têm a informação daquele indicador (contam como "não tem"); clique para ver quais são.</p>` + he.html + heat(he.groups, EXP_IND, accExp);
   const cobKeys = ['Sem e-commerce (oferta: Bling Loja Virtual)', 'E-commerce com logística além da de marketplace', 'E-commerce só com logística de marketplace (oferta: Bling Envios)', 'E-commerce sem logística (oferta: Bling Envios)', 'E-commerce sem dado de logística (só na Cx)'];
   const cobColor = ['#34AD61', '#8BE0AA', '#F5A60A', '#F05143', '#97A4B8'];
   const semEcom = ACC.filter(a => !a.temEcom).sort((a, b) => (b.gmv || 0) - (a.gmv || 0));
@@ -440,8 +508,6 @@ function render() {
   const fxPie = (title, sub, f, fmt) => card(title, sub, pie(fxGroups.map(g => ({ label: g.label, value: sum(g.acc, f), color: FX_COLOR[g.key], text: fmt(sum(g.acc, f)), acc: g.acc })), title));
   h += `<h2>6. Faixas Elite</h2><p class="lead">Faixa lida da tag (ex.: "Faixa 3 · 20 a 30 mil", que é volume de pedidos).</p><div class="grid">` + fxPie('Empresas por faixa Elite', `% das ${ACC.length} contas`, a => 1, v => v + ' emp.') + fxPie('GMV último mês por faixa', '% do GMV da carteira', a => a.gmv, fmtMi) + fxPie('Pedidos (média 3 meses) por faixa', '% do volume médio', a => a.media, v => fmtInt(v) + ' ped.') + fxPie('MRR por faixa', '% do MRR', a => a.mrr, fmtMil) + '</div>';
   h += `<h3 class="sp">Faixa × IF</h3>` + matrix(fxGroups, ifPresent.map(g => ({ label: g.key, acc: g.acc })), 'Faixa');
-  h += `<h3 class="sp">Riscos por faixa</h3>` + heat(fxGroups, RISK_IND);
-  h += `<h3 class="sp">Oportunidades de expansão por faixa</h3>` + heat(fxGroups, EXP_IND);
   const maisComum = groups => table(['Grupo', 'Emp.', 'Contas com motivo', 'Motivos mais comuns', 'Indicador de risco mais frequente'], groups.map(g => {
     const ms = RISCOS.map(([k]) => [k, g.acc.filter(a => a.riscos[k])]).filter(x => x[1].length).sort((a, b) => b[1].length - a[1].length);
     const ind = RISK_IND.map(i => [i.name, g.acc.filter(a => i.f(a) === 1)]).filter(x => x[1].length).sort((a, b) => b[1].length - a[1].length);
@@ -457,16 +523,27 @@ function render() {
   const segInd = (title, f, titleList) => card(title, 'contas por segmento · clique para ver', barList(segGroups.map(g => ({ label: g.label, value: g.acc.filter(f).length, color: g.color, acc: g.acc.filter(f) })).filter(i => i.value).sort((a, b) => b.value - a.value), v => v + ' emp.'));
   h += `<h3 class="sp">Indicadores por segmento</h3><div class="grid">` + segInd('Citam preço como risco', a => a.riscos['Preço']) + segInd('Volume acima da faixa', a => a.acimaFaixa === 1) + segInd('Sem e-commerce', a => !a.temEcom) + segInd('Saúde da API abaixo de ' + API_GREEN + '%', a => a.apiBaixa === 1) + segInd('3+ tickets em 30 dias', a => a.ticketsAlto === 1) + segInd('Health Score em Atenção ou Crítico', a => a.banda !== 'Saudável') + '</div>';
 
-  // 8. Integrações e hubs
-  const integCount = new Map(); ACC.forEach(a => a.integ.forEach(i => { const k = i.toLowerCase() === 'api' ? 'Api (genérica: Magis5, Base e outros hubs via API)' : i; integCount.set(k, (integCount.get(k) || []).concat(a)); }));
-  const integItems = [...integCount.entries()].sort((a, b) => b[1].length - a[1].length);
-  const hubItems = integItems.filter(([k]) => HUBS.map(h => h.toLowerCase()).includes(k.toLowerCase()) || k.startsWith('Api ('));
+  // 8. Integrações: marketplaces, e-commerces e hubs separados (verde = tem · vermelho = não tem; clique para ver as empresas)
+  const platStack = (getList, maxRows) => {
+    const comDado = ACC.filter(a => getList(a) != null);
+    const usoAll = new Map(); ALL.forEach(a => (getList(a) || []).forEach(k => usoAll.set(k, (usoAll.get(k) || 0) + 1)));
+    const usoAcc = new Map(); comDado.forEach(a => getList(a).forEach(k => usoAcc.set(k, (usoAcc.get(k) || 0) + 1)));
+    const names = new Set(usoAcc.keys()); [...usoAll.entries()].sort((x, y) => y[1] - x[1]).slice(0, 8).forEach(([k]) => names.add(k));
+    const rows = [...names].sort((x, y) => (usoAcc.get(y) || 0) - (usoAcc.get(x) || 0) || (usoAll.get(y) || 0) - (usoAll.get(x) || 0)).slice(0, maxRows).map(k => {
+      const tem = comDado.filter(a => getList(a).includes(k)), nao = comDado.filter(a => !getList(a).includes(k));
+      return { label: k, parts: [{ label: 'Tem', count: tem.length, color: '#34AD61', acc: tem }, { label: 'Não tem', count: nao.length, color: '#F05143', acc: nao }], extra: pct(tem.length, comDado.length) + ' têm' };
+    });
+    return { rows, n: comDado.length, semDado: ACC.length - comDado.length, total: names.size };
+  };
+  const leg8 = '<p class="sub"><span class="dot" style="background:#34AD61"></span> tem a integração &nbsp;·&nbsp; <span class="dot" style="background:#F05143"></span> não tem &nbsp;·&nbsp; clique em um trecho para ver as empresas</p>';
+  const mk = platStack(a => a.mktList, 20), ec = platStack(a => a.ecomList, 20), hb = platStack(a => a.hubList, 20);
   const appsDist = groupBy(ACC.filter(a => a.nApps != null), a => a.nApps >= 5 ? '5 ou mais apps' : a.nApps + (a.nApps === 1 ? ' app' : ' apps'));
-  h += `<h2>8. Integrações e hubs</h2><p class="lead">Integrações ativas na Cx. A exportação não traz o nome dos aplicativos conectados via API (Magis5, Base etc.): eles aparecem como "Api" e a Tabela Meta informa só a quantidade de apps por conta.</p><div class="two">`
-    + card('Integrações mais usadas', `top 20 de ${integItems.length} · ${ACC.length} contas`, barList(integItems.slice(0, 20).map(([k, acc], i) => ({ label: k, value: acc.length, color: hue(i), acc })), v => v + ' emp.'))
-    + card('Hubs e integradores identificáveis', 'contas por hub (uma conta pode ter mais de um)', hubItems.length ? barList(hubItems.map(([k, acc], i) => ({ label: k, value: acc.length, color: hue(i + 5), acc })), v => v + ' emp.') : '<p class="mut">Nenhum hub identificável nesta carteira.</p>')
-    + card('Quantidade de aplicativos com uso na API', `${cnt(ACC, a => a.nApps)} contas com dado (Tabela Meta)`, barList([...appsDist.entries()].sort((a, b) => parseInt(a[0]) - parseInt(b[0])).map(([k, acc], i) => ({ label: k, value: acc.length, color: hue(i + 9), acc })), v => v + ' emp.'))
-    + '</div>';
+  const nota8 = x => `${x.n} contas com dado na Tabela Meta${x.semDado ? ` · ${x.semDado} sem dado ficam de fora` : ''} · ${x.rows.length} de ${x.total} plataformas`;
+  h += `<h2>8. Integrações</h2><p class="lead">Marketplaces e e-commerces são colunas separadas da Tabela Meta. Em cada plataforma, o verde mostra quem tem e o vermelho quem não tem. O nome dos apps conectados via API (Magis5, Base etc.) não vem na exportação: aparece como "Api".</p>`
+    + card('Marketplaces', nota8(mk) + ' · coluna "Marketplaces Configurados"', leg8 + stack(mk.rows))
+    + '<div style="height:12px"></div>' + card('E-commerces (plataformas de loja virtual)', nota8(ec) + ' · coluna "E-commerces Configurados"', leg8 + stack(ec.rows))
+    + '<div style="height:12px"></div>' + card('Hubs e integradores', `${hb.n} contas · integrações ativas da Exportação de Clientes (Cx)`, leg8 + stack(hb.rows))
+    + '<div class="two">' + card('Quantidade de aplicativos com uso na API', `${cnt(ACC, a => a.nApps)} contas com dado (Tabela Meta)`, barList([...appsDist.entries()].sort((x, y) => parseInt(x[0]) - parseInt(y[0])).map(([k, acc], i) => ({ label: k, value: acc.length, color: hue(i + 9), acc })), v => v + ' emp.')) + '</div>';
 
   // 9. Grupos
   const grupos = [...groupBy(ACC.filter(a => a.grupo), a => a.grupo).entries()].sort((a, b) => sum(b[1], x => x.gmv) - sum(a[1], x => x.gmv));
@@ -484,7 +561,7 @@ function finishLoad(fonte, temMeta, extra) {
   sel.innerHTML = csms.map(c => `<option>${esc(c)}</option>`).join('') + '<option value="__all__">Todas as carteiras</option>';
   sel.value = csms.includes(prev) ? prev : (prev === '__all__' ? '__all__' : csms[0]);
   $('#status').textContent = `${fonte} · ${ALL.length} empresas · ${temMeta ? 'Cx + Meta' : 'só Cx (sem Tabela Meta: GMV, API e e-commerce ficam limitados)'}${extra ? ' · ' + extra : ''} · carregado ${new Date().toLocaleString('pt-BR')}`;
-  $('#status').className = 'ok'; render();
+  $('#status').className = 'ok'; render(); toggleManual(false);
 }
 function loadWorkbook(wb, fonte) {
   let cx = null, meta = null;
@@ -522,7 +599,157 @@ async function loadGoogle(url) {
   if (!ok) throw new Error('Não consegui ler a planilha. Verifique: (1) o arquivo é uma Planilha Google (não .xlsx no Drive — abra e use Arquivo › Salvar como Planilhas Google); (2) está compartilhado como "Qualquer pessoa com o link pode ver"; (3) as abas se chamam "Tabela Cx" e "Tabela Meta".');
   loadWorkbook(wb, 'Google Sheets');
 }
-function fail(e) { $('#status').textContent = e.message || String(e); $('#status').className = 'err'; }
+// ===== Dados automáticos do Google Drive (Apps Script) =====
+function jsonp(url, ms = 90000) {
+  return new Promise((resolve, reject) => {
+    const cb = 'autoCb_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
+    const s = document.createElement('script');
+    const fim = () => { clearTimeout(t); try { delete window[cb]; } catch (e) { window[cb] = undefined; } s.remove(); };
+    const t = setTimeout(() => { fim(); reject(new Error('O serviço de dados não respondeu. Tente de novo em instantes.')); }, ms);
+    window[cb] = d => { fim(); resolve(d); };
+    s.onerror = () => { fim(); reject(new Error('Não consegui acessar o serviço de dados. Confira o WEBAPP_URL e se o App da Web está implantado com acesso para "Qualquer pessoa".')); };
+    s.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
+    document.body.appendChild(s);
+  });
+}
+function rowsFromB64(f) {
+  const bin = atob(f.b64);
+  if (f.ext === 'json') return JSON.parse(new TextDecoder('utf-8').decode(Uint8Array.from(bin, c => c.charCodeAt(0))));
+  if (f.ext === 'csv') {
+    const txt = new TextDecoder('utf-8').decode(Uint8Array.from(bin, c => c.charCodeAt(0)));
+    return rawRows(XLSX.read(txt, { type: 'string' }));
+  }
+  return rawRows(XLSX.read(f.b64, { type: 'base64' }));
+}
+// Colunas da API ainda em validação (a exportação manual prevalece enquanto houver uma).
+// Quando a validação confirmar que batem, é só tirar o nome daqui.
+const CX_PREFERIR_EXPORTACAO = ['Último MRR Ativo', 'Dias da última tarefa concluída', 'Responsável: Analista Principal'];
+
+// ===== Validação: compara, coluna a coluna, a tabela da API com a exportação manual (abra a página com ?validar=1) =====
+function validarCx(apiRows, compRows) {
+  const hA = apiRows[0].map(S), hi = findHeaderRow(compRows, 'carteira', 'cnpj/cpf'); if (hi < 0) return null;
+  const hC = compRows[hi].map(S);
+  const codRe = h => /^cod\.?\s*cliente$/i.test(h);
+  const iA = hA.findIndex(codRe), iC = hC.findIndex(codRe);
+  const cod = v => idKey(S(v).replace(/^emp[_\s-]*/i, '').trim());
+  const mapA = new Map(apiRows.slice(1).map(r => [cod(r[iA]), r]));
+  const mapC = new Map(); compRows.slice(hi + 1).forEach(r => { const k = cod((r || [])[iC]); if (k) mapC.set(k, r); });
+  const ambos = [...mapC.keys()].filter(k => mapA.has(k));
+  const serialIso = n => new Date(Math.round((n - 25569) * 864e5)).toISOString().slice(0, 10);
+  const norm = v => {
+    if (v == null) return ''; let s = String(v).trim(); if (!s) return '';
+    let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/); if (m) return `${m[3].length === 2 ? '20' + m[3] : m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+    m = s.match(/^(\d{4}-\d{2}-\d{2})/); if (m) return m[1];
+    if (/^-?[\d.,]+$/.test(s)) { const n = parseNum(s, false); if (n != null) return String(Math.round(n * 100) / 100); }
+    if (s.includes(' | ') || s.includes(', ')) return s.split(/ \| |, /).map(x => x.trim().toLowerCase()).filter(Boolean).sort().join('|');
+    return s.toLowerCase();
+  };
+  const igual = (a, c) => { let x = norm(a), y = norm(c);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(x) && /^\d{5}(\.\d+)?$/.test(y)) y = serialIso(Number(y));
+    if (/^\d{4}-\d{2}-\d{2}$/.test(y) && /^\d{5}(\.\d+)?$/.test(x)) x = serialIso(Number(x));
+    return x === y; };
+  const linhas = hC.map((h, j) => {
+    if (!h) return null; const i = hA.findIndex(x => x.toLowerCase() === h.toLowerCase());
+    if (i < 0) return { col: h, status: 'falta na API', ig: 0, dif: 0, ex: '' };
+    let ig = 0, dif = 0, ex = '';
+    ambos.forEach(k => { const a = mapA.get(k)[i], c = mapC.get(k)[j]; if (igual(a, c)) ig++; else { dif++; if (!ex) ex = `${k}: API “${S(a) || '(vazio)'}” × exportação “${S(c) || '(vazio)'}”`; } });
+    return { col: h, status: dif === 0 ? 'ok' : (ig / (ig + dif) >= 0.98 ? 'quase' : 'diferente'), ig, dif, ex };
+  }).filter(Boolean);
+  return { linhas, ambos: ambos.length, soApi: [...mapA.keys()].filter(k => !mapC.has(k)).length, soExp: [...mapC.keys()].filter(k => !mapA.has(k)).length };
+}
+function mostrarValidacao(v) {
+  let box = document.getElementById('validacao');
+  if (!box) { box = document.createElement('div'); box.id = 'validacao'; box.style.cssText = 'margin-top:14px;overflow-x:auto'; document.getElementById('status').after(box); }
+  if (!v) { box.textContent = 'Validação: não há exportação manual para comparar.'; return; }
+  const cor = { ok: 'var(--accent, #3fb950)', quase: '#d29922', diferente: '#f85149', 'falta na API': '#f85149' };
+  const ordem = { 'falta na API': 0, diferente: 1, quase: 2, ok: 3 };
+  const lin = v.linhas.slice().sort((a, b) => ordem[a.status] - ordem[b.status]);
+  const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  box.innerHTML = `<p><strong>Validação API × exportação</strong> · ${v.ambos} clientes nas duas · ${v.soApi} só na API · ${v.soExp} só na exportação · ${v.linhas.filter(l => l.status === 'ok').length} de ${v.linhas.length} colunas idênticas</p>
+  <table style="border-collapse:collapse;font-size:12px;width:100%"><tr><th style="text-align:left;padding:4px">Coluna</th><th style="text-align:left;padding:4px">Resultado</th><th style="padding:4px">Iguais</th><th style="padding:4px">Diferentes</th><th style="text-align:left;padding:4px">Exemplo de diferença</th></tr>
+  ${lin.map(l => `<tr style="border-top:1px solid rgba(128,128,128,.25)"><td style="padding:4px">${esc(l.col)}</td><td style="padding:4px;color:${cor[l.status]}">${l.status}</td><td style="padding:4px;text-align:right">${l.ig}</td><td style="padding:4px;text-align:right">${l.dif}</td><td style="padding:4px">${esc(l.ex)}</td></tr>`).join('')}</table>`;
+}
+
+// Junta à tabela da API do CustomerX as colunas que só existem na exportação manual
+// (HS, NPS Score, MRR, dias da última tarefa…), casando pelo código do cliente.
+function complementarCx(apiRows, compRows) {
+  const hA = apiRows[0].map(S), temA = new Set(hA.map(h => h.toLowerCase()));
+  const hi = findHeaderRow(compRows, 'carteira', 'cnpj/cpf'); if (hi < 0) return apiRows;
+  const hC = compRows[hi].map(S);
+  const iCodA = hA.findIndex(h => /^cod\.?\s*cliente$/i.test(h)), iCodC = hC.findIndex(h => /^cod\.?\s*cliente$/i.test(h));
+  if (iCodA < 0 || iCodC < 0) return apiRows;
+  const faltam = hC.map((h, j) => [h, j]).filter(([h]) => h && !temA.has(h.toLowerCase()));
+  // colunas que a API já traz mas ainda estão em validação: o valor da exportação prevalece quando existir
+  const pref = hA.map((h, i) => [i, hC.findIndex(x => x.toLowerCase() === h.toLowerCase())])
+    .filter(([i, j]) => j >= 0 && CX_PREFERIR_EXPORTACAO.some(n => n.toLowerCase() === hA[i].toLowerCase()));
+  const cod = v => idKey(S(v).replace(/^emp[_\s-]*/i, '').trim());
+  const porCod = new Map(); for (let i = hi + 1; i < compRows.length; i++) { const r = compRows[i] || []; const k = cod(r[iCodC]); if (k && !porCod.has(k)) porCod.set(k, r); }
+  return [[...hA, ...faltam.map(([h]) => h)], ...apiRows.slice(1).map(r => {
+    const c = porCod.get(cod(r[iCodA])); const out = [...r];
+    if (c) pref.forEach(([i, j]) => { if (S(c[j]) !== '') out[i] = c[j]; });
+    return [...out, ...faltam.map(([, j]) => c && c[j] !== undefined ? c[j] : '')];
+  })];
+}
+const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+const rotuloPeriodo = per => { const [a, m] = per.split('-'); return `Fim de ${MESES[+m - 1]}/${a}`; };
+function pedirToken(msg) {
+  $('#tokenBox').hidden = false; $('#wtoken').focus();
+  $('#status').textContent = msg || 'Digite o código de acesso para carregar os dados automáticos (fica salvo neste navegador).';
+  $('#status').className = '';
+}
+async function chamarWebApp(params) {
+  const tok = localStorage.getItem('wtoken');
+  if (!tok) { pedirToken(); throw null; }
+  const d = await jsonp(`${WEBAPP_URL}?token=${encodeURIComponent(tok)}&${params}`);
+  if (!d || !d.ok) {
+    if (d && d.erro === 'token') { localStorage.removeItem('wtoken'); pedirToken('Código de acesso inválido. Digite novamente.'); throw null; }
+    throw new Error('Serviço de dados: ' + ((d && d.mensagem) || 'resposta inválida.'));
+  }
+  return d;
+}
+function resumoStatus(st) {
+  if (!st) return '';
+  const p = [];
+  if (st.meta) p.push(st.meta.erro ? `⚠ Metabase falhou em ${st.meta.erro_em}` : `Metabase de ${st.meta.arquivo_de || st.meta.atualizado_em}`);
+  if (st.cx) p.push(st.cx.erro ? `⚠ CustomerX: ${st.cx.erro}` : st.cx.origem === 'API'
+    ? `CustomerX (API) de ${st.cx.arquivo_de || st.cx.atualizado_em}${st.cx.clientes_com_falha ? ` · ⚠ ${st.cx.clientes_com_falha} clientes com indicador faltando` : ''}${st.cx.complemento_de ? ` · colunas em validação da exportação de ${st.cx.complemento_de}` : ''}`
+    : `CustomerX de ${st.cx.arquivo_de || st.cx.atualizado_em}`);
+  return p.join(' · ');
+}
+async function carregarPeriodo(per) {
+  $('#status').textContent = per === 'atual' ? 'Buscando os dados mais recentes no Drive…' : `Buscando ${rotuloPeriodo(per).toLowerCase()}…`;
+  $('#status').className = '';
+  const d = await chamarWebApp('periodo=' + encodeURIComponent(per));
+  let cxRows = rowsFromB64(d.cx);
+  if (d.cx.ext === 'json' && d.cxComp) {
+    const comp = rowsFromB64(d.cxComp);
+    if (new URLSearchParams(location.search).has('validar')) mostrarValidacao(validarCx(cxRows, comp));
+    cxRows = complementarCx(cxRows, comp);
+  } else if (new URLSearchParams(location.search).has('validar')) mostrarValidacao(null);
+  const t = montarTabelas(rowsFromB64(d.meta), cxRows);
+  ALL = buildAccounts(t.cxRows, t.metaRows);
+  const par = t.semPar ? `${t.semPar} de ${t.total} empresas da Meta sem par na Exportação` : 'todos os CNPJs da Meta localizados na Exportação';
+  const fonte = per === 'atual' ? 'Drive (automático)' : `Drive · ${rotuloPeriodo(per)}`;
+  finishLoad(fonte, true, [par, per === 'atual' ? resumoStatus(d.status) : ''].filter(Boolean).join(' · '));
+}
+async function iniciarAuto() {
+  $('#autoRow').hidden = false;
+  const d = await chamarWebApp('acao=lista');
+  const mesAtual = new Date().toISOString().slice(0, 7);
+  const sel = $('#periodo');
+  sel.innerHTML = '<option value="atual">Hoje (mais recente)</option>' +
+    (d.periodos || []).filter(p => p !== mesAtual).map(p => `<option value="${p}">${rotuloPeriodo(p)}</option>`).join('');
+  $('#tokenBox').hidden = true;
+  await carregarPeriodo('atual');
+}
+function toggleManual(open) {
+  const box = $('#manual'), btn = $('#manualBtn'); if (!box || !btn) return;
+  if (open === undefined) open = box.hidden;
+  box.hidden = !open; btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  btn.textContent = open ? '✕ Fechar carga manual' : '📂 Carregar arquivos manualmente';
+}
+// Se a carga automática falhar e ainda não houver dados na tela, abre a carga manual
+function fail(e) { if (e === null) return; $('#status').textContent = e.message || String(e); $('#status').className = 'err'; if (!ALL.length) toggleManual(true); }
 
 async function loadRepoFile(name) {
   const r = await fetch(name + '?_=' + Date.now()); if (!r.ok) throw new Error('sem ' + name);
@@ -533,6 +760,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const p = new URLSearchParams(location.search);
   let theme = 'light'; try { theme = localStorage.getItem('theme') || (typeof DEFAULT_THEME !== 'undefined' ? DEFAULT_THEME : 'light'); } catch (e) {}
   applyTheme(theme);
+  $('#manualBtn').onclick = () => toggleManual();
   $('#theme').onclick = () => { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; applyTheme(t); try { localStorage.setItem('theme', t); } catch (e) {} };
   $('#gload').onclick = () => { const u = $('#gurl').value.trim(); if (!u) return; localStorage.setItem('sheetUrl', u); $('#status').textContent = 'Carregando…'; $('#status').className = ''; loadGoogle(u).catch(fail); };
   $('#file').onchange = async e => {
@@ -557,6 +785,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.target.value = '';
   };
   $('#csm').onchange = () => { localStorage.setItem('csm', $('#csm').value); render(); };
+  // Dados automáticos (Drive) têm prioridade quando WEBAPP_URL está preenchido
+  if (typeof WEBAPP_URL !== 'undefined' && WEBAPP_URL && !p.get('sheet')) {
+    if (p.get('token')) { localStorage.setItem('wtoken', p.get('token')); p.delete('token'); history.replaceState(null, '', location.pathname + (p.toString() ? '?' + p : '')); }
+    $('#wtokenOk').onclick = () => { const v = $('#wtoken').value.trim(); if (!v) return; localStorage.setItem('wtoken', v); $('#wtoken').value = ''; iniciarAuto().catch(fail); };
+    $('#wtoken').onkeydown = ev => { if (ev.key === 'Enter') $('#wtokenOk').click(); };
+    $('#periodo').onchange = () => carregarPeriodo($('#periodo').value).catch(fail);
+    iniciarAuto().catch(fail);
+    return;
+  }
   // Ordem: ?sheet= na URL › DEFAULT_SHEET › dados.xlsx no repositório › último link usado neste navegador
   const fixed = p.get('sheet') || (typeof DEFAULT_SHEET !== 'undefined' && DEFAULT_SHEET) || '';
   if (fixed) { $('#gurl').value = fixed; $('#status').textContent = 'Carregando…'; loadGoogle(fixed).catch(fail); return; }
@@ -564,6 +801,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   for (const f of files) { try { $('#status').textContent = 'Carregando ' + f + '…'; await loadRepoFile(f); return; } catch (e) { /* tenta o próximo */ } }
   const saved = localStorage.getItem('sheetUrl');
   if (saved) { $('#gurl').value = saved; $('#status').textContent = 'Carregando…'; loadGoogle(saved).catch(fail); }
-  else { $('#status').textContent = 'Nenhum dados.xlsx no repositório. Suba os 2 arquivos crus (empresas_elite___cadastro + Exportação de Clientes) ou cole o link da planilha para ver os gráficos.'; $('#status').className = ''; }
+  else { toggleManual(true); $('#status').textContent = 'Nenhum dados.xlsx no repositório. Suba os 2 arquivos crus (empresas_elite___cadastro + Exportação de Clientes) ou cole o link da planilha para ver os gráficos.'; $('#status').className = ''; }
 });
 </script></body></html>
