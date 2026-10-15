@@ -27,7 +27,7 @@ h1{font-size:28px;margin:0 0 4px;letter-spacing:-.01em;font-weight:700;color:var
 .c-red{background:var(--neg-bg)!important;color:var(--neg-fg);font-weight:600}.c-yel{background:var(--warn-bg)!important;color:var(--warn-fg);font-weight:600}.c-grn{background:var(--pos-bg)!important;color:var(--pos-fg);font-weight:600}
 .lg{display:block;font-size:10.5px;color:var(--mut);font-weight:400}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.kpi{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:12px 14px;box-shadow:var(--sh)}.kpi b{display:block;font-size:22px;color:var(--tx2);font-weight:700}.kpi span{color:var(--mut);font-size:12.5px}
+.kpi.ck:hover{border-color:var(--ac)}.kpi{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:12px 14px;box-shadow:var(--sh)}.kpi b{display:block;font-size:22px;color:var(--tx2);font-weight:700}.kpi span{color:var(--mut);font-size:12.5px}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:16px 18px;box-shadow:var(--sh)}
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:12px;margin-top:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;margin-top:12px}
@@ -333,14 +333,14 @@ const PAL = ['#34AD61', '#12B8A2', '#0EA5E9', '#7C5CE6', '#F5A60A', '#F05143', '
 const hue = i => PAL[i % PAL.length];
 
 let ALL = [], ACC = [], META = { fonte: '', data: '' };
-let LISTS = []; // registro de listas clicáveis: índice -> {title, acc}
-function reg(title, acc) { LISTS.push({ title, acc }); return LISTS.length - 1; }
+let LISTS = []; // registro de listas clicáveis: índice -> {title, acc, sort?, resumo?}
+function reg(title, acc, opts) { LISTS.push(Object.assign({ title, acc }, opts || {})); return LISTS.length - 1; }
 const L = (title, acc, text) => (acc && acc.length ? `<span class="ck lk" data-l="${reg(title, acc)}">${text}</span>` : text);
 function openList(i) {
   const L = LISTS[i]; if (!L) return;
-  const rows = [...L.acc].sort((a, b) => a.score - b.score || (b.gmv || 0) - (a.gmv || 0));
+  const rows = [...L.acc].sort(L.sort || ((a, b) => a.score - b.score || (b.gmv || 0) - (a.gmv || 0)));
   $('#mtitle').textContent = `${L.title} · ${rows.length} conta${rows.length === 1 ? '' : 's'}`;
-  $('#mbody').innerHTML = rows.length ? `<table><thead><tr><th>Empresa</th><th>Score</th><th>CSM</th><th>IF</th><th>Faixa</th><th>Segmento (Cx)</th><th>Plano</th><th>MRR</th><th>GMV último mês</th><th>Pedidos (média 3m)</th><th>Tickets 30d</th><th>Último login</th><th>Última interação</th><th>Armazenamento</th><th>Saúde API</th><th>Posição vs faixa</th><th>Motivo do risco</th><th>Integrações</th></tr></thead><tbody>${rows.map(a => `<tr><td>${nomeLink(a)}<span class="mut sm">${esc(a.razao !== a.nome ? a.razao : '')}</span></td><td class="${scoreCls(a.score)}" title="${esc('Score: ' + a.scoreFonte + (a.penalidades.length ? ' · Sinais: ' + a.penalidades.map(p => p[0]).join(' · ') : ''))}">${a.score}</td><td>${esc(a.csm)}</td><td>${a.IF}</td><td>${a.fx ? 'Faixa ' + a.fx : '–'}</td><td>${esc(a.seg)}</td><td>${esc(a.plano) || '–'}</td><td title="Valor na planilha: ${esc(a.mrrRaw)}">${fmtMoney(a.mrr)}</td><td>${fmtMi(a.gmv)}</td><td>${fmtInt(a.media)}</td><td>${a.tickets == null ? '–' : fmtInt(a.tickets)}</td><td class="${a.diasLogin != null && a.diasLogin > 15 ? 'c-red' : a.diasLogin != null && a.diasLogin > 7 ? 'c-yel' : ''}">${fmtDays(a.diasLogin)}</td><td class="${a.diasInteracao != null && a.diasInteracao > 60 ? 'c-red' : a.diasInteracao != null && a.diasInteracao > 30 ? 'c-yel' : ''}">${fmtDays(a.diasInteracao)}</td><td class="${armCls(a.arm)}" title="Valor na planilha: ${esc(a.armRaw)}">${fmtPctExact(a.arm)}</td><td class="${apiCls(a.api)}" title="Valor na planilha: ${esc(a.apiRaw)}">${fmtPctExact(a.api)}</td><td>${esc(a.pos)}</td><td>${esc(a.motivo) || '–'}</td><td class="wrap">${esc(a.integ.join(', ')) || '–'}</td></tr>`).join('')}</tbody></table>` : '<p class="mut">Nenhuma conta neste recorte.</p>';
+  $('#mbody').innerHTML = (L.resumo ? `<p class="note" style="margin:0 0 10px">${L.resumo}</p>` : '') + (rows.length ? `<table><thead><tr><th>Empresa</th><th>Score</th><th>CSM</th><th>IF</th><th>Faixa</th><th>Segmento (Cx)</th><th>Plano</th><th>MRR</th><th>GMV último mês</th><th>Pedidos (média 3m)</th><th>Tickets 30d</th><th>Último login</th><th>Última interação</th><th>Armazenamento</th><th>Saúde API</th><th>Posição vs faixa</th><th>Motivo do risco</th><th>Integrações</th></tr></thead><tbody>${rows.map(a => `<tr><td>${nomeLink(a)}<span class="mut sm">${esc(a.razao !== a.nome ? a.razao : '')}</span></td><td class="${scoreCls(a.score)}" title="${esc('Score: ' + a.scoreFonte + (a.penalidades.length ? ' · Sinais: ' + a.penalidades.map(p => p[0]).join(' · ') : ''))}">${a.score}</td><td>${esc(a.csm)}</td><td>${a.IF}</td><td>${a.fx ? 'Faixa ' + a.fx : '–'}</td><td>${esc(a.seg)}</td><td>${esc(a.plano) || '–'}</td><td title="Valor na planilha: ${esc(a.mrrRaw)}">${fmtMoney(a.mrr)}</td><td>${fmtMi(a.gmv)}</td><td>${fmtInt(a.media)}</td><td>${a.tickets == null ? '–' : fmtInt(a.tickets)}</td><td class="${a.diasLogin != null && a.diasLogin > 15 ? 'c-red' : a.diasLogin != null && a.diasLogin > 7 ? 'c-yel' : ''}">${fmtDays(a.diasLogin)}</td><td class="${a.diasInteracao != null && a.diasInteracao > 60 ? 'c-red' : a.diasInteracao != null && a.diasInteracao > 30 ? 'c-yel' : ''}">${fmtDays(a.diasInteracao)}</td><td class="${armCls(a.arm)}" title="Valor na planilha: ${esc(a.armRaw)}">${fmtPctExact(a.arm)}</td><td class="${apiCls(a.api)}" title="Valor na planilha: ${esc(a.apiRaw)}">${fmtPctExact(a.api)}</td><td>${esc(a.pos)}</td><td>${esc(a.motivo) || '–'}</td><td class="wrap">${esc(a.integ.join(', ')) || '–'}</td></tr>`).join('')}</tbody></table>` : '<p class="mut">Nenhuma conta neste recorte.</p>');
   $('#modal').showModal();
 }
 document.addEventListener('click', e => { const t = e.target.closest('[data-l]'); if (t) openList(+t.dataset.l); });
@@ -349,6 +349,10 @@ function groupBy(arr, f) { const m = new Map(); arr.forEach(a => { const k = f(a
 const sum = (arr, f) => arr.reduce((s, a) => s + (f(a) || 0), 0);
 const cnt = (arr, f) => arr.filter(a => f(a) != null).length;
 const avg = (arr, f) => { const v = arr.map(f).filter(x => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+// Health Score médio: igual à plataforma CX, contas com Status "Finalizado" (canceladas) ficam fora da média
+const finalizada = a => /^finalizad/i.test(String(a.statusCx || '').trim());
+const scoreMedia = acc => avg(acc, a => finalizada(a) ? null : a.score);
+const fmtScore = v => v == null ? '–' : Math.round(v);
 const median = (arr, f) => { const v = arr.map(f).filter(x => x != null).sort((a, b) => a - b); if (!v.length) return null; const m = v.length >> 1; return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2; };
 
 // --- gráficos ---
@@ -425,7 +429,30 @@ function render() {
   $('#title').textContent = 'Carteira Elite · ' + (csm === '__all__' ? 'todas as carteiras' : 'CSM ' + csm);
   const gmvT = sum(ACC, a => a.gmv), pedT = sum(ACC, a => a.media), comp = ACC.filter(a => a.acimaFaixa != null);
   const segs = groupBy(ACC, a => a.segGrupo), nSeg = [...segs.keys()].filter(k => k !== 'Sem segmento na Cx').length;
-  $('#kpis').innerHTML = [[`${Math.round(avg(ACC, a => a.score))}`, `Health Score médio · ${ACC.filter(a => a.banda === 'Crítico').length} crítica${ACC.filter(a => a.banda === 'Crítico').length === 1 ? '' : 's'}`], [fmtInt(ACC.length), 'empresas'], [fmtMi(gmvT), 'GMV último mês'], [fmtInt(pedT), 'pedidos/mês (média 3 meses)'], [fmtMil(sum(ACC, a => a.mrr)), `MRR (${cnt(ACC, a => a.mrr)} contas com dado)`], [fmtInt(sum(ACC, a => a.tickets)), `tickets nos últimos 30 dias · ${sum(ACC, a => a.ticketsAlto)} conta${sum(ACC, a => a.ticketsAlto) === 1 ? '' : 's'} com 3+`], [nSeg, `grupos de segmento (+${(segs.get('Sem segmento na Cx') || []).length} sem segmento)`], [`${sum(comp, a => a.acimaFaixa)}/${comp.length}`, 'contas com volume acima da faixa'], [`${sum(ACC, a => a.temMotivo)}/${ACC.length}`, 'contas com motivo de risco']].map(([b, s]) => `<div class="kpi"><b>${b}</b><span>${s}</span></div>`).join('');
+  { // KPIs do topo: clique no card abre a lista de contas; clique no texto sublinhado abre o recorte
+    const desc = k => (a, b) => (b[k] ?? -1) - (a[k] ?? -1);
+    const sub = (title, acc, text, opts) => acc.length ? `<span class="ck lk" data-l="${reg(title, acc, opts)}">${text}</span>` : text;
+    const plural = (n, s1, s2) => `${n} ${n === 1 ? s1 : s2}`;
+    const hsAcc = ACC.filter(a => !finalizada(a) && a.score != null), hs0 = ACC.filter(finalizada), crit = ACC.filter(a => a.banda === 'Crítico');
+    const hsSoma = sum(hsAcc, a => a.score), hsM = scoreMedia(ACC);
+    const gmvAcc = ACC.filter(a => a.gmv), pedAcc = ACC.filter(a => a.media), mrrAcc = ACC.filter(a => a.mrr != null);
+    const tkAcc = ACC.filter(a => a.tickets), tk3 = ACC.filter(a => a.ticketsAlto === 1);
+    const semSeg = segs.get('Sem segmento na Cx') || [], comSeg = ACC.filter(a => a.segGrupo !== 'Sem segmento na Cx');
+    const acima = comp.filter(a => a.acimaFaixa === 1), mot = ACC.filter(a => a.temMotivo);
+    const tiles = [
+      [fmtScore(hsM), `Health Score médio · ${sub('Health Score · Crítico', crit, plural(crit.length, 'crítica', 'críticas'))}${hs0.length ? ` · ${sub('Status Finalizado · fora da média', hs0, `${plural(hs0.length, 'finalizada', 'finalizadas')} fora da média`, { resumo: 'Contas com Status "Finalizado" na Exportação de Clientes não entram na média, igual à plataforma CX.' })}` : ''}`,
+        'Health Score médio · contas que entram na média', hsAcc, { resumo: hsAcc.length ? `Média = soma dos HS (${fmtInt(hsSoma)}) ÷ ${hsAcc.length} contas = <b>${hsM.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>. Contas com Status Finalizado ficam fora (${hs0.length}).` : '' }],
+      [fmtInt(ACC.length), 'empresas', 'Empresas', ACC, { resumo: `${ACC.length} contas da Exportação de Clientes neste filtro.` }],
+      [fmtMi(gmvT), 'GMV último mês', 'GMV último mês', gmvAcc, { sort: desc('gmv'), resumo: `Soma do GMV do último mês de ${gmvAcc.length} contas: <b>${fmtMoney(gmvT)}</b>. Ordenado do maior para o menor.` }],
+      [fmtInt(pedT), 'pedidos/mês (média 3 meses)', 'Pedidos/mês (média 3 meses)', pedAcc, { sort: desc('media'), resumo: `Soma da média de pedidos (marketplace + API) de ${pedAcc.length} contas: <b>${fmtInt(pedT)}</b>.` }],
+      [fmtMil(sum(ACC, a => a.mrr)), `MRR (${cnt(ACC, a => a.mrr)} contas com dado)`, 'MRR', mrrAcc, { sort: desc('mrr'), resumo: `Soma do MRR de ${mrrAcc.length} contas: <b>${fmtMoney(sum(ACC, a => a.mrr))}</b>.` }],
+      [fmtInt(sum(ACC, a => a.tickets)), `tickets nos últimos 30 dias · ${sub('Contas com 3+ tickets nos últimos 30 dias', tk3, plural(tk3.length, 'conta com 3+', 'contas com 3+'), { sort: desc('tickets') })}`, 'Contas com tickets nos últimos 30 dias', tkAcc, { sort: desc('tickets'), resumo: `Total de ${fmtInt(sum(ACC, a => a.tickets))} tickets em ${tkAcc.length} contas.` }],
+      [nSeg, `grupos de segmento ${sub('Sem segmento na Cx', semSeg, `(+${semSeg.length} sem segmento)`)}`, 'Contas com segmento na Cx', comSeg, { sort: (a, b) => String(a.segGrupo).localeCompare(String(b.segGrupo)) || a.score - b.score }],
+      [`${acima.length}/${comp.length}`, 'contas com volume acima da faixa', 'Volume acima da faixa contratada', acima, { sort: desc('media'), resumo: `${acima.length} de ${comp.length} contas com faixa na tag estão acima da faixa contratada.` }],
+      [`${mot.length}/${ACC.length}`, 'contas com motivo de risco', 'Contas com motivo de risco', mot]
+    ];
+    $('#kpis').innerHTML = tiles.map(([b, txt, title, acc, opts]) => `<div class="kpi ck" data-l="${reg(title, acc, opts)}" title="Clique para ver as contas"><b>${b}</b><span>${txt}</span></div>`).join('');
+  }
   { // Conferência: valores lidos da planilha (para comparar com o Excel)
     const st = arr => { const v = arr.filter(x => x != null).sort((p, q) => p - q); return v.length ? { n: v.length, min: v[0], med: v[v.length >> 1], max: v[v.length - 1], sum: v.reduce((p, q) => p + q, 0), acima100: v.filter(x => x > 100).length } : null; };
     const sm = st(ACC.map(a => a.mrr)), sa = st(ACC.map(a => a.arm)), sp = st(ACC.map(a => a.api));
@@ -455,8 +482,8 @@ function render() {
   const penTop = {}; ACC.forEach(a => a.penalidades.forEach(p => { if (p[1] > 0) (penTop[p[0]] = penTop[p[0]] || []).push(a); }));
   const criticas = ACC.filter(a => a.banda !== 'Saudável').sort((a, b) => a.score - b.score);
   h += `<h2>Health Score e engajamento</h2><p class="lead">Score de 0 a 100 por conta: começa em 100 e desconta pontos por IF, queda de pedidos, API, armazenamento, tickets, inadimplência, engajamento, preço, dias sem interação e sem login. Pesos editáveis no código (HEALTH). Data de referência: ${fmtDate(ref)}.</p><div class="grid">`
-    + card('Distribuição do Health Score', `média ${Math.round(avg(ACC, a => a.score))} · Saudável ≥ ${HEALTH_BANDS.saudavel} · Atenção ≥ ${HEALTH_BANDS.atencao}`, pie(bands.map(b => ({ label: b.label, value: b.acc.length, color: BAND_COLOR[b.label], text: b.acc.length + ' emp.', acc: b.acc })), 'Health Score'))
-    + card('Score médio por IF', 'quanto menor, mais frágil', barList(ifPresent.map(g => ({ label: g.label, value: Math.round(avg(g.acc, a => a.score)), color: IF_COLOR[g.key], acc: g.acc })), v => v + ' pts'))
+    + card('Distribuição do Health Score', `média ${fmtScore(scoreMedia(ACC))} (sem Finalizadas) · Saudável ≥ ${HEALTH_BANDS.saudavel} · Atenção ≥ ${HEALTH_BANDS.atencao}`, pie(bands.map(b => ({ label: b.label, value: b.acc.length, color: BAND_COLOR[b.label], text: b.acc.length + ' emp.', acc: b.acc })), 'Health Score'))
+    + card('Score médio por IF', 'quanto menor, mais frágil', barList(ifPresent.map(g => ({ label: g.label, value: Math.round(scoreMedia(g.acc) ?? 0), color: IF_COLOR[g.key], acc: g.acc })), v => v + ' pts'))
     + card('Sinais de risco mais comuns', 'contas afetadas por cada sinal (informativo; o score vem da coluna HS da Exportação)', barList(Object.entries(penTop).filter(([k]) => !IF_ORDER.some(i => k.startsWith(i))).sort((a, b) => b[1].length - a[1].length).slice(0, 10).map(([k, acc], i) => ({ label: k, value: acc.length, color: hue(i), acc })), v => v + ' emp.'))
     + '</div><div class="grid">'
     + card('Último login no Bling', `${cnt(ACC, a => a.diasLogin)} contas com dado (Tabela Meta) · ref. ${fmtDate(ref)}`, pie(mkBuckets(a => a.diasLogin, loginCuts), 'Último login'))
@@ -479,7 +506,7 @@ function render() {
 
   // 2. Comparativo
   h += `<h2>2. Comparativo entre os IFs</h2>` + table(['IF', 'Empresas', 'Score médio', 'GMV', 'GMV médio', 'MRR', 'MRR médio', 'Pedidos (mediana)', 'Tickets 30d (total)', 'Marketplaces (média)', 'Armazenamento médio', 'Saúde API média', 'Usa API', 'Segmentos distintos'],
-    ifGroups.map(g => g.acc.length ? ((arr) => arr.map(c => L(g.label, g.acc, c)))([esc(g.label), g.acc.length, `<span class="${scoreCls(avg(g.acc, a => a.score))}" style="padding:2px 6px;border-radius:6px">${Math.round(avg(g.acc, a => a.score))}</span>`, fmtMi(sum(g.acc, a => a.gmv)), fmtMi(avg(g.acc, a => a.gmv)), fmtMil(sum(g.acc, a => a.mrr)), fmtMil(avg(g.acc, a => a.mrr)), fmtInt(median(g.acc, a => a.media)), fmtInt(sum(g.acc, a => a.tickets)), (avg(g.acc, a => a.naMeta ? a.nMkt : null) ?? 0).toFixed(1), avg(g.acc, a => a.arm) == null ? '–' : `<span class="${armCls(avg(g.acc, a => a.arm))}" style="padding:2px 6px;border-radius:6px">${fmtPct1(avg(g.acc, a => a.arm))}</span>`, avg(g.acc, a => a.api) == null ? '–' : `<span class="${apiCls(avg(g.acc, a => a.api))}" style="padding:2px 6px;border-radius:6px">${fmtPct1(avg(g.acc, a => a.api))}</span>`, avg(g.acc, a => a.usaApi) == null ? '–' : Math.round(100 * avg(g.acc, a => a.usaApi)) + '%', new Set(g.acc.map(a => a.seg)).size]) : [esc(g.label), 0, `<span class="mut">Nenhuma empresa da carteira com esse IF</span>`, '', '', '', '', '', '', '', '', '', '', '']));
+    ifGroups.map(g => g.acc.length ? ((arr) => arr.map(c => L(g.label, g.acc, c)))([esc(g.label), g.acc.length, `<span class="${scoreCls(scoreMedia(g.acc))}" style="padding:2px 6px;border-radius:6px">${fmtScore(scoreMedia(g.acc))}</span>`, fmtMi(sum(g.acc, a => a.gmv)), fmtMi(avg(g.acc, a => a.gmv)), fmtMil(sum(g.acc, a => a.mrr)), fmtMil(avg(g.acc, a => a.mrr)), fmtInt(median(g.acc, a => a.media)), fmtInt(sum(g.acc, a => a.tickets)), (avg(g.acc, a => a.naMeta ? a.nMkt : null) ?? 0).toFixed(1), avg(g.acc, a => a.arm) == null ? '–' : `<span class="${armCls(avg(g.acc, a => a.arm))}" style="padding:2px 6px;border-radius:6px">${fmtPct1(avg(g.acc, a => a.arm))}</span>`, avg(g.acc, a => a.api) == null ? '–' : `<span class="${apiCls(avg(g.acc, a => a.api))}" style="padding:2px 6px;border-radius:6px">${fmtPct1(avg(g.acc, a => a.api))}</span>`, avg(g.acc, a => a.usaApi) == null ? '–' : Math.round(100 * avg(g.acc, a => a.usaApi)) + '%', new Set(g.acc.map(a => a.seg)).size]) : [esc(g.label), 0, `<span class="mut">Nenhuma empresa da carteira com esse IF</span>`, '', '', '', '', '', '', '', '', '', '', '']));
   h += `<p class="note">MRR, tickets, marketplaces, armazenamento, saúde da API e uso de API só existem na Tabela Meta e cobrem as ${sum(ACC, a => a.naMeta)} contas dessa tabela.</p>`;
 
   // 3. Riscos
