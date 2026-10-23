@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carteira Elite · dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#F8FAFC;--card:#FFFFFF;--card2:#F0F3F7;--hover:#F8FAFC;--tx:#495769;--tx2:#1F2A3B;--mut:#66768C;--bd:#E4E9F0;--bd2:#CCD5E0;--ac:#34AD61;--ac2:#288F4E;--acbg:#DCFAE6;--rk:#F05143;--yl:#F5A60A;--ex:#34AD61;--link:#0EB2E8;--neg-bg:#FFE5E3;--neg-fg:#BA291C;--warn-bg:#FFF1C7;--warn-fg:#A16207;--pos-bg:#DCFAE6;--pos-fg:#1D733C;--input:#FFFFFF;--sh:0 2px 4px 0 rgba(73,87,105,.16),0 1px 2px -1px rgba(73,87,105,.16)}
+:root[data-theme="dark"]{--bg:#18181B;--card:#27272A;--card2:#3F3F46;--hover:#3F3F46;--tx:#E4E4E7;--tx2:#FFFFFF;--mut:#A1A1AA;--bd:#3F3F46;--bd2:#52525B;--ac:#5AC782;--ac2:#34AD61;--acbg:#144728;--rk:#F05143;--yl:#F5A60A;--ex:#5AC782;--link:#41CFFA;--neg-bg:#801D1D;--neg-fg:#FFE5E3;--warn-bg:#713F12;--warn-fg:#FFF1C7;--pos-bg:#355313;--pos-fg:#E9FACD;--input:#3F3F46;--sh:0 0 5px #00000054}
+:root[data-theme="dark"] .topbar img{filter:brightness(1.15)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.5 'Inter',Arial,Roboto,Helvetica,sans-serif}
+main{max-width:1080px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:28px;margin:0 0 4px;letter-spacing:-.01em;font-weight:700;color:var(--tx2)}h2{font-size:20px;margin:44px 0 6px;color:var(--tx2);font-weight:700;padding-left:12px;border-left:4px solid var(--ac)}h3{font-size:15px;margin:0;color:var(--tx2)}h3.sp{margin-top:26px}
+.lead{color:var(--mut);margin:0 0 16px}.sub{color:var(--mut);font-size:12.5px;margin:2px 0 10px}
+.loader{background:var(--card);border:1px solid var(--bd);border-radius:8px;box-shadow:var(--sh);padding:14px 18px;margin:14px 0 18px;display:grid;gap:10px}
+.loader .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.loader input[type=text]{flex:1;min-width:240px;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--input);color:var(--tx);font:inherit}
+.loader button,.loader label.btn{padding:8px 16px;border-radius:8px;border:1px solid var(--ac);background:var(--ac);color:#fff;font:inherit;font-weight:600;cursor:pointer}.loader button:hover{background:var(--ac2)}
+.loader label.btn{background:var(--card);color:var(--ac)}.loader label.btn:hover{background:var(--acbg)}.loader input[type=file]{display:none}.loader select{padding:8px 10px;border:1px solid var(--bd2);border-radius:8px;background:var(--input);color:var(--tx);font:inherit}.heatctl select{padding:6px 10px;margin-left:6px;border:1px solid var(--bd2);border-radius:8px;background:var(--input);color:var(--tx);font:inherit}.heatctl label{color:var(--mut)}
+#manualBtn{margin-left:auto;background:var(--card);color:var(--tx);border:1px solid var(--bd2);font-weight:500}#manualBtn[aria-expanded="true"]{border-color:var(--ac);color:var(--ac)}#manual{display:grid;gap:10px;padding-top:10px;border-top:1px dashed var(--bd2)}
+#theme{background:var(--card);color:var(--tx);border:1px solid var(--bd2);font-weight:500}
+[hidden]{display:none!important}.topright{display:flex;align-items:center;gap:14px}.expbtn{background:var(--card)!important;color:var(--tx2)!important;border:1px solid var(--bd2)!important;border-radius:8px!important;padding:7px 12px!important;font:inherit;font-size:13px!important;cursor:pointer;box-shadow:none!important;white-space:nowrap}.expbtn:hover{border-color:var(--ac)!important}.mh{gap:8px}.mh #mExport{margin-left:auto}.tx-dots{background:none!important;border:0!important;box-shadow:none!important;color:inherit!important;opacity:.35;padding:0 3px!important;margin:0 0 0 4px!important;font-size:13px!important;line-height:1;cursor:pointer;vertical-align:middle}th:hover .tx-dots{opacity:.9}.tx-dots.on{opacity:1;color:var(--ac)!important}th[draggable=true]{cursor:grab}.tx-over{outline:2px dashed var(--ac);outline-offset:-2px}.tx-pop{position:fixed;z-index:9999;background:var(--card);color:var(--tx);border:1px solid var(--bd2);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.35);padding:8px;min-width:190px;max-width:320px;display:flex;flex-direction:column;gap:4px;font-size:13px;text-align:left;white-space:normal}.tx-pop button{background:none!important;border:0!important;box-shadow:none!important;color:var(--tx)!important;text-align:left;padding:6px 8px!important;border-radius:6px!important;font:inherit;cursor:pointer}.tx-pop button:hover{background:var(--hover)!important}.tx-pop .tx-tit{font-size:12px;color:var(--mut);padding:2px 8px 4px}.tx-busca{padding:5px 8px;border:1px solid var(--bd2);border-radius:6px;background:var(--input);color:var(--tx);font:inherit}.tx-vals{max-height:220px;overflow:auto;display:flex;flex-direction:column}.tx-op{display:flex;gap:6px;align-items:center;padding:2px 6px;cursor:pointer}.tx-op .mut{margin-left:auto;font-size:11px}.tx-acoes{display:flex;justify-content:flex-end;gap:6px;border-top:1px solid var(--bd);padding-top:6px}.tx-acoes button.on{background:var(--acbg)!important;color:var(--tx2)!important;font-weight:600}.temas{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 0}.temas button{background:var(--card)!important;color:var(--mut)!important;border:1px solid var(--bd2)!important;border-radius:999px!important;padding:6px 14px;font:inherit;font-size:13px;cursor:pointer;box-shadow:none!important}.temas button.on{background:var(--acbg)!important;color:var(--tx2)!important;border-color:var(--ac)!important;font-weight:600}.lk[data-emp]{cursor:pointer;text-decoration:underline dotted}.div{background:rgba(240,81,67,.18)}.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:22px 0 4px;border-bottom:1px solid var(--bd)}.tabs button{background:none!important;border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;color:var(--mut)!important;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer;box-shadow:none!important}.tabs button.on{color:var(--tx2)!important;border-bottom-color:var(--ac)!important}.heatctl input{padding:6px 10px;margin-left:6px;border:1px solid var(--bd2);border-radius:8px;background:var(--input);color:var(--tx);font:inherit;min-width:280px}.seg{display:inline-flex;border:1px solid var(--bd2);border-radius:8px;overflow:hidden;margin-left:6px}.seg button{background:var(--input)!important;color:var(--mut)!important;border:0!important;border-radius:0!important;padding:6px 12px;font:inherit;cursor:pointer;box-shadow:none!important}.seg button.on{background:var(--acbg)!important;color:var(--tx2)!important;font-weight:600}.kv td:first-child{color:var(--mut);width:40%}.kv td{white-space:normal}.delta{font-size:12px;margin-left:6px}.up{color:var(--ac)}.down{color:var(--rk)}.chips span{display:inline-block;padding:3px 9px;margin:2px 4px 2px 0;border:1px solid var(--bd2);border-radius:999px;font-size:12px}.loader small{color:var(--mut)}#status{font-size:12.5px;color:var(--mut)}#status.err{color:var(--rk)}#status.ok{color:var(--ac)}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:6px}.topbar img{height:40px;flex:none;margin-top:4px}
+.tagline{color:var(--mut);font-size:13px}.tagline b{color:var(--ac2)}
+.pills{height:4px;margin:14px 0 4px;background:linear-gradient(90deg,var(--ac) 0 60%,#12B8A2 60% 80%,#7C5CE6 80%);border-radius:2px}
+.c-red{background:var(--neg-bg)!important;color:var(--neg-fg);font-weight:600}.c-yel{background:var(--warn-bg)!important;color:var(--warn-fg);font-weight:600}.c-grn{background:var(--pos-bg)!important;color:var(--pos-fg);font-weight:600}
+.lg{display:block;font-size:10.5px;color:var(--mut);font-weight:400}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi.ck:hover{border-color:var(--ac)}.tx-pop a.lkop{display:block;padding:6px 8px;border-radius:6px;color:var(--tx);text-decoration:none}.tx-pop a.lkop:hover{background:var(--hover)}.emp-oculta{display:none!important}#empTabela{table-layout:fixed;min-width:860px}#empTabela th,#empTabela td{white-space:normal;overflow-wrap:anywhere;padding:8px 10px;text-align:left}#empTabela td .sm{white-space:normal}#empTabela th{white-space:nowrap}.voltar{background:var(--card)!important;color:var(--tx)!important;border:1px solid var(--bd2)!important;font-weight:500}.kpi{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:12px 14px;box-shadow:var(--sh)}.kpi b{display:block;font-size:22px;color:var(--tx2);font-weight:700}.kpi span{color:var(--mut);font-size:12.5px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:16px 18px;box-shadow:var(--sh)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:12px;margin-top:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;margin-top:12px}
+.pw{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}.pw svg{width:150px;height:150px;flex:none}
+.leg{list-style:none;margin:0;padding:0;flex:1;min-width:175px;font-size:12.5px}.leg li{display:grid;grid-template-columns:12px 1fr auto;gap:2px 8px;align-items:center;padding:2px 0}
+.leg em{grid-column:2/4;color:var(--mut);font-style:normal;font-size:11.5px;margin-top:-3px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--bd);border-radius:8px;margin-top:10px;box-shadow:var(--sh)}
+table{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:500;font-size:12px;background:var(--card2)}tr:hover td{background:var(--hover)}tr:last-child td{border-bottom:0}.mut{color:var(--mut)}
+table.mx td.hm{text-align:center;color:var(--tx2);font-variant-numeric:tabular-nums}table.mx td.hm span,table.mx th span{display:block;font-size:10.5px;color:var(--mut);font-weight:400}table.mx th{text-align:center}table.mx td.hm span.sd{color:var(--yl);font-size:10px;margin-top:1px}table.mx th:first-child,table.mx td:first-child{text-align:left}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:4px;margin-bottom:6px}.t-e{background:var(--acbg);color:var(--ac2)}
+.note{font-size:12.5px;color:var(--mut);margin-top:10px}
+.chk{margin:12px 0 0}.chk summary{cursor:pointer;color:var(--mut);font-size:12.5px}
+.sb{display:grid;grid-template-columns:210px 1fr 84px;gap:10px;align-items:center;margin:7px 0;font-size:12.5px}.sl small{color:var(--mut);margin-left:4px}
+.sbar{display:flex;height:26px;border-radius:6px;overflow:hidden;background:var(--card2)}.sbar i{display:flex;align-items:center;justify-content:center;color:#fff;font-style:normal;font-size:11.5px;font-weight:600;overflow:hidden;white-space:nowrap;min-width:0}
+.bl{display:grid;gap:5px;font-size:12.5px}.blr{display:grid;grid-template-columns:170px 1fr auto;gap:8px;align-items:center}.blb{height:14px;background:var(--card2);border-radius:4px;overflow:hidden}.blb i{display:block;height:100%}
+a{color:var(--link)}
+.sbar i{color:#fff;text-shadow:0 0 2px rgba(0,0,0,.35)}.stat{display:flex;gap:10px;flex-wrap:wrap}.stat .ck{background:var(--card2);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;min-width:160px}.stat .ck b{display:block;font-size:20px;color:var(--tx2)}.stat .ck span{font-size:12px;color:var(--mut)}.stat .ck:hover{border-color:var(--ac)}.wrapc{white-space:normal;display:block;max-width:420px;font-size:12px;color:var(--mut)}
+.ck{cursor:pointer}.lk{text-decoration:underline dotted;text-underline-offset:3px}.lk:hover{color:var(--ac2);text-decoration-style:solid}td.ck:hover,li.ck:hover,.blr.ck:hover{outline:2px solid var(--ac);outline-offset:-2px}path.ck:hover{opacity:.8}
+dialog{border:1px solid var(--bd);border-radius:8px;box-shadow:0 16px 24px -2px rgba(73,87,105,.16);background:var(--card);color:var(--tx);padding:0;width:min(1040px,94vw);max-height:86vh}dialog::backdrop{background:rgba(0,0,0,.45)}
+.mh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:var(--card)}.mh h3{font-size:16px}.mh button{border:1px solid var(--bd2);background:var(--card);color:var(--tx);border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}
+#mbody{overflow:auto;max-height:calc(86vh - 60px)}#mbody table{font-size:12.5px}#mbody td.wrap{white-space:normal;min-width:220px;max-width:320px;font-size:11.5px}.sm{display:block;font-size:11px}
+.hint{font-size:12.5px;color:var(--mut);margin:6px 0 0}
+.sb .sl{min-width:0}@media (max-width:600px){.two{grid-template-columns:1fr}.sb{grid-template-columns:1fr}.blr{grid-template-columns:1fr}.sl{font-weight:600}}
+</style>
+</head>
+<body>
+<main>
+<div class="topbar"><div><h1 id="title">Carteira Elite</h1><p class="lead" style="margin:0">Análise por IF, faixa Elite e segmento · gerada no navegador a partir das Tabelas Cx e Meta</p><p class="tagline">O <b>crescimento do empreendedor</b> flui <b>primeiro</b> através de nós</p></div><div class="topright"><button type="button" id="exportAll" class="expbtn">⬇ Exportar dados</button><img src="data:image/png;base64,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" alt="Bling"></div></div>
+<div class="pills" aria-hidden="true"></div>
+<div class="loader">
+  <div class="row"><label for="csm">Carteira (CSM):</label><select id="csm"><option>—</option></select><button id="manualBtn" type="button" aria-expanded="false" aria-controls="manual">📂 Carregar arquivos manualmente</button><button id="theme" type="button" title="Alternar tema">🌙 Modo escuro</button></div>
+  <div id="manual" hidden>
+  <div class="row"><input type="text" id="gurl" placeholder="Link da Planilha Google com as abas Tabela Cx e Tabela Meta"><button id="gload">Carregar da Google Sheets</button><label class="btn">Subir os arquivos .xlsx<input type="file" id="file" accept=".xlsx,.xls,.csv" multiple></label></div>
+    <div class="row"><small>Envie os arquivos crus: o que começa com <b>base_dash____dados_meta</b> (dados Meta), o que começa com <b>Exportação de Clientes (Completa)</b> (dados CSM) e, opcional, o que começa com <b>lista_de_tickets_aberto</b> (tickets). Pode selecionar os dois de uma vez. Valem só para o seu navegador.</small></div>
+  </div>
+  <div class="row" id="autoRow" hidden><label for="periodo">Dados de:</label><select id="periodo"><option value="atual">Hoje</option></select><span id="tokenBox" hidden><input type="password" id="wtoken" placeholder="Código de acesso" style="min-width:200px"> <button id="wtokenOk" type="button">Conectar</button></span></div>
+  <p class="hint">Clique em qualquer célula, fatia ou barra para ver a lista de clientes daquele recorte.</p>
+  <div id="status">Suba os 2 arquivos crus (base_dash____dados_meta + Exportação de Clientes + lista_de_tickets_aberto) ou cole o link da planilha para começar.</div>
+</div>
+<nav class="tabs" id="tabs"><button type="button" data-tab="carteira" class="on">Gestão de Carteira</button><button type="button" data-tab="empresa">Visão da Empresa</button><button type="button" data-tab="historico">Visão de Gestão · Histórico Elite</button><button type="button" id="fontesBtn" style="margin-left:auto">ℹ️ Fontes dos dados</button></nav>
+<section id="tab-carteira">
+<div class="kpis" id="kpis"></div>
+<div id="check"></div>
+<nav class="temas" id="temas"></nav>
+<div id="body"><p class="note">Aguardando dados.</p></div>
+</section>
+<section id="tab-empresa" hidden></section>
+<section id="tab-historico" hidden></section>
+<dialog id="modal"><div class="mh"><h3 id="mtitle"></h3><button onclick="document.getElementById('modal').close()">Fechar</button></div><div id="mbody"></div></dialog>
+</main>
+<script>
+// Tema padrão: 'dark' ou 'light' (o visitante pode alternar; a escolha fica salva no navegador dele)
+const DEFAULT_THEME = 'dark';
+// Fonte de dados para todos os visitantes, nesta ordem:
+// 1) DEFAULT_SHEET: link de uma Planilha Google compartilhada (deixe vazio para não usar)
+// 2) DEFAULT_FILES: arquivos .xlsx hospedados no próprio repositório, ao lado do index.html
+const DEFAULT_SHEET = '';
+// Limites de cor: armazenamento acima de ARM_RED % fica vermelho; API abaixo de API_RED % vermelha, até API_GREEN % amarela, acima verde.
+const ARM_RED = 90, API_RED = 80, API_GREEN = 90;
+const DEFAULT_FILES = ['dados.xlsx'];
+// Dados automáticos (Google Drive): cole aqui o link do App da Web do Apps Script (termina em /exec).
+// O código de acesso NÃO vai aqui: cada pessoa digita uma vez na página e ele fica salvo no navegador dela.
+const WEBAPP_URL = 'https://script.google.com/a/macros/bling.com.br/s/AKfycbzDURj5Ig9IQQlQBmzmnJ43SIQsVINBynp-XV2qkkx81rG_QzTR6uVq5sDyd0bLjQdNWQ/exec';
+</script>
+<script>
+// ===== Motor de dados: transforma as abas "Tabela Cx" e "Tabela Meta" em contas tratadas =====
+const FAIXAS = {1:[10000,15000],2:[15000,20000],3:[20000,30000],4:[30000,50000],5:[50000,80000],6:[80000,100000],7:[100000,150000]};
+const FAIXA_LABEL = {0:'Sem faixa na tag',1:'Faixa 1 · 10–15 mil',2:'Faixa 2 · 15–20 mil',3:'Faixa 3 · 20–30 mil',4:'Faixa 4 · 30–50 mil',5:'Faixa 5 · 50–80 mil',6:'Faixa 6 · 80–100 mil',7:'Faixa 7 · 100–150 mil+'};
+const IF_LABEL = {IF0:'IF0 · Cliente churnado',IF1:'IF1 · Verbalizou cancelamento',IF2:'IF2 · Alto atrito',IF3:'IF3 · Recuperação',IF4:'IF4 · Relac. saudável',IF5:'IF5 · Potencial de expansão',"Sem IF":'Sem IF'};
+const IF_ORDER = ['IF0','IF1','IF2','IF3','IF4','IF5','Sem IF'];
+const ECOM_CX = ['tray','nuvemshop','lojaintegrada','shopify','woocommerce','bagy','yampi','vtex','wix','magento','blinglojavirtual','wbuy','mercos','linx'];
+const LOG_MKT = ['mercadoenvios','logisticashopee','logisticatiktok','amazondba','magaluentregas'];
+// Agrupamento de segmentos da Cx (edite à vontade). Segmento não listado mantém o próprio nome.
+const SEG_GRUPO = {
+  'Moda e Vestuário': ['Moda e Vestuário','Moda e Calçados','Moda e Acessórios','Joias e Bijuterias','Joias e Acessórios','Relojoaria e Acessórios','Têxtil','Armarinho e Aviamentos'],
+  'Beleza e Saúde': ['Beleza e Cosméticos','Beleza e Higiene','Saúde e Farmácia','Saúde','Saúde e Bem-Estar','Farmácia','Produtos Médicos e Hospitalares','Suplementos Alimentares e Nutrição','Ótica','Ótica e Fotografia'],
+  'Casa, Construção e Decoração': ['Materiais de Construção','Móveis e Decoração','Móveis','Utilidades Domésticas','Cama, Mesa e Banho','Eletrodomésticos','Ferramentas','Indústria de Madeira','Produtos de Limpeza','Embalagens'],
+  'Eletrônicos e Informática': ['Informática','Eletroeletrônicos','Eletrônicos e Distribuição','Eletrônicos e Informática','Telecomunicações','Fotografia'],
+  'Automotivo': ['Autopeças','Automotivo','Motos'],
+  'Alimentação e Bebidas': ['Alimentação','Bebidas'],
+  'Papelaria, Livros e Lazer': ['Papelaria','Livraria e Cultura','Brinquedos e Lazer','Esportes'],
+  'Pet Shop': ['Pet Shop'],
+  'Atacado e Varejo geral': ['Distribuição e Atacado','Comércio Varejista','Equipamentos Comerciais','Máquinas e Equipamentos Industriais'],
+  'Serviços': ['Marketing e Publicidade','Serviços Técnicos','Intermediação e Agenciamento'],
+};
+const SEG_MAP = {}; Object.entries(SEG_GRUPO).forEach(([g, list]) => list.forEach(s => SEG_MAP[s.toLowerCase()] = g));
+// Hubs/integradores identificáveis na coluna "Integrações ativas" da Cx
+const HUBS = ['IntegraCommerce','SkyHub','ApiAnyMarket','Olist','ApiPluggTo','ApiConectala','ApiConectaVenda','ApiWebcontinental','ApiCommerceplus','ApiDropi','Shoppub','ApiVnda','ApiWapstore','ApiFacily'];
+// Health Score: começa em 100 e desconta pontos por sinal de risco (edite os pesos). Faixas: >= 75 Saudável, 50–74 Atenção, < 50 Crítico.
+const HEALTH = { IF1: 40, IF2: 30, IF3: 15, IF4: 0, IF5: 0, 'Sem IF': 5, IF0: 60,
+  quedaPedidos: 15, apiVermelha: 10, apiAmarela: 5, armazenamento: 10, tickets: 10, inadimplente: 15, baixoEngajamento: 10, precoRisco: 10,
+  semInteracao60: 10, semInteracao30: 5, semLogin15: 10, semLogin7: 5, abaixoFaixa: 5, npsDetrator: 10, npsPromotor: -5 };
+const HEALTH_BANDS = { saudavel: 75, atencao: 50 };
+const RISCOS = [['Preço','preço'],['Produto','produto'],['Suporte','suporte'],['Funcionalidade','funcionalidade'],['Armazenamento','armazenamento'],['Instabilidade','instabilidade'],['Lentidão','lentid'],['Plano','plano'],['Integrações','integra'],['CSM','csm']];
+
+const S = v => (v == null ? '' : String(v)).trim();
+const cleanNum = v => S(v).replace(/[\s\u00a0]/g, '').replace(/^R\$/i, '').replace(/%$/, '').replace(/^\((.*)\)$/, '-$1');
+// Lê número em qualquer formato (1.941,67 · 1,941.67 · 1941.67 · 2.250 · 100,4% · R$ 2.250). pct=true: nunca trata ponto/vírgula como milhar.
+const parseNum = (v, pct) => {
+  if (v == null || v === '') return null;
+  if (typeof v === 'number') return isNaN(v) ? null : v;
+  let t = cleanNum(v); if (t === '' || t === '-') return null;
+  const hasC = t.includes(','), hasD = t.includes('.');
+  if (hasC && hasD) { t = t.lastIndexOf(',') > t.lastIndexOf('.') ? t.replace(/\./g, '').replace(',', '.') : t.replace(/,/g, ''); }
+  else if (hasC) { t = (!pct && /^-?\d{1,3}(,\d{3})+$/.test(t)) ? t.replace(/,/g, '') : t.replace(',', '.'); }
+  else if (hasD) { if (!pct && /^-?\d{1,3}(\.\d{3})+$/.test(t)) t = t.replace(/\./g, ''); }
+  const x = Number(t); return isNaN(x) ? null : x;
+};
+const N = v => parseNum(v, false);
+const Nraw = v => parseNum(v, true);
+const has = (t, k) => S(t).toLowerCase().includes(k.toLowerCase());
+const toDate = v => { if (v == null || v === '') return null; if (v instanceof Date) return isNaN(v) ? null : v; if (typeof v === 'number') return new Date(Math.round((v - 25569) * 864e5)); const s = String(v).trim(); let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if (m) return new Date(+m[1], m[2] - 1, +m[3]); m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); if (m) return new Date(+m[3], m[2] - 1, +m[1]); const d = new Date(s); return isNaN(d) ? null : d; };
+const daysBetween = (a, b) => (a && b) ? Math.round((b - a) / 864e5) : null;
+const idKey = v => { const s = S(v); if (/^\d+(\.0+)?$/.test(s)) return String(parseInt(s, 10)); if (/e\+/i.test(s)) return String(Math.round(Number(s))); return s; };
+
+// Recebe arrays de linhas (array de arrays) de cada aba; localiza a linha de cabeçalho.
+function toRecords(rows) {
+  let hi = rows.findIndex(r => r && r.some(c => /id empresa/i.test(S(c))));
+  if (hi < 0) hi = 0;
+  const hdr = rows[hi].map(c => S(c).replace(/^Tabela (Cx|Meta)\s+/i, ''));
+  const out = [];
+  for (let i = hi + 1; i < rows.length; i++) {
+    const r = rows[i]; if (!r || S(r[0]) === '') continue;
+    const o = {}; hdr.forEach((h, j) => { if (h) o[h] = r[j]; }); out.push(o);
+  }
+  return { hdr, rows: out };
+}
+function col(obj, ...names) { for (const n of names) { const k = Object.keys(obj).find(k => k.toLowerCase() === n.toLowerCase()); if (k !== undefined) return obj[k]; } return undefined; }
+
+function detectSheet(rows) {
+  const flat = rows.slice(0, 3).flat().map(c => S(c).toLowerCase());
+  if (flat.some(c => c === 'carteira') && flat.some(c => c === 'tags')) return 'cx';
+  if (flat.some(c => c === 'csm') && flat.some(c => c.startsWith('gmv'))) return 'meta';
+  return null;
+}
+
+// ===== Tratamento dos arquivos crus (substitui os PROCX do Excel) =====
+// Arquivo 1: começa com "base_dash____dados_meta" (antes: "empresas_elite___cadastro") -> dados da aba "Tabela Meta" (crus)
+// Arquivo 3 (opcional): começa com "lista_de_tickets_aberto" -> lista de tickets dos últimos 90 dias
+// Arquivo 2: começa com "Exportação de Clientes (Completa)" -> dados da aba "Tabela CSM/Cx" (crus)
+const normName = s => S(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const PREFIXES_META = ['basedashdadosmeta', 'empresaselitecadastro'];   // base_dash____dados_meta... (novo) ou empresas_elite___cadastro... (antigo)
+const PREFIX_TICKETS = 'listadeticketsaberto';    // lista_de_tickets_aberto_nos_ultimos_90_dias...
+const ehMeta = n => PREFIXES_META.some(p => n.startsWith(p));
+const PREFIX_CX = 'exportacaodeclientes';      // Exportação de Clientes (Completa)...
+const cnpjKey = v => S(v).replace(/\D/g, '');
+const rawRows = wb => XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '' });
+function findHeaderRow(rows, ...must) {
+  for (let i = 0; i < Math.min(rows.length, 25); i++) {
+    const low = (rows[i] || []).map(c => S(c).toLowerCase());
+    if (must.every(m => low.includes(m))) return i;
+  }
+  return -1;
+}
+// Reproduz os PROCX: enriquece a Tabela Meta com dados da Exportação de Clientes,
+// casando pelo CNPJ (e, como reserva, pelo ID da empresa sem o prefixo "emp_").
+function montarTabelas(metaRaw, cxRaw) {
+  // --- Exportação de Clientes -> vira a "Tabela Cx" ---
+  const hCx = findHeaderRow(cxRaw, 'carteira', 'cnpj/cpf');
+  if (hCx < 0) throw new Error('O arquivo "Exportação de Clientes (Completa)" não tem as colunas Carteira e CNPJ/CPF. Confira se é a exportação completa do CustomerX.');
+  const cxHdr = cxRaw[hCx].map(S);
+  const cIdx = n => cxHdr.findIndex(h => h.toLowerCase() === n.toLowerCase());
+  const iCod = cxHdr.findIndex(h => /^cod\.?\s*cliente$/i.test(h) || /^id empresa$/i.test(h));
+  const iCnpjCx = cIdx('CNPJ/CPF');
+  const iCart = cIdx('Carteira'), iMot = cIdx('Motivo do risco'), iTags = cIdx('Tags'), iGrp = cIdx('Grupo'), iPedM = cIdx('Média de pedidos'), iPedA = cIdx('Média da API');
+  const cxHdr2 = cxHdr.slice(); if (iCod >= 0) cxHdr2[iCod] = 'ID Empresa';
+  const cxBody = [];
+  for (let i = hCx + 1; i < cxRaw.length; i++) {
+    const r = (cxRaw[i] || []).slice();
+    if (!r.length || r.every(c => S(c) === '')) continue;
+    if (iCod >= 0) r[iCod] = S(r[iCod]).replace(/^emp[_\s-]*/i, '').trim(); // "emp_123 " -> "123"
+    cxBody.push(r);
+  }
+  // Índices para a busca (PROCX): CNPJ como chave principal, ID como reserva
+  const byCnpj = new Map(), byId = new Map();
+  cxBody.forEach(r => {
+    const c = cnpjKey(r[iCnpjCx]); if (c && !byCnpj.has(c)) byCnpj.set(c, r);
+    const id = iCod >= 0 ? idKey(r[iCod]) : ''; if (id && !byId.has(id)) byId.set(id, r);
+  });
+  // --- Meta crua -> vira a "Tabela Meta" com as colunas buscadas/calculadas ---
+  const hM = findHeaderRow(metaRaw, 'id empresa', 'cnpj');
+  if (hM < 0) throw new Error('O arquivo "base_dash____dados_meta" não tem as colunas ID Empresa e CNPJ. Confira se é a exportação correta.');
+  const mHdr = metaRaw[hM].map(S);
+  const iIdM = mHdr.findIndex(h => /^id empresa$/i.test(h));
+  const iCnpjM = mHdr.findIndex(h => /^cnpj$/i.test(h));
+  const outHdr = [...mHdr, 'CSM', 'Motivo do Risco', 'TAG', 'Grupo', 'Pedido importado de marketplace', 'Pedido API', 'Media ultimos 3 meses'];
+  const NAO_CX = 'Não encontrado CX', NAO = 'Não encontrado';
+  const mBody = []; let semPar = 0;
+  for (let i = hM + 1; i < metaRaw.length; i++) {
+    const r = metaRaw[i] || [];
+    if (!r.length || S(r[iIdM]) === '') continue;
+    const cx = byCnpj.get(cnpjKey(r[iCnpjM])) || byId.get(idKey(r[iIdM])) || null; // PROCX pelo CNPJ; reserva: ID
+    if (!cx) semPar++;
+    const g = j => (cx && j >= 0 && cx[j] !== undefined) ? cx[j] : '';
+    const pedM = cx ? g(iPedM) : NAO, pedA = cx ? g(iPedA) : NAO;
+    const media = (N(pedM) || 0) + (N(pedA) || 0); // = SOMA(Pedido marketplace; Pedido API); texto conta como 0, igual ao Excel
+    const base = []; for (let j = 0; j < mHdr.length; j++) base.push(r[j] !== undefined ? r[j] : '');
+    mBody.push([...base, cx ? g(iCart) : NAO_CX, cx ? g(iMot) : NAO, cx ? g(iTags) : NAO, cx ? g(iGrp) : NAO, pedM, pedA, media]);
+  }
+  return { cxRows: [cxHdr2, ...cxBody], metaRows: [outHdr, ...mBody], semPar, total: mBody.length };
+}
+
+// ===== Lista de tickets (planilha "lista_de_tickets_aberto…"): opcional =====
+let TICKETS = null; // linhas cruas da planilha de tickets
+function indexarTickets(rows, cnpjsBase) {
+  if (!rows || !rows.length) return null;
+  const hi = findHeaderRow(rows, 'cnpj'); if (hi < 0) return null;
+  const hdr = rows[hi].map(S), iC = hdr.findIndex(h => h.toLowerCase() === 'cnpj'), iE = hdr.findIndex(h => h.toLowerCase() === 'empresa');
+  const iD = hdr.findIndex(h => /abertura/i.test(h));
+  const porCnpj = new Map(), porNome = new Map();
+  for (let i = hi + 1; i < rows.length; i++) {
+    const r = rows[i] || []; if (!r.length || r.every(c => S(c) === '')) continue;
+    const t = { _r: r, _data: iD >= 0 ? toDate(r[iD]) : null, _txt: iD >= 0 ? S(r[iD]) : '' };
+    const c = cnpjKey(r[iC]);
+    if (c && cnpjsBase.has(c)) { if (!porCnpj.has(c)) porCnpj.set(c, []); porCnpj.get(c).push(t); }
+    else if (iE >= 0) { const n = normName(r[iE]); if (n) { if (!porNome.has(n)) porNome.set(n, []); porNome.get(n).push(t); } } // CNPJ diferente do cadastro: casa pelo nome
+  }
+  const ordenar = l => l.sort((a, b) => b._txt.localeCompare(a._txt));
+  porCnpj.forEach(ordenar); porNome.forEach(ordenar);
+  return { hdr, porCnpj, porNome };
+}
+const TICKETS_DIAS = 90; // "tickets nos últimos 90 dias": abertos até 90 dias antes da data da base (a planilha de tickets traz 90 dias)
+const TICKETS_LIMITE = 5; // risco quando a conta tem MAIS DE 5 tickets no período (6 ou mais)
+function buildAccounts(cxRows, metaRows) {
+  const cx = toRecords(cxRows).rows, meta = toRecords(metaRows || []).rows;
+  // data de referência = login mais recente na Tabela Meta (aproxima a data da exportação); senão hoje
+  let REF = null; meta.forEach(m => { const d = toDate(col(m, 'Último Login')); if (d && (!REF || d > REF)) REF = d; }); if (!REF) REF = new Date();
+  buildAccounts.REF = REF;
+  const mIdx = new Map(), mIdxCnpj = new Map();
+  meta.forEach(m => { mIdx.set(idKey(col(m, 'ID Empresa')), m); const c = cnpjKey(col(m, 'CNPJ')); if (c && !mIdxCnpj.has(c)) mIdxCnpj.set(c, m); });
+  const cnpjsBase = new Set([...cx.map(r => cnpjKey(col(r, 'CNPJ/CPF') ?? col(r, 'CNPJ'))), ...meta.map(m => cnpjKey(col(m, 'CNPJ')))].filter(Boolean));
+  const TK = indexarTickets(TICKETS, cnpjsBase); buildAccounts.TK = TK;
+  return cx.map(r => {
+    const id = idKey(col(r, 'ID Empresa'));
+    const cnpj = cnpjKey(col(r, 'CNPJ/CPF') ?? col(r, 'CNPJ'));
+    const m = (cnpj && mIdxCnpj.get(cnpj)) || mIdx.get(id) || null;
+    const tags = S(col(r, 'Tags'));
+    let IF = 'Sem IF'; for (const k of ['IF0','IF1','IF2','IF3','IF4','IF5']) if (tags.includes(k)) { IF = k; break; }
+    let fx = 0; for (let i = 1; i <= 7; i++) if (tags.includes('Faixa ' + i)) { fx = i; break; }
+    const mediaCx = N(col(r, 'Média de pedidos'));
+    const media = m ? N(col(m, 'Media ultimos 3 meses')) : mediaCx;
+    const gmv = m ? N(col(m, 'GMV Último Mês')) : N(col(r, 'GMV'));
+    const pedUlt = m ? N(col(m, 'Pedidos Último Mês')) : null;
+    let pos = 'Sem faixa na tag', acima = null;
+    if (fx && media != null) { const [lo, hi] = FAIXAS[fx]; pos = media > hi ? 'Acima do intervalo' : media < lo ? 'Abaixo do intervalo' : 'Dentro do intervalo'; if (media > hi) acima = media / hi - 1; }
+    const mkts = m ? S(col(m, 'Marketplaces Configurados')) : '';
+    const nMkt = mkts ? mkts.split(',').filter(x => x.trim()).length : 0;
+    const splitList = t => S(t).split(',').map(x => x.trim()).filter(Boolean);
+    const mktList = m ? splitList(col(m, 'Marketplaces Configurados')) : null;   // null = sem dado na Tabela Meta
+    const ecomList = m ? splitList(col(m, 'E-commerces Configurados')) : null;
+    // MRR: base é a Tabela Meta; só para contas sem linha na Meta usa a CX (Último MRR Ativo ou MRR)
+    const mrrCx = N(col(r, 'MRR')), mrrMeta = m ? N(col(m, 'MRR')) : null;
+    const mrrCxReserva = N(col(r, 'Último MRR Ativo')) || mrrCx || null;
+    const mrrFonte = m ? 'Meta' : (mrrCxReserva != null ? 'CX' : '');
+    const mrrRaw = `Meta: ${m ? (S(col(m, 'MRR')) || 'vazio') : 'sem linha na Meta'} · CX: ${S(col(r, 'MRR')) || 'vazio'} · usado: ${mrrFonte || 'nenhum'}`;
+    const ecomTxt = m ? S(col(m, 'E-commerces Configurados')) : (ECOM_CX.some(e => S(col(r, 'Integrações ativas')).toLowerCase().includes(e)) ? '(integração Cx)' : '');
+    const temEcom = ecomTxt ? 1 : 0;
+    const logs = m ? S(col(m, 'Logísticas Configuradas')) : '';
+    const logList = logs ? logs.split(',').map(x => x.trim()).filter(Boolean) : [];
+    const logPropria = logList.some(l => !LOG_MKT.includes(l.toLowerCase())) ? 1 : 0;
+    const cobertura = !temEcom ? 'Sem e-commerce (oferta: Bling Loja Virtual)' : !m ? 'E-commerce sem dado de logística (só na Cx)' : !logList.length ? 'E-commerce sem logística (oferta: Bling Envios)' : logPropria ? 'E-commerce com logística além da de marketplace' : 'E-commerce só com logística de marketplace (oferta: Bling Envios)';
+    const motivoCx = S(col(r, 'Motivo do risco')); const motivo = motivoCx || (m ? S(col(m, 'Motivo do Risco')) : '');
+    const temMotivo = motivo && !has(motivo, 'sem risco') && motivo !== 'Não encontrado' ? 1 : 0;
+    const riscos = {}; RISCOS.forEach(([k, key]) => riscos[k] = has(motivo, key) ? 1 : 0);
+    const api = m ? Nraw(col(m, 'Saúde da API (% 2xx)')) : null;
+    const arm = m ? Nraw(col(m, '% Armazenamento Utilizado')) : null;
+    const apiRaw = m ? S(col(m, 'Saúde da API (% 2xx)')) : '', armRaw = m ? S(col(m, '% Armazenamento Utilizado')) : '';
+    const sim = k => m ? (S(col(m, k)).toLowerCase() === 'sim' ? 1 : 0) : null;
+    const cert = m ? (['não','nao',''].includes(S(col(m, 'Comprou Certificado pelo Bling')).toLowerCase()) ? 0 : 1) : null;
+    const ultLogin = m ? toDate(col(m, 'Último Login')) : null; const diasLogin = daysBetween(ultLogin, REF);
+    const ultContato = toDate(col(r, 'Último contato')); const diasContato = daysBetween(ultContato, REF);
+    const diasTarefa = N(col(r, 'Dias da última tarefa concluída'));
+    const diasInteracao = (diasContato != null && diasTarefa != null) ? Math.min(diasContato, diasTarefa) : (diasContato ?? diasTarefa);
+    const tipoContato = S(col(r, 'Tipo último contato'));
+    const nps = N(col(r, 'NPS Score'));
+    const seg = S(col(r, 'Segmento')) || 'Sem segmento na Cx';
+    const segGrupo = seg === 'Sem segmento na Cx' ? seg : (SEG_MAP[seg.toLowerCase()] || seg);
+    const mrr = m ? mrrMeta : mrrCxReserva;
+    // tickets: com a lista de tickets carregada, conta os abertos nos últimos 90 dias; sem ela, usa a coluna de 90 dias da Meta (se existir)
+    let ticketsLista = null, tickets = m ? N(col(m, 'Total Tickets Últimos 90 Dias')) : null;
+    if (TK) {
+      const cM = m ? cnpjKey(col(m, 'CNPJ')) : '', vistos = new Set(); ticketsLista = [];
+      [TK.porCnpj.get(cnpj), cM !== cnpj ? TK.porCnpj.get(cM) : null, TK.porNome.get(normName(col(r, 'Razão Social'))), m ? TK.porNome.get(normName(col(m, 'Razão Social'))) : null]
+        .forEach(l => (l || []).forEach(t => { if (!vistos.has(t)) { vistos.add(t); ticketsLista.push(t); } }));
+      ticketsLista.sort((a, b) => b._txt.localeCompare(a._txt));
+      tickets = ticketsLista.filter(t => t._data && daysBetween(t._data, REF) <= TICKETS_DIAS).length;
+    }
+    const nApps = m ? N(col(m, 'Aplicativos com Uso na API')) : null;
+    const integ = S(col(r, 'Integrações ativas')).split(',').map(x => x.trim()).filter(Boolean);
+    return {
+      id, razao: S(col(r, 'Razão Social')), nome: S(col(r, 'Fantasia')) || S(col(r, 'Razão Social')),
+      csm: S(col(r, 'Carteira')), statusCx: S(col(r, 'Status')), seg, segGrupo, mrr, plano: m ? S(col(m, 'Plano Contratado')) : '', tickets, ticketsAlto: tickets == null ? null : (tickets > TICKETS_LIMITE ? 1 : 0), nApps, integ, hubList: integ.filter(i => i.toLowerCase() === 'api' || HUBS.map(h => h.toLowerCase()).includes(i.toLowerCase())).map(i => i.toLowerCase() === 'api' ? 'Api (Magis5, Base e outros hubs via API)' : i), hubs: integ.filter(i => HUBS.map(h => h.toLowerCase()).includes(i.toLowerCase())), apiGenerica: integ.some(i => i.toLowerCase() === 'api') ? 1 : 0, grupo: S(col(r, 'Grupo')), tags, IF, ifLabel: IF_LABEL[IF] || IF,
+      fx, fxLabel: FAIXA_LABEL[fx], fxMin: fx ? FAIXAS[fx][0] : null, fxMax: fx ? FAIXAS[fx][1] : null,
+      naMeta: m ? 1 : 0, gmv, pedUlt, media, pedMkt: m ? N(col(m, 'Pedido importado de marketplace')) : null, pedApi: m ? N(col(m, 'Pedido API')) : null,
+      pos, acima, mkts, nMkt, mktList, ecomList, mrrRaw, armRaw, apiRaw, ecomTxt, temEcom, logs, nLog: logList.length, logPropria, cobertura,
+      motivo, temMotivo, riscos,
+      queda: (m && media && pedUlt != null) ? (pedUlt < 0.75 * media ? 1 : 0) : null,
+      api, apiBaixa: api == null ? null : (api < (typeof API_GREEN !== 'undefined' ? API_GREEN : 90) ? 1 : 0), usaApi: sim('Usou API'),
+      arm, storage: (has(tags, 'STORAGE') || (arm != null && arm > (typeof ARM_RED !== 'undefined' ? ARM_RED : 90))) ? 1 : 0,
+      baixoEng: has(tags, 'Baixo engajamento') ? 1 : 0,
+      inad: (has(tags, 'inadimplente') || (m && S(col(m, 'Situação')) === 'Inadimplente')) ? 1 : 0,
+      faixaIncorreta: has(tags, 'faixa incorreta') ? 1 : 0, aproximando: has(tags, 'Aproximando Faixa') ? 1 : 0, semTermo: has(tags, 'Sem termo') ? 1 : 0,
+      contaDigital: sim('Tem Bling Conta Digital'), cert, checkout: sim('Utilizou Checkout'), pdv: sim('Utilizou PDV'), meuNegocio: sim('Utilizou Meu Negócio'),
+      acimaFaixa: pos === 'Sem faixa na tag' ? null : (pos === 'Acima do intervalo' ? 1 : 0),
+      abaixoFaixa: pos === 'Sem faixa na tag' ? null : (pos === 'Abaixo do intervalo' ? 1 : 0),
+      mrrFonte, mrrCx, mrrMeta, situacaoMeta: m ? S(col(m, 'Situação')) : '', link: S(col(r, 'Link Admin de Empresas')), linkOcta: S(col(r, 'Link Conversa Octadesk', 'Link Octadesk', 'Link Octa')), linkCx: m ? S(col(m, 'Link CustomerX', 'Link CX', 'Link Cx')) : '',
+      cnpjTxt: S(col(r, 'CNPJ/CPF')) || (m ? S(col(m, 'CNPJ')) : ''), ticketsLista,
+      ultLogin, diasLogin, ultContato, diasContato, diasTarefa, diasInteracao, tipoContato, nps,
+      _r: r, _m: m,
+      hsCx: Nraw(col(r, 'HS')), // Health Score oficial: coluna X (HS) da Exportação de Clientes
+    };
+  }).map(a => {
+    const pen = [];
+    const add = (k, label) => { const v = HEALTH[k]; if (v) pen.push([label, v]); };
+    add(a.IF, a.ifLabel);
+    if (a.queda === 1) add('quedaPedidos', 'Pedidos −25% vs. média');
+    if (a.api != null) { if (a.api < (typeof API_RED !== 'undefined' ? API_RED : 80)) add('apiVermelha', 'API < ' + (typeof API_RED !== 'undefined' ? API_RED : 80) + '%'); else if (a.apiBaixa === 1) add('apiAmarela', 'API entre ' + (typeof API_RED !== 'undefined' ? API_RED : 80) + ' e ' + (typeof API_GREEN !== 'undefined' ? API_GREEN : 90) + '%'); }
+    if (a.storage) add('armazenamento', 'Armazenamento alto');
+    if (a.ticketsAlto === 1) add('tickets', 'Mais de 5 tickets em 90 dias');
+    if (a.inad) add('inadimplente', 'Inadimplente');
+    if (a.baixoEng) add('baixoEngajamento', 'Baixo engajamento (tag)');
+    if (a.riscos['Preço']) add('precoRisco', 'Cita preço como risco');
+    if (a.diasInteracao != null) { if (a.diasInteracao > 60) add('semInteracao60', 'Sem interação há 60+ dias'); else if (a.diasInteracao > 30) add('semInteracao30', 'Sem interação há 30+ dias'); }
+    if (a.diasLogin != null) { if (a.diasLogin > 15) add('semLogin15', 'Sem login há 15+ dias'); else if (a.diasLogin > 7) add('semLogin7', 'Sem login há 7+ dias'); }
+    if (a.abaixoFaixa === 1) add('abaixoFaixa', 'Volume abaixo da faixa');
+    if (a.nps != null) { if (a.nps <= 6) add('npsDetrator', 'NPS detrator'); else if (a.nps >= 9) add('npsPromotor', 'NPS promotor'); }
+    const scoreCalc = Math.max(0, Math.min(100, 100 - pen.reduce((s, p) => s + p[1], 0)));
+    // Score oficial: coluna HS da Exportação de Clientes. O cálculo interno só entra se a conta não tiver HS na planilha.
+    const score = a.hsCx != null ? Math.max(0, Math.min(100, Math.round(a.hsCx))) : scoreCalc;
+    const banda = score >= HEALTH_BANDS.saudavel ? 'Saudável' : score >= HEALTH_BANDS.atencao ? 'Atenção' : 'Crítico';
+    return Object.assign(a, { score, scoreCalc, scoreFonte: a.hsCx != null ? 'HS (planilha)' : 'calculado', banda, penalidades: pen });
+  });
+}
+// ===== Interface =====
+const $ = s => document.querySelector(s);
+const fmtInt = n => (n == null ? '–' : Math.round(n).toLocaleString('pt-BR'));
+const fmtMoney = n => n == null ? '–' : 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2 });
+const fmtPctExact = n => n == null ? '–' : n.toLocaleString('pt-BR', { maximumFractionDigits: 10 }) + '%';
+const fmtPct1 = n => n == null ? '–' : n.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%';
+const fmtMil = n => (n == null ? '–' : 'R$ ' + Math.round(n).toLocaleString('pt-BR'));
+const fmtMi = n => (n == null ? '–' : 'R$ ' + (n / 1e6).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' mi');
+const pct = (a, b) => (b ? (100 * a / b).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%' : '–');
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const IF_COLOR = { IF0: '#66768C', IF1: '#F05143', IF2: '#F5A60A', IF3: '#FCCD4C', IF4: '#34AD61', IF5: '#12B8A2', 'Sem IF': '#97A4B8' };
+const FX_COLOR = ['#97A4B8', '#B8F2CD', '#8BE0AA', '#5AC782', '#34AD61', '#288F4E', '#1D733C', '#144728'];
+const POS_COLOR = { 'Acima do intervalo': '#34AD61', 'Dentro do intervalo': '#8BE0AA', 'Abaixo do intervalo': '#F05143', 'Sem faixa na tag': '#97A4B8' };
+const PAL = ['#34AD61', '#12B8A2', '#0EA5E9', '#7C5CE6', '#F5A60A', '#F05143', '#77B324', '#66768C', '#5AC782', '#33CCB8', '#60A5FA', '#A78BFA', '#FCCD4C', '#FCA097', '#B5E667', '#97A4B8'];
+const hue = i => PAL[i % PAL.length];
+
+let ALL = [], ACC = [], META = { fonte: '', data: '' };
+let LISTS = []; // registro de listas clicáveis: índice -> {title, acc, sort?, resumo?}
+function reg(title, acc, opts) { LISTS.push(Object.assign({ title, acc }, opts || {})); return LISTS.length - 1; }
+const L = (title, acc, text) => (acc && acc.length ? `<span class="ck lk" data-l="${reg(title, acc)}">${text}</span>` : text);
+function openList(i) {
+  const L = LISTS[i]; if (!L) return;
+  const rows = [...L.acc].sort(L.sort || ((a, b) => a.score - b.score || (b.gmv || 0) - (a.gmv || 0)));
+  $('#mtitle').textContent = `${L.title} · ${rows.length} conta${rows.length === 1 ? '' : 's'}`;
+  $('#mbody').innerHTML = (L.resumo ? `<p class="note" style="margin:0 0 10px">${L.resumo}</p>` : '') + (rows.length ? `<table><thead><tr><th>Empresa</th><th>Score</th><th>CSM</th><th>IF</th><th>Faixa</th><th>Segmento (Cx)</th><th>Plano</th><th>MRR</th><th>GMV último mês</th><th>Pedidos (média 3m)</th><th>Tickets 90d</th><th>Último login</th><th>Última interação</th><th>Armazenamento</th><th>Saúde API</th><th>Posição vs faixa</th><th>Motivo do risco</th><th>Integrações</th></tr></thead><tbody>${rows.map(a => `<tr><td>${nomeLink(a)}<span class="mut sm">${esc(a.razao !== a.nome ? a.razao : '')}</span></td><td class="${scoreCls(a.score)}" title="${esc('Score: ' + a.scoreFonte + (a.penalidades.length ? ' · Sinais: ' + a.penalidades.map(p => p[0]).join(' · ') : ''))}">${a.score}</td><td>${esc(a.csm)}</td><td>${a.IF}</td><td>${a.fx ? 'Faixa ' + a.fx : '–'}</td><td>${esc(a.seg)}</td><td>${esc(a.plano) || '–'}</td><td title="${esc(a.mrrRaw)}">${fmtMoney(a.mrr)}</td><td>${fmtMi(a.gmv)}</td><td>${fmtInt(a.media)}</td><td>${a.tickets == null ? '–' : fmtInt(a.tickets)}</td><td class="${a.diasLogin != null && a.diasLogin > 15 ? 'c-red' : a.diasLogin != null && a.diasLogin > 7 ? 'c-yel' : ''}">${fmtDays(a.diasLogin)}</td><td class="${a.diasInteracao != null && a.diasInteracao > 60 ? 'c-red' : a.diasInteracao != null && a.diasInteracao > 30 ? 'c-yel' : ''}">${fmtDays(a.diasInteracao)}</td><td class="${armCls(a.arm)}" title="Valor na planilha: ${esc(a.armRaw)}">${fmtPctExact(a.arm)}</td><td class="${apiCls(a.api)}" title="Valor na planilha: ${esc(a.apiRaw)}">${fmtPctExact(a.api)}</td><td>${esc(a.pos)}</td><td>${esc(a.motivo) || '–'}</td><td class="wrap">${esc(a.integ.join(', ')) || '–'}</td></tr>`).join('')}</tbody></table>` : '<p class="mut">Nenhuma conta neste recorte.</p>');
+  $('#modal').showModal();
+}
+document.addEventListener('click', e => { const t = e.target.closest('[data-l]'); if (t) openList(+t.dataset.l); });
+
+function groupBy(arr, f) { const m = new Map(); arr.forEach(a => { const k = f(a); if (!m.has(k)) m.set(k, []); m.get(k).push(a); }); return m; }
+const sum = (arr, f) => arr.reduce((s, a) => s + (f(a) || 0), 0);
+const cnt = (arr, f) => arr.filter(a => f(a) != null).length;
+const avg = (arr, f) => { const v = arr.map(f).filter(x => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+// Health Score médio: igual à plataforma CX, contas com Status "Finalizado" (canceladas) ficam fora da média
+const finalizada = a => /^finalizad/i.test(String(a.statusCx || '').trim());
+const scoreMedia = acc => avg(acc, a => finalizada(a) ? null : a.score);
+const fmtScore = v => v == null ? '–' : Math.round(v);
+const median = (arr, f) => { const v = arr.map(f).filter(x => x != null).sort((a, b) => a - b); if (!v.length) return null; const m = v.length >> 1; return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2; };
+
+// --- gráficos ---
+function pie(items, label) {
+  const total = sum(items, i => i.value); let a0 = -Math.PI / 2, paths = '';
+  items.forEach(it => { if (!it.value) return; if (it.value === total) { paths += `<circle ${it.acc ? `data-l="${reg(label + ' · ' + it.label, it.acc)}" class="ck"` : ''} cx="90" cy="90" r="80" fill="${it.color}"><title>${esc(it.label)}: ${esc(it.text)}</title></circle>`; return; } const a1 = a0 + 2 * Math.PI * it.value / total; const big = a1 - a0 > Math.PI ? 1 : 0; const p = a => [90 + 80 * Math.cos(a), 90 + 80 * Math.sin(a)]; const [x0, y0] = p(a0), [x1, y1] = p(a1); paths += `<path ${it.acc ? `data-l="${reg(label + ' · ' + it.label, it.acc)}" class="ck"` : ''} d="M90,90 L${x0.toFixed(2)},${y0.toFixed(2)} A80,80 0 ${big} 1 ${x1.toFixed(2)},${y1.toFixed(2)} Z" fill="${it.color}" stroke="var(--card)" stroke-width="2"><title>${esc(it.label)}: ${esc(it.text)}</title></path>`; a0 = a1; });
+  if (!total) paths = '<circle cx="90" cy="90" r="80" fill="var(--bd)"/>';
+  return `<div class="pw"><svg viewBox="0 0 180 180" role="img" aria-label="${esc(label)}">${paths}</svg><ul class="leg">${items.map(it => `<li ${it.acc ? `data-l="${reg(label + ' · ' + it.label, it.acc)}" class="ck"` : ''}><span class="dot" style="background:${it.color}"></span><span>${esc(it.label)}</span><b>${pct(it.value, total)}</b><em>${esc(it.text)}</em></li>`).join('')}</ul></div>`;
+}
+function card(title, sub, body, cls = '') { return `<div class="card ${cls}"><h3>${title}</h3>${sub ? `<p class="sub">${sub}</p>` : ''}${body}</div>`; }
+function stack(rows) {
+  return rows.map(r => { const n = sum(r.parts, p => p.count); return `<div class="sb"><div class="sl">${esc(r.label)}<small>n=${n}</small></div><div class="sbar">${r.parts.filter(p => p.count).map(p => `<i ${p.acc ? `data-l="${reg(r.label + ' · ' + p.label, p.acc)}" class="ck"` : ''} style="flex:${p.count};background:${p.color}" title="${esc(p.label)}: ${p.count} · ${pct(p.count, n)}">${p.count / n < 0.12 ? p.count : p.count + ' · ' + pct(p.count, n)}</i>`).join('')}</div><div class="mut">${r.extra || ''}</div></div>`; }).join('');
+}
+function barList(items, fmt) { const mx = Math.max(...items.map(i => i.value), 1); return `<div class="bl">${items.map(i => `<div class="blr ${i.acc ? 'ck' : ''}" ${i.acc ? `data-l="${reg(i.label, i.acc)}"` : ''}><span>${esc(i.label)}</span><div class="blb"><i style="width:${100 * i.value / mx}%;background:${i.color}"></i></div><b>${fmt(i.value)}</b></div>`).join('')}</div>`; }
+function heat(groups, indicators, totalAcc) {
+  totalAcc = totalAcc || ACC;
+  // groups: [{label, acc}], indicators: [{name, f, semDado?}] with f(acc) -> 1/0/null (null = conta sem dado para o indicador)
+  // Base do %: sempre o total de empresas do grupo (IF ou faixa). Conta sem dado conta como "não tem", mas aparece no aviso "k sem dado".
+  const th = groups.map(g => `<th>${esc(g.short || g.label)}<span>n=${g.acc.length}</span></th>`).join('');
+  const rows = indicators.map(ind => { const cells = [...groups, { label: 'Total', acc: totalAcc }].map(g => {
+    const nome = g.short || g.label, N = g.acc.length, comInd = g.acc.filter(a => ind.f(a) === 1), x = comInd.length;
+    const semDado = g.acc.filter(a => ind.f(a) == null);
+    const sd = semDado.length ? `<span class="ck lk sd" data-l="${reg(`${ind.name} · ${nome} · sem dado (${ind.semDado || 'sem dado'})`, semDado)}" title="Sem dado: ${esc(ind.semDado || 'sem dado')}">${semDado.length} sem dado</span>` : '';
+    if (!N) return '<td class="hm"><span>–</span></td>';
+    const p = x / N; const li = reg(`${ind.name} · ${nome}`, comInd); const rgb = ind.tone === 'red' ? '240,81,67' : '52,173,97';
+    return `<td class="hm ck" data-l="${li}" style="background:rgba(${rgb},${(0.08 + 0.45 * p).toFixed(2)})">${x}/${N}<span>${pct(x, N)}</span>${sd}</td>`; }).join('');
+    return `<tr><td>${esc(ind.name)}</td>${cells}</tr>`; }).join('');
+  return `<div class="tw"><table class="mx"><thead><tr><th>Indicador</th>${th}<th>Total<span>n=${totalAcc.length}</span></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function matrix(rowGroups, colGroups, rowLabel) {
+  const th = colGroups.map(c => `<th>${esc(c.label)}</th>`).join('');
+  const rows = rowGroups.map(r => { const cells = colGroups.map(c => { const inter = r.acc.filter(a => c.acc.includes(a)), k = inter.length; return k ? `<td class="hm ck" data-l="${reg(r.label + ' × ' + c.label, inter)}" style="background:rgba(52,173,97,${(0.08 + 0.45 * k / r.acc.length).toFixed(2)})">${k}<span>${pct(k, r.acc.length)}</span></td>` : '<td class="hm"></td>'; }).join(''); return `<tr><td>${esc(r.label)}</td>${cells}<td class="hm ck" data-l="${reg(r.label, r.acc)}"><b>${r.acc.length}</b><span>${pct(r.acc.length, ACC.length)}</span></td></tr>`; }).join('');
+  return `<div class="tw"><table class="mx"><thead><tr><th>${rowLabel}</th>${th}<th>Total</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function table(cols, rows) { return `<div class="tw"><table><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}" class="mut">Nenhuma conta neste critério.</td></tr>`}</tbody></table></div>`; }
+const apiCls = v => v == null ? '' : v < API_RED ? 'c-red' : v < API_GREEN ? 'c-yel' : 'c-grn';
+const BAND_COLOR = { 'Saudável': '#34AD61', 'Atenção': '#F5A60A', 'Crítico': '#F05143' };
+const scoreCls = s => s == null ? '' : s >= HEALTH_BANDS.saudavel ? 'c-grn' : s >= HEALTH_BANDS.atencao ? 'c-yel' : 'c-red';
+const fmtDays = d => d == null ? '–' : d <= 0 ? 'hoje' : d + ' d';
+const fmtDate = d => d ? d.toLocaleDateString('pt-BR') : '–';
+const armCls = v => v == null ? '' : v > ARM_RED ? 'c-red' : '';
+// Nome da empresa com link: ADM (Link Admin de Empresas, da Cx), CX (Link CustomerX, da Meta) e Octa (Link Conversa Octadesk, da Cx).
+// Com dois ou mais links, o clique abre um menu para escolher; com um só, vai direto; sem nenhum, fica sem link.
+const linksDe = a => [a.link ? ['ADM', a.link] : null, a.linkCx ? ['CX', a.linkCx] : null, a.linkOcta ? ['Octa', a.linkOcta] : null].filter(Boolean);
+const linkUnico = (a, txt) => { const L = linksDe(a);
+  if (!L.length) return txt;
+  if (L.length === 1) return `<a href="${esc(L[0][1])}" target="_blank" rel="noopener" title="Abrir no ${L[0][0]}">${txt}</a>`;
+  return `<a href="#" class="lkmenu" data-adm="${esc(a.link)}" data-cx="${esc(a.linkCx)}" data-octa="${esc(a.linkOcta)}" title="Abrir no ${L.map(x => x[0]).join(', ')}">${txt}</a>`; };
+const nomeLink = a => linkUnico(a, esc(a.nome));
+const linkBotao = (url, rot) => url ? `<a href="${esc(url)}" target="_blank" rel="noopener">${rot} ↗</a>` : '<span class="mut">—</span>';
+document.addEventListener('click', e => {
+  const el = e.target.closest('a.lkmenu'); if (!el) return;
+  e.preventDefault(); e.stopPropagation();
+  const op = (url, rot) => url ? `<a class="lkop" href="${esc(url)}" target="_blank" rel="noopener">${rot}</a>` : '';
+  const p = txAbrirPop(el, `<div class="tx-tit">Abrir empresa em</div>${op(el.dataset.adm, '🔗 ADM (Admin de Empresas)')}${op(el.dataset.cx, '🔗 CX (CustomerX)')}${op(el.dataset.octa, '💬 Octa (conversa no Octadesk)')}`);
+  p.addEventListener('click', ev => { if (ev.target.closest('a.lkop')) setTimeout(txFecharPop, 0); });
+}, true);
+
+const RISK_IND = [
+  { name: 'Pedidos −25% vs. média 3m', f: a => a.queda, semDado: 'sem linha na Tabela Meta ou sem pedidos do último mês' }, { name: `Saúde da API < ${API_GREEN}%`, f: a => a.apiBaixa, tone: 'red', semDado: 'não usa API ou sem linha na Tabela Meta' }, { name: 'Preço citado como risco', f: a => a.riscos['Preço'] },
+  { name: `Armazenamento > ${ARM_RED}% ou tag storage`, f: a => a.storage, tone: 'red' }, { name: 'Baixo engajamento (tag)', f: a => a.baixoEng }, { name: 'Inadimplente', f: a => a.inad }, { name: 'Mais de 5 tickets nos últimos 90 dias', f: a => a.ticketsAlto, semDado: 'sem linha na Tabela Meta' }, { name: 'Sem login há mais de 15 dias', f: a => a.diasLogin == null ? null : (a.diasLogin > 15 ? 1 : 0), tone: 'red', semDado: 'sem data de último login' }, { name: 'Sem interação do CSM há mais de 60 dias', f: a => a.diasInteracao == null ? null : (a.diasInteracao > 60 ? 1 : 0), tone: 'red', semDado: 'sem último contato e sem tarefa concluída na Cx' }, { name: 'Volume abaixo da faixa contratada', f: a => a.abaixoFaixa, semDado: 'sem faixa na tag' }];
+const EXP_IND = [
+  { name: 'Volume acima da faixa contratada', f: a => a.acimaFaixa, semDado: 'sem faixa na tag' }, { name: 'Pagamento de faixa incorreta (tag)', f: a => a.faixaIncorreta }, { name: 'Aproximando próxima faixa Elite', f: a => a.aproximando },
+  { name: 'Sem Bling Conta Digital', f: a => a.contaDigital == null ? null : 1 - a.contaDigital , semDado: 'sem linha na Tabela Meta' }, { name: 'Sem certificado pelo Bling', f: a => a.cert == null ? null : 1 - a.cert , semDado: 'sem linha na Tabela Meta' }, { name: 'Sem Checkout', f: a => a.checkout == null ? null : 1 - a.checkout , semDado: 'sem linha na Tabela Meta' },
+  { name: 'Sem PDV', f: a => a.pdv == null ? null : 1 - a.pdv , semDado: 'sem linha na Tabela Meta' }, { name: 'Sem Meu Negócio', f: a => a.meuNegocio == null ? null : 1 - a.meuNegocio , semDado: 'sem linha na Tabela Meta' }, { name: 'Sem uso de API', f: a => a.usaApi == null ? null : 1 - a.usaApi , semDado: 'sem linha na Tabela Meta' },
+  { name: 'Sem e-commerce → Bling Loja Virtual', f: a => 1 - a.temEcom }, { name: 'E-commerce sem nenhuma logística → Bling Envios', f: a => a.temEcom && a.naMeta ? (a.nLog ? 0 : 1) : null, semDado: 'sem e-commerce ou sem linha na Tabela Meta' },
+  { name: 'E-commerce só com logística de marketplace → Bling Envios', f: a => a.temEcom && a.naMeta ? (a.nLog && !a.logPropria ? 1 : 0) : null, semDado: 'sem e-commerce ou sem linha na Tabela Meta' }];
+
+// Seletores dos mapas de Riscos e de Expansão: ver por IF ou por Faixa, todos ou um só
+const HV = { risco: { by: 'IF', sel: '' }, exp: { by: 'IF', sel: '' } };
+document.addEventListener('change', e => {
+  const t = e.target.closest('[data-hv]'); if (!t) return;
+  const v = HV[t.dataset.hv]; v[t.dataset.k] = t.value; if (t.dataset.k === 'by') v.sel = '';
+  const y = window.scrollY; render(); window.scrollTo(0, y);
+});
+function heatCtl(view, groupsIF, groupsFx) {
+  const v = HV[view], gs = v.by === 'IF' ? groupsIF : groupsFx;
+  const id = g => String(g.key);
+  if (v.sel && !gs.some(g => id(g) === v.sel)) v.sel = '';
+  const opts = gs.map(g => `<option value="${esc(id(g))}"${id(g) === v.sel ? ' selected' : ''}>${esc(g.label)}</option>`).join('');
+  const html = `<div class="heatctl" style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:4px 0 12px">
+    <label>Ver por: <select data-hv="${view}" data-k="by"><option value="IF"${v.by === 'IF' ? ' selected' : ''}>IF</option><option value="Faixa"${v.by === 'Faixa' ? ' selected' : ''}>Faixa</option></select></label>
+    <label>Mostrar: <select data-hv="${view}" data-k="sel"><option value="">Todos</option>${opts}</select></label></div>`;
+  return { html, groups: v.sel ? gs.filter(g => id(g) === v.sel) : gs, by: v.by };
+}
+function render() {
+  LISTS = [];
+  const csm = $('#csm').value; ACC = csm === '__all__' ? ALL : ALL.filter(a => a.csm === csm);
+  $('#title').textContent = 'Carteira Elite · ' + (csm === '__all__' ? 'todas as carteiras' : 'CSM ' + csm);
+  const gmvT = sum(ACC, a => a.gmv), pedT = sum(ACC, a => a.media), comp = ACC.filter(a => a.acimaFaixa != null);
+  const segs = groupBy(ACC, a => a.segGrupo), nSeg = [...segs.keys()].filter(k => k !== 'Sem segmento na Cx').length;
+  { // KPIs do topo: clique no card abre a lista de contas; clique no texto sublinhado abre o recorte
+    const desc = k => (a, b) => (b[k] ?? -1) - (a[k] ?? -1);
+    const sub = (title, acc, text, opts) => acc.length ? `<span class="ck lk" data-l="${reg(title, acc, opts)}">${text}</span>` : text;
+    const plural = (n, s1, s2) => `${n} ${n === 1 ? s1 : s2}`;
+    const hsAcc = ACC.filter(a => !finalizada(a) && a.score != null), hs0 = ACC.filter(finalizada), crit = ACC.filter(a => a.banda === 'Crítico');
+    const hsSoma = sum(hsAcc, a => a.score), hsM = scoreMedia(ACC);
+    const gmvAcc = ACC.filter(a => a.gmv), pedAcc = ACC.filter(a => a.media), mrrAcc = ACC.filter(a => a.mrr != null);
+    const tkAcc = ACC.filter(a => a.tickets), tk3 = ACC.filter(a => a.ticketsAlto === 1);
+    const semSeg = segs.get('Sem segmento na Cx') || [], comSeg = ACC.filter(a => a.segGrupo !== 'Sem segmento na Cx');
+    const acima = comp.filter(a => a.acimaFaixa === 1), mot = ACC.filter(a => a.temMotivo);
+    const tiles = [
+      [fmtScore(hsM), `Health Score médio · ${sub('Health Score · Crítico', crit, plural(crit.length, 'crítica', 'críticas'))}${hs0.length ? ` · ${sub('Status Finalizado · fora da média', hs0, `${plural(hs0.length, 'finalizada', 'finalizadas')} fora da média`, { resumo: 'Contas com Status "Finalizado" na Exportação de Clientes não entram na média, igual à plataforma CX.' })}` : ''}`,
+        'Health Score médio · contas que entram na média', hsAcc, { resumo: hsAcc.length ? `Média = soma dos HS (${fmtInt(hsSoma)}) ÷ ${hsAcc.length} contas = <b>${hsM.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>. Contas com Status Finalizado ficam fora (${hs0.length}).` : '' }],
+      [fmtInt(ACC.length), 'empresas', 'Empresas', ACC, { resumo: `${ACC.length} contas da Exportação de Clientes neste filtro.` }],
+      [fmtMi(gmvT), 'GMV último mês', 'GMV último mês', gmvAcc, { sort: desc('gmv'), resumo: `Soma do GMV do último mês de ${gmvAcc.length} contas: <b>${fmtMoney(gmvT)}</b>. Ordenado do maior para o menor.` }],
+      [fmtInt(pedT), 'pedidos/mês (média 3 meses)', 'Pedidos/mês (média 3 meses)', pedAcc, { sort: desc('media'), resumo: `Soma da média de pedidos (marketplace + API) de ${pedAcc.length} contas: <b>${fmtInt(pedT)}</b>.` }],
+      [fmtMil(sum(ACC, a => a.mrr)), `MRR (${cnt(ACC, a => a.mrr)} contas com dado)`, 'MRR', mrrAcc, { sort: desc('mrr'), resumo: `Soma do MRR de ${mrrAcc.length} contas: <b>${fmtMoney(sum(ACC, a => a.mrr))}</b>.` }],
+      [fmtInt(sum(ACC, a => a.tickets)), `tickets nos últimos 90 dias · ${sub('Contas com mais de 5 tickets nos últimos 90 dias', tk3, plural(tk3.length, 'conta com mais de 5', 'contas com mais de 5'), { sort: desc('tickets') })}`, 'Contas com tickets nos últimos 90 dias', tkAcc, { sort: desc('tickets'), resumo: `Total de ${fmtInt(sum(ACC, a => a.tickets))} tickets em ${tkAcc.length} contas.` }],
+      [nSeg, `grupos de segmento ${sub('Sem segmento na Cx', semSeg, `(+${semSeg.length} sem segmento)`)}`, 'Contas com segmento na Cx', comSeg, { sort: (a, b) => String(a.segGrupo).localeCompare(String(b.segGrupo)) || a.score - b.score }],
+      [`${acima.length}/${comp.length}`, 'contas com volume acima da faixa', 'Volume acima da faixa contratada', acima, { sort: desc('media'), resumo: `${acima.length} de ${comp.length} contas com faixa na tag estão acima da faixa contratada.` }],
+      [`${mot.length}/${ACC.length}`, 'contas com motivo de risco', 'Contas com motivo de risco', mot]
+    ];
+    $('#kpis').innerHTML = tiles.map(([b, txt, title, acc, opts]) => `<div class="kpi ck" data-l="${reg(title, acc, opts)}" title="Clique para ver as contas"><b>${b}</b><span>${txt}</span></div>`).join('');
+  }
+  { // Conferência: valores lidos da planilha (para comparar com o Excel)
+    const st = arr => { const v = arr.filter(x => x != null).sort((p, q) => p - q); return v.length ? { n: v.length, min: v[0], med: v[v.length >> 1], max: v[v.length - 1], sum: v.reduce((p, q) => p + q, 0), acima100: v.filter(x => x > 100).length } : null; };
+    const sm = st(ACC.map(a => a.mrr)), sa = st(ACC.map(a => a.arm)), sp = st(ACC.map(a => a.api));
+    const row = (nome, x, f, extra) => x ? `<tr><td>${nome}</td><td>${x.n}</td><td>${f(x.min)}</td><td>${f(x.med)}</td><td>${f(x.max)}</td><td>${extra(x)}</td></tr>` : `<tr><td>${nome}</td><td colspan="5" class="mut">sem dado</td></tr>`;
+    $('#check').innerHTML = `<details class="chk"><summary>Conferência dos valores lidos da planilha (MRR, armazenamento, API)</summary><div class="tw"><table><thead><tr><th>Campo</th><th>Contas com valor</th><th>Menor</th><th>Mediana</th><th>Maior</th><th>Observação</th></tr></thead><tbody>${row('MRR', sm, fmtMoney, x => 'soma ' + fmtMoney(x.sum))}${row('% Armazenamento Utilizado', sa, fmtPctExact, x => x.acima100 + ' conta(s) acima de 100%')}${row('Saúde da API (% 2xx)', sp, fmtPctExact, x => x.acima100 + ' conta(s) acima de 100%')}</tbody></table></div><p class="note">Passe o mouse sobre o MRR, o armazenamento ou a API na lista de clientes para ver o texto exato que veio na planilha. Contas sem linha na Tabela Meta: ${ACC.filter(a => !a.naMeta).length}.</p></details>`;
+  }
+  if (!ACC.length) { $('#body').innerHTML = '<p class="note">Nenhuma empresa para este filtro.</p>'; return; }
+
+  const ifGroups = IF_ORDER.map(k => ({ key: k, short: k, label: IF_LABEL[k], acc: ACC.filter(a => a.IF === k) })).filter(g => g.acc.length || ['IF1', 'IF2', 'IF3', 'IF4', 'IF5', 'Sem IF'].includes(g.key));
+  const ifPresent = ifGroups.filter(g => g.acc.length);
+  const fxGroups = [1, 2, 3, 4, 5, 6, 7, 0].map(k => ({ key: k, label: FAIXA_LABEL[k], acc: ACC.filter(a => a.fx === k) })).filter(g => g.acc.length);
+  const segOrder = [...segs.entries()].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0])); const si = segOrder.findIndex(s => s[0] === 'Sem segmento na Cx'); if (si >= 0) segOrder.push(...segOrder.splice(si, 1));
+  const segGroups = segOrder.map(([k, v], i) => ({ key: k, label: k, acc: v, color: k === 'Sem segmento na Cx' ? '#9aa1ad' : hue(i) }));
+  const posKeys = ['Acima do intervalo', 'Dentro do intervalo', 'Abaixo do intervalo', 'Sem faixa na tag'];
+  const posParts = acc => posKeys.slice(0, 3).map(k => ({ label: k, count: acc.filter(a => a.pos === k).length, color: POS_COLOR[k], acc: acc.filter(a => a.pos === k) }));
+  const semFx = acc => { const k = acc.filter(a => a.pos === 'Sem faixa na tag').length; return k ? `+${k} sem faixa` : ''; };
+  let h = '';
+
+  // 0. Health Score e engajamento
+  const bands = ['Saudável', 'Atenção', 'Crítico'].map(k => ({ label: k, acc: ACC.filter(a => a.banda === k) }));
+  const ref = buildAccounts.REF;
+  const bucket = (v, cuts) => v == null ? 'Sem dado' : cuts.find(c => v <= c[0])?.[1] || cuts[cuts.length - 1][1];
+  const loginCuts = [[7, 'Até 7 dias'], [15, '8 a 15 dias'], [30, '16 a 30 dias'], [1e9, 'Mais de 30 dias']];
+  const interCuts = [[30, 'Até 30 dias'], [60, '31 a 60 dias'], [90, '61 a 90 dias'], [1e9, 'Mais de 90 dias']];
+  const bColor = { 'Até 7 dias': '#34AD61', '8 a 15 dias': '#8BE0AA', '16 a 30 dias': '#F5A60A', 'Mais de 30 dias': '#F05143', 'Até 30 dias': '#34AD61', '31 a 60 dias': '#F5A60A', '61 a 90 dias': '#F56A5D', 'Mais de 90 dias': '#BA291C', 'Sem dado': '#97A4B8' };
+  const mkBuckets = (f, cuts) => [...cuts.map(c => c[1]), 'Sem dado'].map(k => ({ label: k, value: ACC.filter(a => bucket(f(a), cuts) === k).length, color: bColor[k], text: ACC.filter(a => bucket(f(a), cuts) === k).length + ' emp.', acc: ACC.filter(a => bucket(f(a), cuts) === k) })).filter(i => i.value);
+  const penTop = {}; ACC.forEach(a => a.penalidades.forEach(p => { if (p[1] > 0) (penTop[p[0]] = penTop[p[0]] || []).push(a); }));
+  const criticas = ACC.filter(a => a.banda !== 'Saudável').sort((a, b) => a.score - b.score);
+  h += `<h2>Health Score e engajamento</h2><p class="lead">Score de 0 a 100 por conta: começa em 100 e desconta pontos por IF, queda de pedidos, API, armazenamento, tickets, inadimplência, engajamento, preço, dias sem interação e sem login. Pesos editáveis no código (HEALTH). Data de referência: ${fmtDate(ref)}.</p><div class="grid">`
+    + card('Distribuição do Health Score', `média ${fmtScore(scoreMedia(ACC))} (sem Finalizadas) · Saudável ≥ ${HEALTH_BANDS.saudavel} · Atenção ≥ ${HEALTH_BANDS.atencao}`, pie(bands.map(b => ({ label: b.label, value: b.acc.length, color: BAND_COLOR[b.label], text: b.acc.length + ' emp.', acc: b.acc })), 'Health Score'))
+    + card('Score médio por IF', 'quanto menor, mais frágil', barList(ifPresent.map(g => ({ label: g.label, value: Math.round(scoreMedia(g.acc) ?? 0), color: IF_COLOR[g.key], acc: g.acc })), v => v + ' pts'))
+    + card('Sinais de risco mais comuns', 'contas afetadas por cada sinal (informativo; o score vem da coluna HS da Exportação)', barList(Object.entries(penTop).filter(([k]) => !IF_ORDER.some(i => k.startsWith(i))).sort((a, b) => b[1].length - a[1].length).slice(0, 10).map(([k, acc], i) => ({ label: k, value: acc.length, color: hue(i), acc })), v => v + ' emp.'))
+    + '</div><div class="grid">'
+    + card('Último login no Bling', `${cnt(ACC, a => a.diasLogin)} contas com dado (Tabela Meta) · ref. ${fmtDate(ref)}`, pie(mkBuckets(a => a.diasLogin, loginCuts), 'Último login'))
+    + card('Última interação do CSM', `${cnt(ACC, a => a.diasInteracao)} contas com dado · menor entre "Último contato" e "Dias da última tarefa concluída"`, pie(mkBuckets(a => a.diasInteracao, interCuts), 'Última interação'))
+    + '</div>';
+  h += `<div class="stat" style="margin-top:12px">${['Crítico', 'Atenção', 'Saudável'].map(k => { const acc = ACC.filter(a => a.banda === k); return `<div class="ck" data-l="${reg('Health Score · ' + k, acc)}"><b style="color:${BAND_COLOR[k]}">${acc.length}</b><span>${k} · clique para ver a lista</span></div>`; }).join('')}</div>`;
+
+  // Visão geral
+  h += `<h2>Visão geral por segmento</h2><p class="lead">Segmentos da Tabela Cx agrupados (${Object.keys(SEG_GRUPO).length} grupos; o segmento original aparece na lista de clientes).</p><div class="grid">` + card('Segmentos da carteira (agrupados)', `% das ${ACC.length} contas`, pie(segGroups.map(g => ({ label: g.label, value: g.acc.length, color: g.color, text: g.acc.length + ' emp.', acc: g.acc })), 'Segmentos')) + '</div>';
+
+  // 1. IF
+  const ifPie = (title, sub, f, fmt) => card(title, sub, pie(ifGroups.map(g => ({ label: g.label, value: sum(g.acc, f), color: IF_COLOR[g.key], text: fmt(sum(g.acc, f)), acc: g.acc })), title));
+  h += `<h2>1. Distribuição por IF</h2><div class="grid">` + ifPie('Empresas por IF', `% das ${ACC.length} contas`, a => 1, v => v + ' emp.') + ifPie('GMV último mês por IF', '% do GMV', a => a.gmv, fmtMi) + ifPie('Pedidos (média 3 meses) por IF', '% do volume médio de pedidos', a => a.media, v => fmtInt(v) + ' ped.') + ifPie('MRR por IF', '% do MRR (Tabela Meta)', a => a.mrr, fmtMil) + '</div>';
+  h += `<h3 class="sp">Média de pedidos (3 meses) × intervalo da faixa</h3><p class="lead">A tag de faixa traz o intervalo de pedidos (ex.: "Faixa 3 · 20 a 30 mil"). A média de pedidos dos 3 meses é comparada com esse intervalo.</p><div class="grid">` +
+    card('Média de pedidos × intervalo da faixa', `${sum(comp, a => a.acimaFaixa)} das ${comp.length} contas comparáveis estão acima do teto`, pie(posKeys.map(k => ({ label: k, value: ACC.filter(a => a.pos === k).length, color: POS_COLOR[k], text: ACC.filter(a => a.pos === k).length + ' emp.', acc: ACC.filter(a => a.pos === k) })), 'Posição vs faixa')) + '</div><div class="two">' +
+    card('Por IF', 'Contas comparáveis (com faixa na tag)', stack(ifPresent.map(g => ({ label: g.label, parts: posParts(g.acc), extra: semFx(g.acc) })))) +
+    card('Por faixa', 'Contas comparáveis', stack(fxGroups.filter(g => g.key).map(g => ({ label: g.label, parts: posParts(g.acc) })))) + '</div>';
+  const acima = ACC.filter(a => a.acimaFaixa === 1), abaixo = ACC.filter(a => a.abaixoFaixa === 1);
+  h += `<div class="stat" style="margin-top:12px"><div class="ck" data-l="${reg('Acima do intervalo da faixa', acima)}"><b>${acima.length}</b><span>contas acima do teto da faixa · clique para ver</span></div><div class="ck" data-l="${reg('Abaixo do intervalo da faixa', abaixo)}"><b>${abaixo.length}</b><span>contas abaixo do piso da faixa · clique para ver</span></div><div class="ck" data-l="${reg('Tag de faixa incorreta', ACC.filter(a => a.faixaIncorreta))}"><b>${sum(ACC, a => a.faixaIncorreta)}</b><span>com tag "pagamento de faixa incorreta"</span></div></div>`;
+
+  // 2. Comparativo
+  h += `<h2>2. Comparativo entre os IFs</h2>` + table(['IF', 'Empresas', 'Score médio', 'GMV', 'GMV médio', 'MRR', 'MRR médio', 'Pedidos (mediana)', 'Tickets 90d (total)', 'Marketplaces (média)', 'Armazenamento médio', 'Saúde API média', 'Usa API', 'Segmentos distintos'],
+    ifGroups.map(g => g.acc.length ? ((arr) => arr.map(c => L(g.label, g.acc, c)))([esc(g.label), g.acc.length, `<span class="${scoreCls(scoreMedia(g.acc))}" style="padding:2px 6px;border-radius:6px">${fmtScore(scoreMedia(g.acc))}</span>`, fmtMi(sum(g.acc, a => a.gmv)), fmtMi(avg(g.acc, a => a.gmv)), fmtMil(sum(g.acc, a => a.mrr)), fmtMil(avg(g.acc, a => a.mrr)), fmtInt(median(g.acc, a => a.media)), fmtInt(sum(g.acc, a => a.tickets)), (avg(g.acc, a => a.naMeta ? a.nMkt : null) ?? 0).toFixed(1), avg(g.acc, a => a.arm) == null ? '–' : `<span class="${armCls(avg(g.acc, a => a.arm))}" style="padding:2px 6px;border-radius:6px">${fmtPct1(avg(g.acc, a => a.arm))}</span>`, avg(g.acc, a => a.api) == null ? '–' : `<span class="${apiCls(avg(g.acc, a => a.api))}" style="padding:2px 6px;border-radius:6px">${fmtPct1(avg(g.acc, a => a.api))}</span>`, avg(g.acc, a => a.usaApi) == null ? '–' : Math.round(100 * avg(g.acc, a => a.usaApi)) + '%', new Set(g.acc.map(a => a.seg)).size]) : [esc(g.label), 0, `<span class="mut">Nenhuma empresa da carteira com esse IF</span>`, '', '', '', '', '', '', '', '', '', '', '']));
+  h += `<p class="note">MRR, tickets, marketplaces, armazenamento, saúde da API e uso de API só existem na Tabela Meta e cobrem as ${sum(ACC, a => a.naMeta)} contas dessa tabela.</p>`;
+
+  // 3. Riscos
+  const hr = heatCtl('risco', ifPresent, fxGroups);
+  h += `<h2>3. Riscos por ${hr.by === 'IF' ? 'IF' : 'faixa'}</h2><p class="lead">Cada célula mostra quantas empresas do grupo têm o indicador sobre o total de empresas do grupo (n do cabeçalho). Embaixo aparece quantas empresas não têm a informação daquele indicador (contam como "não tem"); clique para ver quais são.</p>` + hr.html + heat(hr.groups, RISK_IND);
+  const motivoPie = g => { const items = RISCOS.map(([k], i) => ({ label: k, value: sum(g.acc, a => a.riscos[k]), color: hue(i + 3), text: sum(g.acc, a => a.riscos[k]) + ' citações', acc: g.acc.filter(a => a.riscos[k]) })).filter(i => i.value).sort((a, b) => b.value - a.value); const tit = g.key === 'IF0' ? 'Motivo do cancelamento · IF0' : 'Motivos de risco · ' + g.key; return items.length ? card(tit, `${g.acc.length} contas · uma conta pode citar mais de um motivo`, pie(items, g.key === 'IF0' ? 'Motivo do cancelamento IF0' : 'Motivos ' + g.key)) : ''; };
+  const topIfs = ifPresent.filter(g => sum(g.acc, a => a.temMotivo) > 0);
+  h += `<h3 class="sp">Motivos de risco por IF</h3><p class="lead">Um gráfico para cada IF que tem ao menos uma conta com motivo de risco.</p><div class="grid">${topIfs.map(motivoPie).join('')}</div>`;
+  const semMotivo = ifPresent.filter(g => !sum(g.acc, a => a.temMotivo)); if (semMotivo.length) h += `<p class="note">Sem motivo de risco registrado: ${semMotivo.map(g => g.key).join(', ')}.</p>`;
+
+  // 4. Expansão
+  // IF0 = cliente que cancelou: fica fora das oportunidades de expansão
+  const accExp = ACC.filter(a => a.IF !== 'IF0');
+  const fxExp = fxGroups.map(g => ({ ...g, acc: g.acc.filter(a => a.IF !== 'IF0') })).filter(g => g.acc.length);
+  const he = heatCtl('exp', ifPresent.filter(g => g.key !== 'IF0'), fxExp);
+  const compExp = comp.filter(a => a.IF !== 'IF0');
+  h += `<h2>4. Oportunidades de expansão por ${he.by === 'IF' ? 'IF' : 'faixa'}</h2><p class="lead">A faixa Elite é de volume de pedidos. ${sum(compExp, a => a.acimaFaixa)} de ${compExp.length} contas têm volume acima do teto da faixa. Clientes IF0 (cancelados) não entram aqui.</p><p class="lead">Cada célula mostra quantas empresas do grupo têm o indicador sobre o total de empresas do grupo (n do cabeçalho). Embaixo aparece quantas empresas não têm a informação daquele indicador (contam como "não tem"); clique para ver quais são.</p>` + he.html + heat(he.groups, EXP_IND, accExp);
+  const cobKeys = ['Sem e-commerce (oferta: Bling Loja Virtual)', 'E-commerce com logística além da de marketplace', 'E-commerce só com logística de marketplace (oferta: Bling Envios)', 'E-commerce sem logística (oferta: Bling Envios)', 'E-commerce sem dado de logística (só na Cx)'];
+  const cobColor = ['#34AD61', '#8BE0AA', '#F5A60A', '#F05143', '#97A4B8'];
+  const semEcom = ACC.filter(a => !a.temEcom).sort((a, b) => (b.gmv || 0) - (a.gmv || 0));
+  h += `<h3 class="sp">Bling Loja Virtual e Bling Envios</h3><div class="grid">` + card('Cobertura de e-commerce e logística', `% das ${ACC.length} contas`, pie(cobKeys.map((k, i) => ({ label: k, value: ACC.filter(a => a.cobertura === k).length, color: cobColor[i], text: ACC.filter(a => a.cobertura === k).length + ' emp.', acc: ACC.filter(a => a.cobertura === k) })).filter(i => i.value), 'Cobertura')) + '</div>';
+  const envios = ACC.filter(a => a.cobertura.includes('Bling Envios'));
+  h += `<div class="stat" style="margin-top:12px"><div class="ck" data-l="${reg('Sem e-commerce → Bling Loja Virtual', semEcom)}"><b>${semEcom.length}</b><span>sem e-commerce → Bling Loja Virtual · ${pct(sum(semEcom, a => a.gmv), gmvT)} do GMV</span></div><div class="ck" data-l="${reg('Sem e-commerce e com 5+ marketplaces', semEcom.filter(a => a.nMkt >= 5))}"><b>${semEcom.filter(a => a.nMkt >= 5).length}</b><span>dessas, com 5+ marketplaces (melhores candidatas)</span></div><div class="ck" data-l="${reg('Candidatas a Bling Envios', envios)}"><b>${envios.length}</b><span>e-commerce sem logística própria → Bling Envios</span></div></div>`;
+
+  // 6. Faixas
+  const fxPie = (title, sub, f, fmt) => card(title, sub, pie(fxGroups.map(g => ({ label: g.label, value: sum(g.acc, f), color: FX_COLOR[g.key], text: fmt(sum(g.acc, f)), acc: g.acc })), title));
+  h += `<h2>6. Faixas Elite</h2><p class="lead">Faixa lida da tag (ex.: "Faixa 3 · 20 a 30 mil", que é volume de pedidos).</p><div class="grid">` + fxPie('Empresas por faixa Elite', `% das ${ACC.length} contas`, a => 1, v => v + ' emp.') + fxPie('GMV último mês por faixa', '% do GMV da carteira', a => a.gmv, fmtMi) + fxPie('Pedidos (média 3 meses) por faixa', '% do volume médio', a => a.media, v => fmtInt(v) + ' ped.') + fxPie('MRR por faixa', '% do MRR', a => a.mrr, fmtMil) + '</div>';
+  h += `<h3 class="sp">Faixa × IF</h3>` + matrix(fxGroups, ifPresent.map(g => ({ label: g.key, acc: g.acc })), 'Faixa');
+  const maisComum = groups => table(['Grupo', 'Emp.', 'Contas com motivo', 'Motivos mais comuns', 'Indicador de risco mais frequente'], groups.map(g => {
+    const ms = RISCOS.map(([k]) => [k, g.acc.filter(a => a.riscos[k])]).filter(x => x[1].length).sort((a, b) => b[1].length - a[1].length);
+    const ind = RISK_IND.map(i => [i.name, g.acc.filter(a => i.f(a) === 1)]).filter(x => x[1].length).sort((a, b) => b[1].length - a[1].length);
+    const cm = g.acc.filter(a => a.temMotivo);
+    return [L(g.label, g.acc, esc(g.label)), L(g.label, g.acc, g.acc.length), L(g.label + ' · com motivo de risco', cm, cm.length), ms.slice(0, 2).map(x => L(`${g.label} · risco ${x[0]}`, x[1], `${x[0]} (${x[1].length})`)).join(' · ') || '–', ind.length ? L(`${g.label} · ${ind[0][0]}`, ind[0][1], `${ind[0][0]} (${ind[0][1].length})`) : '–'];
+  }));
+  h += `<h3 class="sp">Risco mais comum por faixa</h3>` + maisComum(fxGroups);
+  h += `<h3 class="sp">Risco mais comum por segmento</h3>` + maisComum(segGroups);
+
+  // 7. Segmentos
+  h += `<h2>7. Segmentos (agrupados)</h2><div class="grid">` + card('Empresas por segmento', '', barList(segGroups.map(g => ({ label: g.label, value: g.acc.length, color: g.color, acc: g.acc })), v => v + ' emp.')) + card('MRR por segmento', '', barList([...segGroups].sort((a, b) => sum(b.acc, x => x.mrr) - sum(a.acc, x => x.mrr)).map(g => ({ label: g.label, value: sum(g.acc, a => a.mrr), color: g.color, acc: g.acc })), fmtMil)) + card('GMV por segmento', '', barList([...segGroups].sort((a, b) => sum(b.acc, x => x.gmv) - sum(a.acc, x => x.gmv)).map(g => ({ label: g.label, value: sum(g.acc, a => a.gmv), color: g.color, acc: g.acc })), fmtMi)) + '</div>';
+  h += `<h3 class="sp">Segmento × IF</h3>` + matrix(segGroups, ifPresent.map(g => ({ label: g.key, acc: g.acc })), 'Segmento');
+  const segInd = (title, f, titleList) => card(title, 'contas por segmento · clique para ver', barList(segGroups.map(g => ({ label: g.label, value: g.acc.filter(f).length, color: g.color, acc: g.acc.filter(f) })).filter(i => i.value).sort((a, b) => b.value - a.value), v => v + ' emp.'));
+  h += `<h3 class="sp">Indicadores por segmento</h3><div class="grid">` + segInd('Citam preço como risco', a => a.riscos['Preço']) + segInd('Volume acima da faixa', a => a.acimaFaixa === 1) + segInd('Sem e-commerce', a => !a.temEcom) + segInd('Saúde da API abaixo de ' + API_GREEN + '%', a => a.apiBaixa === 1) + segInd('Mais de 5 tickets em 90 dias', a => a.ticketsAlto === 1) + segInd('Health Score em Atenção ou Crítico', a => a.banda !== 'Saudável') + '</div>';
+
+  // 8. Integrações: marketplaces, e-commerces e hubs separados (verde = tem · vermelho = não tem; clique para ver as empresas)
+  const platStack = (getList, maxRows) => {
+    const comDado = ACC.filter(a => getList(a) != null);
+    const usoAll = new Map(); ALL.forEach(a => (getList(a) || []).forEach(k => usoAll.set(k, (usoAll.get(k) || 0) + 1)));
+    const usoAcc = new Map(); comDado.forEach(a => getList(a).forEach(k => usoAcc.set(k, (usoAcc.get(k) || 0) + 1)));
+    const names = new Set(usoAcc.keys()); [...usoAll.entries()].sort((x, y) => y[1] - x[1]).slice(0, 8).forEach(([k]) => names.add(k));
+    const rows = [...names].sort((x, y) => (usoAcc.get(y) || 0) - (usoAcc.get(x) || 0) || (usoAll.get(y) || 0) - (usoAll.get(x) || 0)).slice(0, maxRows).map(k => {
+      const tem = comDado.filter(a => getList(a).includes(k)), nao = comDado.filter(a => !getList(a).includes(k));
+      return { label: k, parts: [{ label: 'Tem', count: tem.length, color: '#34AD61', acc: tem }, { label: 'Não tem', count: nao.length, color: '#F05143', acc: nao }], extra: pct(tem.length, comDado.length) + ' têm' };
+    });
+    return { rows, n: comDado.length, semDado: ACC.length - comDado.length, total: names.size };
+  };
+  const leg8 = '<p class="sub"><span class="dot" style="background:#34AD61"></span> tem a integração &nbsp;·&nbsp; <span class="dot" style="background:#F05143"></span> não tem &nbsp;·&nbsp; clique em um trecho para ver as empresas</p>';
+  const mk = platStack(a => a.mktList, 20), ec = platStack(a => a.ecomList, 20), hb = platStack(a => a.hubList, 20);
+  const appsDist = groupBy(ACC.filter(a => a.nApps != null), a => a.nApps >= 5 ? '5 ou mais apps' : a.nApps + (a.nApps === 1 ? ' app' : ' apps'));
+  const nota8 = x => `${x.n} contas com dado na Tabela Meta${x.semDado ? ` · ${x.semDado} sem dado ficam de fora` : ''} · ${x.rows.length} de ${x.total} plataformas`;
+  h += `<h2>8. Integrações</h2><p class="lead">Marketplaces e e-commerces são colunas separadas da Tabela Meta. Em cada plataforma, o verde mostra quem tem e o vermelho quem não tem. O nome dos apps conectados via API (Magis5, Base etc.) não vem na exportação: aparece como "Api".</p>`
+    + card('Marketplaces', nota8(mk) + ' · coluna "Marketplaces Configurados"', leg8 + stack(mk.rows))
+    + '<div style="height:12px"></div>' + card('E-commerces (plataformas de loja virtual)', nota8(ec) + ' · coluna "E-commerces Configurados"', leg8 + stack(ec.rows))
+    + '<div style="height:12px"></div>' + card('Hubs e integradores', `${hb.n} contas · integrações ativas da Exportação de Clientes (Cx)`, leg8 + stack(hb.rows))
+    + '<div class="two">' + card('Quantidade de aplicativos com uso na API', `${cnt(ACC, a => a.nApps)} contas com dado (Tabela Meta)`, barList([...appsDist.entries()].sort((x, y) => parseInt(x[0]) - parseInt(y[0])).map(([k, acc], i) => ({ label: k, value: acc.length, color: hue(i + 9), acc })), v => v + ' emp.')) + '</div>';
+
+  // 9. Grupos
+  const grupos = [...groupBy(ACC.filter(a => a.grupo), a => a.grupo).entries()].sort((a, b) => sum(b[1], x => x.gmv) - sum(a[1], x => x.gmv));
+  h += `<h2>9. Grupos econômicos</h2><p class="lead">${grupos.length} grupos, ${sum(grupos, g => g[1].length)} empresas com grupo preenchido na Cx. Clique no grupo para ver as empresas.</p><div class="two">`
+    + card('GMV por grupo econômico', 'soma do GMV último mês das empresas do grupo', grupos.length ? barList(grupos.map(([g, acc], i) => ({ label: `${g} (${acc.length})`, value: sum(acc, a => a.gmv), color: hue(i), acc })), fmtMi) : '<p class="mut">Nenhum grupo preenchido.</p>')
+    + card('MRR por grupo econômico', 'soma do MRR das empresas do grupo', grupos.length ? barList([...grupos].sort((a, b) => sum(b[1], x => x.mrr) - sum(a[1], x => x.mrr)).map(([g, acc], i) => ({ label: `${g} (${acc.length})`, value: sum(acc, a => a.mrr), color: hue(i), acc })), fmtMil) : '<p class="mut">Nenhum grupo preenchido.</p>')
+    + '</div>';
+  $('#body').innerHTML = h;
+}
+
+// --- carga de dados ---
+function finishLoad(fonte, temMeta, extra) {
+  const csms = [...new Set(ALL.map(a => a.csm).filter(Boolean))].sort();
+  const sel = $('#csm'), prev = (ALL.length && csms.includes(sel.value)) ? sel.value : (localStorage.getItem('csm') || 'Bruno');
+  sel.innerHTML = csms.map(c => `<option>${esc(c)}</option>`).join('') + '<option value="__all__">Todas as carteiras</option>';
+  sel.value = csms.includes(prev) ? prev : (prev === '__all__' ? '__all__' : csms[0]);
+  $('#status').textContent = `${fonte} · ${ALL.length} empresas · ${temMeta ? 'Cx + Meta' : 'só Cx (sem Tabela Meta: GMV, API e e-commerce ficam limitados)'}${extra ? ' · ' + extra : ''} · carregado ${new Date().toLocaleString('pt-BR')}`;
+  $('#status').className = 'ok'; render(); toggleManual(false);
+}
+function loadWorkbook(wb, fonte) {
+  let cx = null, meta = null;
+  wb.SheetNames.forEach(n => { const rows = XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, defval: '' }); const t = detectSheet(rows); if (t === 'cx') cx = rows; if (t === 'meta') meta = rows; });
+  if (!cx) throw new Error('Não encontrei a aba "Tabela Cx" (precisa ter as colunas Carteira e Tags).');
+  ALL = buildAccounts(cx, meta);
+  finishLoad(fonte, !!meta);
+}
+// --- carga dos 2 arquivos crus ---
+const RAW = { meta: null, cx: null, tickets: null, metaName: '', cxName: '', ticketsName: '' };
+// última montagem (para remontar quando a lista de tickets chega depois)
+let ULTIMA_BASE = null;
+function remontarComTickets(rows, nome) {
+  TICKETS = rows;
+  if (!ULTIMA_BASE) return false;
+  ALL = buildAccounts(ULTIMA_BASE.cxRows, ULTIMA_BASE.metaRows);
+  $('#status').textContent = $('#status').textContent.replace(/ · tickets: [^·]*/, '') + ` · tickets: ${nome}`;
+  render(); renderAbaAtual(); return true;
+}
+function tryBuildRaw() {
+  if (RAW.tickets && !(RAW.meta && RAW.cx) && ULTIMA_BASE) { remontarComTickets(RAW.tickets, RAW.ticketsName); return; }
+  if (RAW.meta && RAW.cx) {
+    const t = montarTabelas(RAW.meta, RAW.cx);
+    TICKETS = RAW.tickets || TICKETS;
+    ULTIMA_BASE = { cxRows: t.cxRows, metaRows: t.metaRows };
+    ALL = buildAccounts(t.cxRows, t.metaRows);
+    const extra = t.semPar ? `${t.semPar} de ${t.total} empresas da Meta sem par na Exportação (CNPJ/ID não localizado)` : 'todos os CNPJs da Meta localizados na Exportação';
+    finishLoad(`${RAW.metaName} + ${RAW.cxName}${RAW.ticketsName ? ' + ' + RAW.ticketsName : ''} (só neste navegador)`, true, extra + (TICKETS ? '' : ' · sem a lista de tickets (tickets de 90 dias pela coluna da Meta, se existir)'));
+  } else {
+    const falta = !RAW.meta ? 'o arquivo que começa com "base_dash____dados_meta" (dados Meta)' : 'o arquivo que começa com "Exportação de Clientes (Completa)" (dados CSM)';
+    const tem = RAW.meta ? RAW.metaName : RAW.cxName;
+    $('#status').textContent = `Recebi "${tem}". Agora suba ${falta} para montar os gráficos.`;
+    $('#status').className = '';
+  }
+}
+function sheetId(url) { const m = String(url).match(/\/d\/([a-zA-Z0-9_-]{20,})/) || String(url).match(/^([a-zA-Z0-9_-]{20,})$/); return m ? m[1] : null; }
+async function loadGoogle(url) {
+  const id = sheetId(url); if (!id) throw new Error('Link inválido. Cole o link completo da planilha Google (…/spreadsheets/d/ID/…).');
+  const wb = XLSX.utils.book_new(); let ok = 0;
+  for (const sheet of ['Tabela Cx', 'Tabela Meta', 'Cx', 'Meta']) {
+    try {
+      const r = await fetch(`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheet)}&_=${Date.now()}`);
+      if (!r.ok) continue; const txt = await r.text(); if (!txt || txt.startsWith('<') || txt.length < 50) continue;
+      const w = XLSX.read(txt, { type: 'string' }); XLSX.utils.book_append_sheet(wb, w.Sheets[w.SheetNames[0]], sheet); ok++;
+    } catch (e) { /* tenta a próxima aba */ }
+  }
+  if (!ok) throw new Error('Não consegui ler a planilha. Verifique: (1) o arquivo é uma Planilha Google (não .xlsx no Drive — abra e use Arquivo › Salvar como Planilhas Google); (2) está compartilhado como "Qualquer pessoa com o link pode ver"; (3) as abas se chamam "Tabela Cx" e "Tabela Meta".');
+  loadWorkbook(wb, 'Google Sheets');
+}
+// ===== Dados automáticos do Google Drive (Apps Script) =====
+function jsonp(url, ms = 90000) {
+  return new Promise((resolve, reject) => {
+    const cb = 'autoCb_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
+    const s = document.createElement('script');
+    const fim = () => { clearTimeout(t); try { delete window[cb]; } catch (e) { window[cb] = undefined; } s.remove(); };
+    const t = setTimeout(() => { fim(); reject(new Error('O serviço de dados não respondeu. Tente de novo em instantes.')); }, ms);
+    window[cb] = d => { fim(); resolve(d); };
+    s.onerror = () => { fim(); reject(new Error('Não consegui acessar o serviço de dados. Confira o WEBAPP_URL e se o App da Web está implantado com acesso para "Qualquer pessoa".')); };
+    s.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
+    document.body.appendChild(s);
+  });
+}
+function rowsFromB64(f) {
+  const bin = atob(f.b64);
+  if (f.ext === 'json') return JSON.parse(new TextDecoder('utf-8').decode(Uint8Array.from(bin, c => c.charCodeAt(0))));
+  if (f.ext === 'csv') {
+    const txt = new TextDecoder('utf-8').decode(Uint8Array.from(bin, c => c.charCodeAt(0)));
+    return rawRows(XLSX.read(txt, { type: 'string' }));
+  }
+  return rawRows(XLSX.read(f.b64, { type: 'base64' }));
+}
+// Colunas da API ainda em validação (a exportação manual prevalece enquanto houver uma).
+// Quando a validação confirmar que batem, é só tirar o nome daqui.
+const CX_PREFERIR_EXPORTACAO = ['Último MRR Ativo', 'Dias da última tarefa concluída', 'Responsável: Analista Principal'];
+
+// ===== Validação: compara, coluna a coluna, a tabela da API com a exportação manual (abra a página com ?validar=1) =====
+function validarCx(apiRows, compRows) {
+  const hA = apiRows[0].map(S), hi = findHeaderRow(compRows, 'carteira', 'cnpj/cpf'); if (hi < 0) return null;
+  const hC = compRows[hi].map(S);
+  const codRe = h => /^cod\.?\s*cliente$/i.test(h);
+  const iA = hA.findIndex(codRe), iC = hC.findIndex(codRe);
+  const cod = v => idKey(S(v).replace(/^emp[_\s-]*/i, '').trim());
+  const mapA = new Map(apiRows.slice(1).map(r => [cod(r[iA]), r]));
+  const mapC = new Map(); compRows.slice(hi + 1).forEach(r => { const k = cod((r || [])[iC]); if (k) mapC.set(k, r); });
+  const ambos = [...mapC.keys()].filter(k => mapA.has(k));
+  const serialIso = n => new Date(Math.round((n - 25569) * 864e5)).toISOString().slice(0, 10);
+  const norm = v => {
+    if (v == null) return ''; let s = String(v).trim(); if (!s) return '';
+    let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/); if (m) return `${m[3].length === 2 ? '20' + m[3] : m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+    m = s.match(/^(\d{4}-\d{2}-\d{2})/); if (m) return m[1];
+    if (/^-?[\d.,]+$/.test(s)) { const n = parseNum(s, false); if (n != null) return String(Math.round(n * 100) / 100); }
+    if (s.includes(' | ') || s.includes(', ')) return s.split(/ \| |, /).map(x => x.trim().toLowerCase()).filter(Boolean).sort().join('|');
+    return s.toLowerCase();
+  };
+  const igual = (a, c) => { let x = norm(a), y = norm(c);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(x) && /^\d{5}(\.\d+)?$/.test(y)) y = serialIso(Number(y));
+    if (/^\d{4}-\d{2}-\d{2}$/.test(y) && /^\d{5}(\.\d+)?$/.test(x)) x = serialIso(Number(x));
+    return x === y; };
+  const linhas = hC.map((h, j) => {
+    if (!h) return null; const i = hA.findIndex(x => x.toLowerCase() === h.toLowerCase());
+    if (i < 0) return { col: h, status: 'falta na API', ig: 0, dif: 0, ex: '' };
+    let ig = 0, dif = 0, ex = '';
+    ambos.forEach(k => { const a = mapA.get(k)[i], c = mapC.get(k)[j]; if (igual(a, c)) ig++; else { dif++; if (!ex) ex = `${k}: API “${S(a) || '(vazio)'}” × exportação “${S(c) || '(vazio)'}”`; } });
+    return { col: h, status: dif === 0 ? 'ok' : (ig / (ig + dif) >= 0.98 ? 'quase' : 'diferente'), ig, dif, ex };
+  }).filter(Boolean);
+  return { linhas, ambos: ambos.length, soApi: [...mapA.keys()].filter(k => !mapC.has(k)).length, soExp: [...mapC.keys()].filter(k => !mapA.has(k)).length };
+}
+function mostrarValidacao(v) {
+  let box = document.getElementById('validacao');
+  if (!box) { box = document.createElement('div'); box.id = 'validacao'; box.style.cssText = 'margin-top:14px;overflow-x:auto'; document.getElementById('status').after(box); }
+  if (!v) { box.textContent = 'Validação: não há exportação manual para comparar.'; return; }
+  const cor = { ok: 'var(--accent, #3fb950)', quase: '#d29922', diferente: '#f85149', 'falta na API': '#f85149' };
+  const ordem = { 'falta na API': 0, diferente: 1, quase: 2, ok: 3 };
+  const lin = v.linhas.slice().sort((a, b) => ordem[a.status] - ordem[b.status]);
+  const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  box.innerHTML = `<p><strong>Validação API × exportação</strong> · ${v.ambos} clientes nas duas · ${v.soApi} só na API · ${v.soExp} só na exportação · ${v.linhas.filter(l => l.status === 'ok').length} de ${v.linhas.length} colunas idênticas</p>
+  <table style="border-collapse:collapse;font-size:12px;width:100%"><tr><th style="text-align:left;padding:4px">Coluna</th><th style="text-align:left;padding:4px">Resultado</th><th style="padding:4px">Iguais</th><th style="padding:4px">Diferentes</th><th style="text-align:left;padding:4px">Exemplo de diferença</th></tr>
+  ${lin.map(l => `<tr style="border-top:1px solid rgba(128,128,128,.25)"><td style="padding:4px">${esc(l.col)}</td><td style="padding:4px;color:${cor[l.status]}">${l.status}</td><td style="padding:4px;text-align:right">${l.ig}</td><td style="padding:4px;text-align:right">${l.dif}</td><td style="padding:4px">${esc(l.ex)}</td></tr>`).join('')}</table>`;
+}
+
+// Junta à tabela da API do CustomerX as colunas que só existem na exportação manual
+// (HS, NPS Score, MRR, dias da última tarefa…), casando pelo código do cliente.
+function complementarCx(apiRows, compRows) {
+  const hA = apiRows[0].map(S), temA = new Set(hA.map(h => h.toLowerCase()));
+  const hi = findHeaderRow(compRows, 'carteira', 'cnpj/cpf'); if (hi < 0) return apiRows;
+  const hC = compRows[hi].map(S);
+  const iCodA = hA.findIndex(h => /^cod\.?\s*cliente$/i.test(h)), iCodC = hC.findIndex(h => /^cod\.?\s*cliente$/i.test(h));
+  if (iCodA < 0 || iCodC < 0) return apiRows;
+  const faltam = hC.map((h, j) => [h, j]).filter(([h]) => h && !temA.has(h.toLowerCase()));
+  // colunas que a API já traz mas ainda estão em validação: o valor da exportação prevalece quando existir
+  const pref = hA.map((h, i) => [i, hC.findIndex(x => x.toLowerCase() === h.toLowerCase())])
+    .filter(([i, j]) => j >= 0 && CX_PREFERIR_EXPORTACAO.some(n => n.toLowerCase() === hA[i].toLowerCase()));
+  const cod = v => idKey(S(v).replace(/^emp[_\s-]*/i, '').trim());
+  const porCod = new Map(); for (let i = hi + 1; i < compRows.length; i++) { const r = compRows[i] || []; const k = cod(r[iCodC]); if (k && !porCod.has(k)) porCod.set(k, r); }
+  return [[...hA, ...faltam.map(([h]) => h)], ...apiRows.slice(1).map(r => {
+    const c = porCod.get(cod(r[iCodA])); const out = [...r];
+    if (c) pref.forEach(([i, j]) => { if (S(c[j]) !== '') out[i] = c[j]; });
+    return [...out, ...faltam.map(([, j]) => c && c[j] !== undefined ? c[j] : '')];
+  })];
+}
+const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+const rotuloPeriodo = per => { const [a, m] = per.split('-'); return `Fim de ${MESES[+m - 1]}/${a}`; };
+function pedirToken(msg) {
+  $('#tokenBox').hidden = false; $('#wtoken').focus();
+  $('#status').textContent = msg || 'Digite o código de acesso para carregar os dados automáticos (fica salvo neste navegador).';
+  $('#status').className = '';
+}
+async function chamarWebApp(params) {
+  const tok = localStorage.getItem('wtoken');
+  if (!tok) { pedirToken(); throw null; }
+  const d = await jsonp(`${WEBAPP_URL}?token=${encodeURIComponent(tok)}&${params}`);
+  if (!d || !d.ok) {
+    if (d && d.erro === 'token') { localStorage.removeItem('wtoken'); IDB.limpar(); pedirToken('Código de acesso inválido. Digite novamente.'); throw null; }
+    throw new Error('Serviço de dados: ' + ((d && d.mensagem) || 'resposta inválida.'));
+  }
+  return d;
+}
+// Metabase: API ou n8n = automático; arquivo com mais de 1 dia ou colocado à mão = aviso
+function metaRotulo(m, nome = 'Metabase') {
+  const d = toDate(S(m.arquivo_de).split(' ')[0]), velho = d && (Date.now() - d.getTime()) / 864e5 > 1.5;
+  const fonte = { API: 'API', n8n: 'n8n', 'e-mail': 'e-mail' }[m.origem] || 'arquivo manual';
+  return (velho || m.origem === 'pasta' ? '⚠ ' : '') + `${nome} (${fonte})`;
+}
+function resumoStatus(st) {
+  if (!st) return '';
+  const p = [];
+  if (st.meta) p.push(st.meta.erro ? `⚠ Metabase falhou em ${st.meta.erro_em}` : `${metaRotulo(st.meta)} de ${st.meta.arquivo_de || st.meta.atualizado_em}`);
+  if (st.tickets) p.push(st.tickets.erro ? `⚠ lista de tickets indisponível (${st.tickets.erro})` : `${metaRotulo(st.tickets, 'Tickets')} de ${st.tickets.arquivo_de || st.tickets.atualizado_em}`);
+  if (st.cx) p.push(st.cx.erro ? `⚠ CustomerX: ${st.cx.erro}` : st.cx.origem === 'API'
+    ? `CustomerX (API) de ${st.cx.arquivo_de || st.cx.atualizado_em}${st.cx.clientes_com_falha ? ` · ⚠ ${st.cx.clientes_com_falha} clientes com indicador faltando` : ''}${st.cx.complemento_de ? ` · colunas em validação da exportação de ${st.cx.complemento_de}` : ''}`
+    : `CustomerX de ${st.cx.arquivo_de || st.cx.atualizado_em}`);
+  return p.join(' · ');
+}
+// ===== Cache no navegador (IndexedDB): reabrir a página é instantâneo; só baixa de novo quando o Drive publica dados novos =====
+let VERSAO = '';
+const IDB = (() => {
+  let pdb;
+  const abrir = () => pdb || (pdb = new Promise((res, rej) => {
+    const r = indexedDB.open('blingdash', 1);
+    r.onupgradeneeded = () => r.result.createObjectStore('c');
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  }));
+  const tx = (modo, f) => abrir().then(db => new Promise((res, rej) => {
+    const t = db.transaction('c', modo), q = f(t.objectStore('c'));
+    t.oncomplete = () => res(q && q.result); t.onerror = () => rej(t.error);
+  }));
+  return {
+    get: k => tx('readonly', st => st.get(k)).catch(() => null),
+    put: (k, v) => tx('readwrite', st => st.put(v, k)).catch(() => null),
+    limpar: () => tx('readwrite', st => st.clear()).catch(() => null),
+  };
+})();
+// versão dos dados guardados no navegador: muda quando chega Meta, CustomerX ou lista de tickets nova
+// (o "v2" no início descarta os caches antigos, gravados antes da lista de tickets existir)
+const versaoDe = st => st ? ['v2', st.ultima_publicacao, (st.cx || {}).arquivo_de, (st.meta || {}).arquivo_de, (st.tickets || {}).arquivo_de].join('|') : '';
+
+// transforma a resposta do Drive em linhas (e aplica o complemento/validação do CustomerX)
+function prepararPayload(d) {
+  const validar = new URLSearchParams(location.search).has('validar');
+  let cxRows = rowsFromB64(d.cx);
+  if (d.cx.ext === 'json' && d.cxComp) {
+    const comp = rowsFromB64(d.cxComp);
+    if (validar) mostrarValidacao(validarCx(cxRows, comp));
+    cxRows = complementarCx(cxRows, comp);
+  } else if (validar) mostrarValidacao(null);
+  const metaRows = rowsFromB64(d.meta);
+  if (findHeaderRow(metaRows, 'id empresa', 'cnpj') < 0 && findHeaderRow(metaRows, 'id ticket') >= 0)
+    throw new Error('O serviço de dados devolveu a lista de tickets no lugar da planilha Meta. No Apps Script, a Meta deve ser o arquivo que começa com "base_dash____dados_meta" e os tickets o que começa com "lista_de_tickets_aberto".');
+  return { metaRows, cxRows, status: d.status, ticketsRows: d.tickets ? rowsFromB64(d.tickets) : null };
+}
+function aplicarDados(p, per, sufixo) {
+  if (per === 'atual') window.ULTIMO_STATUS = p.status;
+  const t = montarTabelas(p.metaRows, p.cxRows);
+  TICKETS = p.ticketsRows || (RAW.tickets && per === 'atual' ? RAW.tickets : null);
+  ULTIMA_BASE = { cxRows: t.cxRows, metaRows: t.metaRows };
+  ALL = buildAccounts(t.cxRows, t.metaRows);
+  const par = t.semPar ? `${t.semPar} de ${t.total} empresas da Meta sem par na Exportação` : 'todos os CNPJs da Meta localizados na Exportação';
+  const fonte = per === 'atual' ? 'Drive (automático)' : `Drive · ${rotuloPeriodo(per)}`;
+  finishLoad(fonte, true, [par, per === 'atual' ? resumoStatus(p.status) : '', sufixo || ''].filter(Boolean).join(' · '));
+}
+async function carregarPeriodo(per) {
+  $('#status').textContent = per === 'atual' ? 'Buscando os dados mais recentes no Drive…' : `Buscando ${rotuloPeriodo(per).toLowerCase()}…`;
+  $('#status').className = '';
+  const p = prepararPayload(await chamarWebApp('periodo=' + encodeURIComponent(per)));
+  aplicarDados(p, per);
+  if (per === 'atual' && VERSAO && !new URLSearchParams(location.search).has('validar')) IDB.put('atual', Object.assign({ ver: VERSAO }, p));
+}
+async function iniciarAuto() {
+  $('#autoRow').hidden = false;
+  const validar = new URLSearchParams(location.search).has('validar');
+  const cache = validar ? null : await IDB.get('atual');
+  if (cache) { try { aplicarDados(cache, 'atual', 'conferindo se há dados novos…'); } catch (e) { /* cache inválido: segue */ } }
+  // sem cache, pede a lista e os dados ao mesmo tempo (carrega mais rápido)
+  const pLista = chamarWebApp('acao=lista'), pAtual = cache ? null : chamarWebApp('periodo=atual');
+  if (pAtual) pAtual.catch(() => {});
+  const d = await pLista;
+  VERSAO = versaoDe(d.status);
+  const mesAtual = new Date().toISOString().slice(0, 7);
+  $('#periodo').innerHTML = '<option value="atual">Hoje (mais recente)</option>' +
+    (d.periodos || []).filter(p => p !== mesAtual).map(p => `<option value="${p}">${rotuloPeriodo(p)}</option>`).join('');
+  $('#tokenBox').hidden = true;
+  if (cache && cache.ver === VERSAO && (cache.ticketsRows || !(d.status && d.status.tickets && !d.status.tickets.erro))) aplicarDados(cache, 'atual', 'carregado do cache do navegador (já é a versão mais recente)');
+  else {
+    if (!cache) $('#status').textContent = 'Buscando os dados mais recentes no Drive…';
+    const p = prepararPayload(pAtual ? await pAtual : await chamarWebApp('periodo=atual'));
+    aplicarDados(p, 'atual');
+    if (!validar) IDB.put('atual', Object.assign({ ver: VERSAO }, p));
+  }
+  if (typeof carregarHist === 'function') setTimeout(() => carregarHist('mes', true), 800); // adianta o histórico em segundo plano
+}
+function toggleManual(open) {
+  const box = $('#manual'), btn = $('#manualBtn'); if (!box || !btn) return;
+  if (open === undefined) open = box.hidden;
+  box.hidden = !open; btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  btn.textContent = open ? '✕ Fechar carga manual' : '📂 Carregar arquivos manualmente';
+}
+// Se a carga automática falhar e ainda não houver dados na tela, abre a carga manual
+function fail(e) { if (e === null) return; $('#status').textContent = e.message || String(e); $('#status').className = 'err'; if (!ALL.length) toggleManual(true); }
+
+async function loadRepoFile(name) {
+  const r = await fetch(name + '?_=' + Date.now()); if (!r.ok) throw new Error('sem ' + name);
+  loadWorkbook(XLSX.read(await r.arrayBuffer(), { type: 'array' }), name + ' (do repositório)');
+}
+function applyTheme(t) { document.documentElement.dataset.theme = t; const b = $('#theme'); if (b) b.textContent = t === 'dark' ? '☀️ Modo claro' : '🌙 Modo escuro'; }
+document.addEventListener('DOMContentLoaded', async () => {
+  const p = new URLSearchParams(location.search);
+  let theme = 'light'; try { theme = localStorage.getItem('theme') || (typeof DEFAULT_THEME !== 'undefined' ? DEFAULT_THEME : 'light'); } catch (e) {}
+  applyTheme(theme);
+  $('#manualBtn').onclick = () => toggleManual();
+  $('#theme').onclick = () => { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; applyTheme(t); try { localStorage.setItem('theme', t); } catch (e) {} };
+  $('#gload').onclick = () => { const u = $('#gurl').value.trim(); if (!u) return; localStorage.setItem('sheetUrl', u); $('#status').textContent = 'Carregando…'; $('#status').className = ''; loadGoogle(u).catch(fail); };
+  $('#file').onchange = async e => {
+    const files = [...e.target.files]; if (!files.length) return;
+    $('#status').textContent = 'Lendo arquivo(s)…'; $('#status').className = '';
+    try {
+      for (const f of files) {
+        const wb = XLSX.read(await f.arrayBuffer(), { type: 'array' });
+        const n = normName(f.name);
+        if (ehMeta(n)) { RAW.meta = rawRows(wb); RAW.metaName = f.name; }
+        else if (n.startsWith(PREFIX_TICKETS)) { RAW.tickets = rawRows(wb); RAW.ticketsName = f.name; }
+        else if (n.startsWith(PREFIX_CX)) { RAW.cx = rawRows(wb); RAW.cxName = f.name; }
+        else {
+          // compatibilidade: arquivo único já tratado, com as abas "Tabela Cx" e "Tabela Meta"
+          let legado = false;
+          wb.SheetNames.forEach(s => { if (detectSheet(XLSX.utils.sheet_to_json(wb.Sheets[s], { header: 1, defval: '' })) === 'cx') legado = true; });
+          if (legado) { loadWorkbook(wb, f.name + ' (só neste navegador)'); e.target.value = ''; return; }
+          throw new Error(`Arquivo fora do padrão: "${f.name}". Envie o arquivo que começa com "base_dash____dados_meta" (dados Meta) e o que começa com "Exportação de Clientes (Completa)" (dados CSM).`);
+        }
+      }
+      tryBuildRaw();
+    } catch (err) { fail(err); }
+    e.target.value = '';
+  };
+  $('#csm').onchange = () => { localStorage.setItem('csm', $('#csm').value); render(); };
+  // Dados automáticos (Drive) têm prioridade quando WEBAPP_URL está preenchido
+  if (typeof WEBAPP_URL !== 'undefined' && WEBAPP_URL && !p.get('sheet')) {
+    if (p.get('token')) { localStorage.setItem('wtoken', p.get('token')); p.delete('token'); history.replaceState(null, '', location.pathname + (p.toString() ? '?' + p : '')); }
+    $('#wtokenOk').onclick = () => { const v = $('#wtoken').value.trim(); if (!v) return; localStorage.setItem('wtoken', v); $('#wtoken').value = ''; iniciarAuto().catch(fail); };
+    $('#wtoken').onkeydown = ev => { if (ev.key === 'Enter') $('#wtokenOk').click(); };
+    $('#periodo').onchange = () => carregarPeriodo($('#periodo').value).catch(fail);
+    iniciarAuto().catch(fail);
+    return;
+  }
+  // Ordem: ?sheet= na URL › DEFAULT_SHEET › dados.xlsx no repositório › último link usado neste navegador
+  const fixed = p.get('sheet') || (typeof DEFAULT_SHEET !== 'undefined' && DEFAULT_SHEET) || '';
+  if (fixed) { $('#gurl').value = fixed; $('#status').textContent = 'Carregando…'; loadGoogle(fixed).catch(fail); return; }
+  const files = (typeof DEFAULT_FILES !== 'undefined' ? DEFAULT_FILES : ['dados.xlsx']);
+  for (const f of files) { try { $('#status').textContent = 'Carregando ' + f + '…'; await loadRepoFile(f); return; } catch (e) { /* tenta o próximo */ } }
+  const saved = localStorage.getItem('sheetUrl');
+  if (saved) { $('#gurl').value = saved; $('#status').textContent = 'Carregando…'; loadGoogle(saved).catch(fail); }
+  else { toggleManual(true); $('#status').textContent = 'Nenhum dados.xlsx no repositório. Suba os 2 arquivos crus (base_dash____dados_meta + Exportação de Clientes + lista_de_tickets_aberto) ou cole o link da planilha para ver os gráficos.'; $('#status').className = ''; }
+});
+</script>
+<script>
+// =====================================================================
+// ABAS: Gestão de Carteira · Visão da Empresa · Visão de Gestão (Histórico Elite)
+// =====================================================================
+let TAB = 'carteira', EMP_ID = '', EMP_CSM = null, HIST = {}, HIST_CARREGANDO = {};
+const HV2 = { sub: 'elite', gran: 'mes', carteira: '', empresa: '', csm: '' };
+const renderCarteira = render;
+render = function () {
+  for (const k in HIST) if (HIST[k] && HIST[k].erro) delete HIST[k];   // dados recarregados: tenta o histórico de novo
+  renderCarteira(); if (temDados()) { extrasCarteira(); organizarTemas(); } renderAbaAtual();
+};
+function renderAbaAtual() { if (TAB === 'empresa') renderEmpresa(); else if (TAB === 'historico') renderHistorico(); }
+function trocarAba(t) {
+  TAB = t;
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  ['carteira', 'empresa', 'historico'].forEach(k => { document.getElementById('tab-' + k).hidden = k !== t; });
+  const h = t === 'carteira' ? '' : '#' + t + (t === 'empresa' && EMP_ID ? '=' + encodeURIComponent(EMP_ID) : '');
+  history.replaceState(null, '', location.pathname + location.search + h);
+  renderAbaAtual();
+}
+document.getElementById('tabs').addEventListener('click', e => { const b = e.target.closest('button[data-tab]'); if (b) trocarAba(b.dataset.tab); });
+{ const m = location.hash.match(/^#(empresa|historico)(?:=(.*))?$/); if (m) { if (m[2]) EMP_ID = decodeURIComponent(m[2]); setTimeout(() => trocarAba(m[1]), 0); } }
+
+const lst = v => Array.isArray(v) ? v.filter(Boolean).join(', ') : S(v);
+const kpiBox = (v, l, extra = '') => `<div class="kpi"><b>${v}</b><span>${l}</span>${extra ? `<div>${extra}</div>` : ''}</div>`;
+const temDados = () => typeof ALL !== 'undefined' && ALL && ALL.length;
+const chips = arr => { const a = (Array.isArray(arr) ? arr : S(arr).split(/\s*[,|]\s*/)).filter(Boolean); return a.length ? `<div class="chips">${a.map(x => `<span>${esc(x)}</span>`).join('')}</div>` : '<p class="note">—</p>'; };
+const simNao = v => v == null ? '–' : (v ? 'Sim' : 'Não');
+const cod = v => idKey(S(v).replace(/^emp[_\s-]*/i, '').trim());
+
+// ---------- gráfico de linhas simples (SVG) ----------
+const CORES = ['var(--ac)', 'var(--link)', 'var(--yl)', 'var(--rk)', 'var(--ac2)', 'var(--mut)'];
+function linhas(series, labels, fmt = fmtInt, doZero = true) {
+  const W = 420, H = 200, P = { l: 66, r: 24, t: 12, b: 30 };
+  const all = series.flatMap(s => s.vals).filter(v => v != null && isFinite(v));
+  if (!all.length) return '<p class="note">Sem dados para o período.</p>';
+  let mn = doZero ? Math.min(0, ...all) : Math.min(...all), mx = Math.max(...all);
+  if (!doZero) { const f = (mx - mn) * 0.15 || 5; mn = Math.max(0, mn - f); mx = mx + f; } if (mx === mn) mx = mn + 1;
+  const x = i => P.l + (labels.length === 1 ? (W - P.l - P.r) / 2 : i * (W - P.l - P.r) / (labels.length - 1));
+  const y = v => P.t + (H - P.t - P.b) * (1 - (v - mn) / (mx - mn));
+  let g = '';
+  for (let k = 0; k <= 4; k++) { const v = mn + (mx - mn) * k / 4, yy = y(v); g += `<line x1="${P.l}" x2="${W - P.r}" y1="${yy}" y2="${yy}" stroke="var(--bd)"/><text x="${P.l - 6}" y="${yy + 4}" text-anchor="end" font-size="11" fill="var(--mut)">${esc(fmt(v))}</text>`; }
+  const passo = Math.max(1, Math.ceil(labels.length / 6));
+  labels.forEach((l, i) => { if (i % passo === 0 || i === labels.length - 1) g += `<text x="${x(i)}" y="${H - P.b + 16}" text-anchor="middle" font-size="11" fill="var(--mut)">${esc(l)}</text>`; });
+  series.forEach((s, si) => {
+    const cor = s.cor || CORES[si % CORES.length]; let d = '', pts = '';
+    s.vals.forEach((v, i) => { if (v == null || !isFinite(v)) return; d += (d ? 'L' : 'M') + x(i) + ' ' + y(v); pts += `<circle cx="${x(i)}" cy="${y(v)}" r="3.2" fill="${cor}"><title>${esc(s.nome)} · ${esc(labels[i])}: ${esc(fmt(v))}</title></circle>`; });
+    g += `<path d="${d}" fill="none" stroke="${cor}" stroke-width="2"/>${pts}`;
+  });
+  const leg = series.length > 1 ? `<div class="chips" style="margin-top:6px">${series.map((s, si) => `<span><b style="color:${s.cor || CORES[si % CORES.length]}">●</b> ${esc(s.nome)}</span>`).join('')}</div>` : '';
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">${g}</svg>${leg}`;
+}
+const tabela = (cab, linhasT) => `<div class="tw"><table><thead><tr>${cab.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${linhasT.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+const delta = (a, b, fmt = fmtInt, inverso = false) => {
+  if (a == null || b == null || a === b) return b == null ? '' : '<span class="delta">= sem variação</span>';
+  const sobe = a > b, bom = inverso ? !sobe : sobe, pc = b ? ` (${sobe ? '+' : '−'}${(Math.abs(a - b) / Math.abs(b) * 100).toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%)` : '';
+  return `<span class="delta ${bom ? 'up' : 'down'}">${sobe ? '▲' : '▼'} ${esc(fmt(Math.abs(a - b)))}${pc}</span>`;
+};
+
+// ---------- dados históricos (Apps Script: acao=historico) ----------
+const histDisponivel = () => typeof WEBAPP_URL !== 'undefined' && WEBAPP_URL;
+async function carregarHist(gran, silencioso) {
+  if (HIST[gran] || HIST_CARREGANDO[gran]) return HIST[gran];
+  HIST_CARREGANDO[gran] = true;
+  try {
+    const c = VERSAO ? await IDB.get('hist:' + gran) : null;
+    const d = (c && c.ver === VERSAO) ? c.d : await chamarWebApp('acao=historico&gran=' + gran);
+    if (VERSAO && !(c && c.ver === VERSAO)) IDB.put('hist:' + gran, { ver: VERSAO, d });
+    const per = Object.keys(d.periodos || {}).sort();
+    HIST[gran] = { per, snap: Object.fromEntries(per.map(p => [p, resumoParaContas(d.periodos[p])])), tarefas: d.tarefas, atrasadas: d.atrasadas };
+  } catch (e) { HIST[gran] = silencioso ? undefined : { erro: e ? e.message : 'Informe o código de acesso na aba Gestão de Carteira.' }; }
+  HIST_CARREGANDO[gran] = false; if (TAB !== 'carteira') renderAbaAtual(); return HIST[gran];
+}
+function resumoParaContas(r) {
+  const ix = n => r.colunas.indexOf(n);
+  const I = Object.fromEntries(['Cod. Cliente', 'Razão Social', 'Fantasia', 'Carteira', 'Status', 'Tags', 'HS', 'MRR', 'ARR', 'GMV', 'Média de pedidos', 'LTV Valor', 'Motivo do risco', 'Responsável: Analista Principal'].map(n => [n, ix(n)]));
+  const g = (l, n) => I[n] >= 0 ? l[I[n]] : '';
+  return r.linhas.map(l => {
+    const tags = S(g(l, 'Tags')); let IF = 'Sem IF'; for (const k of ['IF0', 'IF1', 'IF2', 'IF3', 'IF4', 'IF5']) if (tags.includes(k)) { IF = k; break; }
+    let fx = 0; for (let i = 1; i <= 7; i++) if (tags.includes('Faixa ' + i)) { fx = i; break; }
+    return { id: cod(g(l, 'Cod. Cliente')), nome: S(g(l, 'Fantasia')) || S(g(l, 'Razão Social')), csm: S(g(l, 'Carteira')), status: S(g(l, 'Status')),
+      IF, fx, hs: N(g(l, 'HS')), mrr: N(g(l, 'MRR')), arr: N(g(l, 'ARR')), gmv: N(g(l, 'GMV')), ped: N(g(l, 'Média de pedidos')),
+      ltv: N(g(l, 'LTV Valor')), motivo: S(g(l, 'Motivo do risco')), resp: S(g(l, 'Responsável: Analista Principal')).toLowerCase() };
+  });
+}
+const rotulo = p => /^\d{4}-\d{2}$/.test(p) ? `${MESES[+p.slice(5) - 1]}/${p.slice(2, 4)}` : (p.match(/S(\d+)$/) ? 'S' + p.match(/S(\d+)$/)[1] + '/' + p.slice(2, 4) : p);
+
+// =====================================================================
+// VISÃO DA EMPRESA
+// =====================================================================
+function renderEmpresa() {
+  const box = document.getElementById('tab-empresa');
+  if (!temDados()) { box.innerHTML = '<p class="note">Aguardando dados.</p>'; return; }
+  // filtro por CSM da própria aba (começa igual ao seletor de carteira do topo)
+  const csmsEmp = [...new Set(ALL.map(x => x.csm).filter(Boolean))].sort();
+  if (EMP_CSM === null || (EMP_CSM !== '__all__' && !csmsEmp.includes(EMP_CSM))) EMP_CSM = csmsEmp.includes($('#csm').value) ? $('#csm').value : '__all__';
+  const base = ALL.filter(x => EMP_CSM === '__all__' || x.csm === EMP_CSM).sort((p, q) => p.nome.localeCompare(q.nome));
+  const a = ALL.find(x => x.id === EMP_ID);
+  let h = `<div class="heatctl" style="margin-top:16px"><label>Empresa: <input id="empBusca" list="empLista" placeholder="Digite o nome, CNPJ ou código" value="${a ? esc(a.nome + ' · ' + a.id) : ''}" autocomplete="off"></label>
+    <datalist id="empLista">${base.map(x => `<option value="${esc(x.nome + ' · ' + x.id)}">${esc(x.csm)}</option>`).join('')}</datalist>
+    <label>CSM: <select id="empCsm"><option value="__all__"${EMP_CSM === '__all__' ? ' selected' : ''}>Todos</option>${csmsEmp.map(c => `<option${c === EMP_CSM ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select></label>
+    ${a ? '<button type="button" class="voltar" data-emplista="1">← Ver lista de empresas</button>' : `<span class="note" style="margin:0" id="empConta">${base.length} empresas</span>`}</div>`;
+  if (!a) {
+    // listagem: aparece só quando nenhuma empresa está selecionada
+    h += `<p class="note">Clique no nome da empresa para ver a análise dela. Digitar no campo Empresa também filtra a lista.</p>`;
+    h += `<div class="tw"><table id="empTabela"><colgroup><col style="width:13%"><col style="width:27%"><col style="width:15%"><col style="width:10%"><col style="width:9%"><col style="width:10%"><col style="width:16%"></colgroup><thead><tr><th>ID da empresa</th><th>Empresa</th><th>CNPJ</th><th>Link ADM</th><th>Link CX</th><th>Link Octa</th><th>CSM</th></tr></thead><tbody>${base.map(x =>
+      `<tr data-busca="${esc(normBusca([x.nome, x.razao, x.id, x.cnpjTxt, x.csm].join(' ')))}"><td>${esc(x.id)}</td><td><span class="lk" data-emp="${esc(x.id)}">${esc(x.nome)}</span>${x.razao && x.razao !== x.nome ? `<span class="mut sm" style="display:block">${esc(x.razao)}</span>` : ''}</td><td>${esc(x.cnpjTxt || '—')}</td><td>${linkBotao(x.link, 'ADM')}</td><td>${linkBotao(x.linkCx, 'CX')}</td><td>${linkBotao(x.linkOcta, 'Octa')}</td><td>${esc(x.csm || '—')}</td></tr>`).join('')}</tbody></table></div>`;
+    box.innerHTML = h; ligarBuscaEmpresa(); return;
+  }
+
+  const m = a._m || {}, M = n => col(m, n);
+  const req7 = N(M('Total Requisições Últimos 7 Dias')), apps = N(M('Aplicativos com Uso na API'));
+  h += `<h2>${esc(a.nome)}</h2><p class="lead">${esc(a.razao)} · CNPJ ${esc(S(col(a._r, 'CNPJ/CPF')) || S(M('CNPJ')))} · código ${esc(a.id)} · carteira <b>${esc(a.csm || '—')}</b> · ${esc(a.statusCx || '—')}${a.link ? ` · <a href="${esc(a.link)}" target="_blank" rel="noopener">abrir no ADM ↗</a>` : ''}${a.linkCx ? ` · <a href="${esc(a.linkCx)}" target="_blank" rel="noopener">abrir no CX ↗</a>` : ''}${a.linkOcta ? ` · <a href="${esc(a.linkOcta)}" target="_blank" rel="noopener">abrir no Octa ↗</a>` : ''}</p>`;
+  h += `<div class="kpis">${[
+    kpiBox(a.score, `Health Score · ${esc(a.banda)} (${esc(a.scoreFonte)})`), kpiBox(esc(a.IF), esc(a.ifLabel || '')), kpiBox(esc(a.fx ? 'Faixa ' + a.fx : '—'), esc(a.fxLabel || 'sem faixa na tag')),
+    kpiBox(fmtMoney(a.mrr), 'MRR'), kpiBox(fmtMi(a.gmv), 'GMV último mês'), kpiBox(fmtInt(a.pedUlt), 'pedidos último mês'), kpiBox(fmtInt(a.media), 'pedidos/mês (média 3m)'),
+    `<div class="kpi ck" data-tk="${esc(a.id)}" title="Clique para ver os tickets"><b>${fmtInt(a.tickets)}</b><span class="lk">tickets nos últimos 90 dias</span></div>`, kpiBox(fmtInt(req7), 'requisições de API (7 dias)'), kpiBox(fmtInt(apps), 'aplicativos com uso na API'),
+    kpiBox(a.api == null ? '–' : fmtPctExact(a.api), 'saúde da API (% 2xx)'), kpiBox(a.arm == null ? '–' : fmtPctExact(a.arm), 'armazenamento utilizado'),
+    kpiBox(fmtDays(a.diasLogin), 'desde o último login'), kpiBox(fmtDays(a.diasContato), 'desde o último contato' + (a.tipoContato ? ' · ' + esc(a.tipoContato) : '')), kpiBox(fmtDays(a.diasTarefa), 'desde a última tarefa concluída'),
+  ].join('')}</div>`;
+
+  h += `<div class="grid">`;
+  h += card('O que pesa no Health Score', a.scoreFonte === 'HS (planilha)' ? 'HS oficial do CustomerX; abaixo, os sinais que o dashboard identifica' : 'score calculado pelo dashboard',
+    a.penalidades.length ? tabela(['Sinal', 'Pontos'], a.penalidades.map(([l, v]) => [esc(l), (v > 0 ? '−' : '+') + Math.abs(v)])) : '<p class="note">Nenhum sinal de risco.</p>');
+  h += card('Risco e relacionamento', '', `<table class="kv"><tbody>${[
+    ['Motivo do risco', esc(S(col(a._r, 'Motivo do risco')) || '—')], ['Observação de risco', esc(S(col(a._r, 'Observação de risco')) || '—')],
+    ['Responsável', esc(S(col(a._r, 'Responsável: Analista Principal')) || '—')], ['Último contato', `${fmtDate(a.ultContato)} ${a.tipoContato ? '· ' + esc(a.tipoContato) : ''}`],
+    ['NPS', a.nps == null ? '–' : a.nps], ['Status engajamento', esc(S(col(a._r, 'Status engajamento')) || '—')],
+    ['Sentimento do cliente', esc(S(col(a._r, 'Sentimento do Cliente')) || '—')], ['Plano de ação', esc(S(col(a._r, 'Plano de ação')) || '—')],
+  ].map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</tbody></table>`);
+  h += card('Canais e integrações', '', `<p class="sub">Marketplaces</p>${chips(a.mktList || M('Marketplaces Configurados'))}<p class="sub">E-commerces</p>${chips(a.ecomList || M('E-commerces Configurados'))}<p class="sub">Logísticas</p>${chips(M('Logísticas Configuradas') || a.logs)}<p class="sub">Integrações ativas (CustomerX)</p>${chips(a.integ)}`);
+  h += card('Adoção de produtos Bling', '', `<table class="kv"><tbody>${[['Conta Digital', simNao(a.contaDigital)], ['Certificado pelo Bling', esc(S(M('Comprou Certificado pelo Bling')) || '–')], ['Checkout', simNao(a.checkout)], ['PDV', simNao(a.pdv)], ['Meu Negócio', simNao(a.meuNegocio)], ['Usou API', simNao(a.usaApi)], ['Plano contratado', esc(a.plano || '–')], ['Situação (Metabase)', esc(a.situacaoMeta || '–')]].map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</tbody></table>`);
+  h += card('Tags no CustomerX', '', chips(S(col(a._r, 'Tags')).split(' | ')));
+  h += `</div>`;
+
+  // histórico da empresa (mês a mês)
+  h += `<h2>Histórico da empresa</h2>`;
+  const H = HIST.mes;
+  if (!histDisponivel()) h += '<p class="note">O histórico aparece quando a página usa os dados automáticos do Drive.</p>';
+  else if (!H) { h += '<p class="note">Carregando histórico…</p>'; carregarHist('mes'); }
+  else if (H.erro) h += `<p class="note">${esc(H.erro)}</p>`;
+  else {
+    const serie = H.per.map(p => H.snap[p].find(x => x.id === cod(a.id)) || null);
+    const labs = H.per.map(rotulo);
+    h += `<div class="grid">${card('Health Score', '', linhas([{ nome: 'HS', vals: serie.map(x => x && x.hs) }], labs, fmtInt, false))}${card('MRR', '', linhas([{ nome: 'MRR', vals: serie.map(x => x && x.mrr) }], labs, fmtMil))}${card('GMV (CustomerX)', '', linhas([{ nome: 'GMV', vals: serie.map(x => x && x.gmv) }], labs, fmtMi))}</div>`;
+    h += tabela(['Mês', 'Carteira', 'Status', 'IF', 'Faixa', 'HS', 'MRR', 'GMV', 'Pedidos/mês', 'Motivo do risco'],
+      H.per.map((p, i) => { const x = serie[i]; return x ? [rotulo(p), esc(x.csm), esc(x.status), x.IF, x.fx ? 'Faixa ' + x.fx : '—', fmtInt(x.hs), fmtMoney(x.mrr), fmtMi(x.gmv), fmtInt(x.ped), esc(x.motivo || '—')] : [rotulo(p), '<span class="note">não estava na base</span>', '', '', '', '', '', '', '', '']; }).reverse());
+    if (H.per.length < 2) h += '<p class="note">O histórico começou a ser gravado agora: a cada fim de mês entra uma nova linha.</p>';
+  }
+
+  // todos os campos
+  const kv = obj => tabela(['Campo', 'Valor'], Object.keys(obj || {}).filter(k => S(obj[k]) !== '' && !k.startsWith('_')).map(k => [esc(k), esc(obj[k] instanceof Date ? fmtDate(obj[k]) : S(obj[k]))]));
+  h += `<details style="margin-top:22px"><summary>Todos os campos da empresa (CustomerX e Metabase)</summary><div class="grid">${card('CustomerX', '', kv(a._r))}${card('Metabase', a._m ? '' : 'empresa não encontrada na planilha do Metabase', a._m ? kv(a._m) : '')}</div></details>`;
+  box.innerHTML = h; ligarBuscaEmpresa();
+}
+const normBusca = t => S(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+function filtrarListaEmpresas(v) {
+  const t = document.getElementById('empTabela'); if (!t) return;
+  const q = normBusca(v.includes(' · ') ? v.slice(0, v.lastIndexOf(' · ')) : v).trim(), dig = v.replace(/\D/g, '');
+  let n = 0;
+  t.querySelectorAll('tbody tr').forEach(tr => { const b = tr.dataset.busca || ''; const ok = !q || b.includes(q) || (dig.length >= 3 && b.replace(/\D/g, '').includes(dig)); tr.classList.toggle('emp-oculta', !ok); if (ok) n++; });
+  const c = document.getElementById('empConta'); if (c) c.textContent = q ? `${n} de ${t.tBodies[0].rows.length} empresas` : `${t.tBodies[0].rows.length} empresas`;
+}
+document.addEventListener('click', e => { if (e.target.closest('[data-emplista]')) { EMP_ID = ''; trocarAba('empresa'); } });
+// Modal com a lista de tickets da empresa (planilha "lista_de_tickets_aberto…")
+// Link do ticket no suporte do Bling: https://www.bling.com.br/suporte.php#edit/<ID Ticket>
+const LINK_TICKET = 'https://www.bling.com.br/suporte.php#edit/';
+function abrirTickets(id) {
+  const a = ALL.find(x => x.id === id); if (!a) return;
+  const TK = buildAccounts.TK;
+  $('#mtitle').textContent = `Tickets · ${a.nome}`;
+  if (!TK || !a.ticketsLista) {
+    const st = (window.ULTIMO_STATUS || {}).tickets;
+    const motivo = st && st.erro
+      ? `Motivo informado na última publicação: <b>${esc(st.erro)}</b>.`
+      : st && st.arquivo_de
+        ? `O Apps Script publicou a lista em ${esc(st.arquivo_de)}, mas o App da Web não a enviou para esta página. No Apps Script, faça <b>Implantar › Gerenciar implantações › lápis › Nova versão</b> e recarregue.`
+        : 'A última publicação ainda não incluiu a lista de tickets. No Apps Script, rode <b>publicarDados</b> e recarregue esta página.';
+    $('#mbody').innerHTML = `<p class="note" style="margin:0">A lista detalhada de tickets não foi carregada${a.tickets != null ? ` (o total de ${fmtInt(a.tickets)} vem da coluna da base Meta)` : ''}. ${motivo}</p>`;
+    $('#modal').showModal(); return;
+  }
+  const lista = a.ticketsLista.filter(t => t._data && daysBetween(t._data, buildAccounts.REF) <= TICKETS_DIAS);
+  const fmtCel = v => typeof v === 'number' ? (Number.isInteger(v) ? String(v) : String(Math.round(v * 100) / 100)) : (v instanceof Date ? fmtDate(v) : S(v));
+  const iId = TK.hdr.findIndex(h => /^id ticket$/i.test(h.trim())), iNum = TK.hdr.findIndex(h => /^n[uú]mero$/i.test(h.trim()));
+  const idTxt = v => { const x = S(v).replace(/\.0+$/, '').replace(/\D/g, ''); return x; };
+  const link = t => { const x = iId >= 0 ? idTxt(t._r[iId]) : ''; return x ? LINK_TICKET + x : ''; };
+  const ocultas = new Set([iId, iNum]);
+  const cols = TK.hdr.map((h, j) => [h, j]).filter(([h, j]) => h && !ocultas.has(j));
+  const cab = ['Ticket', 'ID do ticket', ...cols.map(([h]) => esc(h))];
+  const linhas = lista.map(t => {
+    const url = link(t), num = iNum >= 0 ? fmtCel(t._r[iNum]) : '', idv = iId >= 0 ? idTxt(t._r[iId]) : '';
+    const a1 = url ? `<a href="${esc(url)}" target="_blank" rel="noopener" title="Abrir o ticket no suporte do Bling">${num ? 'Nº ' + esc(num) : 'Abrir'} ↗</a>` : esc(num || '–');
+    const a2 = url ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(idv)}</a>` : esc(idv || '–');
+    return [a1, a2, ...cols.map(([, j]) => esc(fmtCel(t._r[j])))];
+  });
+  $('#mbody').innerHTML = `<p class="note" style="margin:0 0 10px">${lista.length} ticket(s) nos últimos ${TICKETS_DIAS} dias (data da base: ${fmtDate(buildAccounts.REF)}), do mais recente para o mais antigo. Clique no número para abrir o ticket no suporte do Bling.</p>`
+    + (lista.length ? tabela(cab, linhas) : '<p class="mut">Nenhum ticket neste período.</p>');
+  if (!$('#modal').open) $('#modal').showModal();
+}
+document.addEventListener('click', e => {
+  const k = e.target.closest('[data-tk]'); if (k) abrirTickets(k.dataset.tk);
+});
+function ligarBuscaEmpresa() {
+  const inp = document.getElementById('empBusca'); if (!inp) return;
+  const sel = document.getElementById('empCsm'); if (sel) sel.onchange = () => { EMP_CSM = sel.value; renderEmpresa(); };
+  inp.oninput = () => filtrarListaEmpresas(inp.value);
+  inp.onchange = () => {
+    const v = inp.value.trim(), idTxt = v.includes(' · ') ? v.slice(v.lastIndexOf(' · ') + 3) : v, dig = v.replace(/\D/g, '');
+    const a = ALL.find(x => x.id === idTxt) || ALL.find(x => dig.length >= 8 && S(col(x._r, 'CNPJ/CPF')).replace(/\D/g, '') === dig)
+      || ALL.find(x => x.nome.toLowerCase() === v.toLowerCase());
+    if (a) { EMP_ID = a.id; trocarAba('empresa'); }
+  };
+}
+
+// =====================================================================
+// VISÃO DE GESTÃO · HISTÓRICO ELITE
+// =====================================================================
+function renderHistorico() {
+  const box = document.getElementById('tab-historico');
+  const seg = (k, ops) => `<span class="seg">${ops.map(([v, l]) => `<button type="button" data-h2="${k}" data-v="${v}" class="${HV2[k] === v ? 'on' : ''}">${l}</button>`).join('')}</span>`;
+  let h = `<div class="heatctl" style="margin-top:16px"><label>Visão:${seg('sub', [['elite', 'Histórico do plano Elite'], ['csm', 'Histórico das carteiras (CSM)'], ['comparar', 'Comparador']])}</label><label>Período:${seg('gran', [['mes', 'Mês a mês'], ['semana', 'Semana a semana']])}</label></div>`;
+  if (!histDisponivel()) { box.innerHTML = h + '<p class="note">O histórico usa os dados automáticos do Drive (configure o WEBAPP_URL).</p>'; return; }
+  const H = HIST[HV2.gran];
+  if (!H) { box.innerHTML = h + '<p class="note">Carregando histórico…</p>'; carregarHist(HV2.gran); return; }
+  if (H.erro) { box.innerHTML = h + `<p class="note">${esc(H.erro)}</p>`; return; }
+  box.innerHTML = h + (HV2.sub === 'elite' ? histElite(H) : HV2.sub === 'csm' ? histCsm(H) : comparador(H));
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-h2]'); if (!b) return;
+  HV2[b.dataset.h2] = b.dataset.v; renderHistorico();
+});
+document.addEventListener('change', e => {
+  const t = e.target.closest('[data-h2f]'); if (!t) return;
+  let v = t.value;
+  if (t.dataset.h2f === 'empresa') { const lst2 = HIST[HV2.gran]; const ult = lst2 && lst2.snap[lst2.per[lst2.per.length - 1]] || []; const idTxt = v.includes(' · ') ? v.slice(v.lastIndexOf(' · ') + 3) : v; const x = ult.find(z => z.id === idTxt || z.nome.toLowerCase() === v.toLowerCase()); v = x ? x.id : ''; }
+  HV2[t.dataset.h2f] = v; const y = window.scrollY; renderHistorico(); window.scrollTo(0, y);
+});
+
+function metricas(a) {
+  const IFc = Object.fromEntries(['IF0', 'IF1', 'IF2', 'IF3', 'IF4', 'IF5', 'Sem IF'].map(k => [k, a.filter(x => x.IF === k).length]));
+  return { n: a.length, ativos: a.filter(x => x.status === 'Ativo').length, hs: avg(a, x => /^finalizad/i.test(x.status) ? null : x.hs),
+    mrr: sum(a, x => x.mrr), arr: sum(a, x => x.arr), gmv: sum(a, x => x.gmv), ped: sum(a, x => x.ped), risco: a.filter(x => x.motivo).length, IFc,
+    criticos: a.filter(x => x.hs != null && x.hs < HEALTH_BANDS.atencao && !/^finalizad/i.test(x.status)).length };
+}
+// matriz de/para entre dois períodos (só empresas presentes nos dois)
+function movimentacao(antes, depois, chave, ordem, nome) {
+  const mA = new Map(antes.map(x => [x.id, x])), cont = {}, mudou = [];
+  depois.forEach(x => { const y = mA.get(x.id); if (!y) return; const de = chave(y), para = chave(x); cont[de + '>' + para] = (cont[de + '>' + para] || 0) + 1; if (de !== para) mudou.push([x, de, para]); });
+  const cab = ['De → Para', ...ordem.map(nome), 'Total'];
+  const lin = ordem.map(de => { const t = ordem.reduce((s, pa) => s + (cont[de + '>' + pa] || 0), 0);
+    return [`<b>${esc(nome(de))}</b>`, ...ordem.map(pa => { const v = cont[de + '>' + pa] || 0; return v ? (de === pa ? `<span class="note" style="margin:0">${v}</span>` : `<b style="color:${ordem.indexOf(pa) > ordem.indexOf(de) ? 'var(--ac)' : 'var(--rk)'}">${v}</b>`) : '·'; }), fmtInt(t)]; })
+    .filter(r => r[r.length - 1] !== '0');
+  return { html: tabela(cab, lin), mudou };
+}
+function histElite(H) {
+  if (!H.per.length) return '<p class="note">Ainda não há fotos gravadas. A primeira entra na próxima publicação do Drive.</p>';
+  const ult = H.snap[H.per[H.per.length - 1]];
+  const carteiras = [...new Set(H.per.flatMap(p => H.snap[p].map(x => x.csm)).filter(Boolean))].sort();
+  const empresas = ult.filter(x => !HV2.carteira || x.csm === HV2.carteira).sort((p, q) => p.nome.localeCompare(q.nome));
+  const empSel = HV2.empresa ? ult.find(x => x.id === HV2.empresa) : null;
+  let h = `<div class="heatctl"><label>Carteira: <select data-h2f="carteira"><option value="">Todas</option>${carteiras.map(c => `<option${c === HV2.carteira ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select></label>
+    <label>Empresa: <input data-h2f="empresa" list="h2emp" placeholder="Todas as empresas" value="${empSel ? esc(empSel.nome + ' · ' + empSel.id) : ''}"></label><datalist id="h2emp">${empresas.map(x => `<option value="${esc(x.nome + ' · ' + x.id)}">`).join('')}</datalist></div>`;
+  const labs = H.per.map(rotulo);
+  const filtra = arr => arr.filter(x => (!HV2.carteira || x.csm === HV2.carteira) && (!HV2.empresa || x.id === HV2.empresa));
+  const P = H.per.map(p => metricas(filtra(H.snap[p])));
+  const k = P.length - 1, prev = P[k - 1] || null, pk = P[k];
+  const nomePer = HV2.gran === 'mes' ? 'o mês anterior' : 'a semana anterior';
+  h += `<p class="lead">${empSel ? esc(empSel.nome) : (HV2.carteira ? 'Carteira ' + esc(HV2.carteira) : 'Todo o plano Elite')} · último período: <b>${rotulo(H.per[k])}</b>${prev ? ' · setas comparam com ' + nomePer : ''}</p>`;
+  h += `<div class="kpis">${[
+    kpiBox(fmtInt(pk.n), 'empresas', delta(pk.n, prev && prev.n)), kpiBox(fmtInt(pk.ativos), 'com contrato ativo', delta(pk.ativos, prev && prev.ativos)),
+    kpiBox((pk.hs == null ? '–' : Math.round(pk.hs)), 'Health Score médio', delta(pk.hs && Math.round(pk.hs), prev && prev.hs && Math.round(prev.hs))),
+    kpiBox(fmtMil(pk.mrr), 'MRR', delta(pk.mrr, prev && prev.mrr, fmtMil)), kpiBox(fmtMi(pk.gmv), 'GMV (CustomerX)', delta(pk.gmv, prev && prev.gmv, fmtMi)),
+    kpiBox(fmtInt(pk.IFc.IF0), 'IF0 · cancelados', delta(pk.IFc.IF0, prev && prev.IFc.IF0, fmtInt, true)), kpiBox(fmtInt(pk.risco), 'com motivo de risco', delta(pk.risco, prev && prev.risco, fmtInt, true)),
+  ].join('')}</div>`;
+  if (prev) {
+    const atualA = filtra(H.snap[H.per[k]]), antesA = filtra(H.snap[H.per[k - 1]]);
+    const idsAntes = new Set(antesA.map(x => x.id)), idsAgora = new Set(atualA.map(x => x.id));
+    const entraram = atualA.filter(x => !idsAntes.has(x.id)), sairam = antesA.filter(x => !idsAgora.has(x.id));
+    const viraramIF0 = atualA.filter(x => x.IF === 'IF0' && (antesA.find(y => y.id === x.id) || {}).IF !== 'IF0');
+    h += `<p class="note">Desde ${nomePer}: <b>${entraram.length}</b> entraram na base · <b>${sairam.length}</b> saíram · <b>${viraramIF0.length}</b> passaram para IF0 (cancelaram).${entraram.length ? ' Entraram: ' + entraram.slice(0, 12).map(x => esc(x.nome)).join(', ') + (entraram.length > 12 ? '…' : '') : ''}</p>`;
+    const mf = movimentacao(antesA, atualA, x => x.fx, [0, 1, 2, 3, 4, 5, 6, 7], f => f ? 'Faixa ' + f : 'Sem faixa');
+    const mi = movimentacao(antesA, atualA, x => x.IF, ['IF0', 'IF1', 'IF2', 'IF3', 'IF4', 'IF5', 'Sem IF'], f => f);
+    h += `<h3 class="sp">Movimentação entre faixas · ${labs[k - 1]} → ${labs[k]}</h3><p class="note" style="margin-top:0">Linha = faixa no período anterior; coluna = faixa agora. Verde = subiu de faixa, vermelho = desceu. ${mf.mudou.length} empresas mudaram de faixa.</p>` + mf.html;
+    if (mf.mudou.length) h += `<details><summary>Ver as ${mf.mudou.length} empresas que mudaram de faixa</summary>${tabela(['Empresa', 'Carteira', 'De', 'Para'], mf.mudou.sort((p, q) => q[2] - q[1]).map(([x, de, pa]) => [`<span class="lk" data-emp="${esc(x.id)}">${esc(x.nome)}</span>`, esc(x.csm), de ? 'Faixa ' + de : '—', pa ? 'Faixa ' + pa : '—']))}</details>`;
+    h += `<h3 class="sp">Movimentação entre IFs · ${labs[k - 1]} → ${labs[k]}</h3><p class="note" style="margin-top:0">${mi.mudou.length} empresas mudaram de IF. Verde = IF maior (melhorou), vermelho = IF menor.</p>` + mi.html;
+  }
+  h += `<div class="grid">${card('Health Score médio', '', linhas([{ nome: 'HS médio', vals: P.map(x => x.hs) }], labs, fmtInt, false))}${card('MRR', '', linhas([{ nome: 'MRR', vals: P.map(x => x.mrr) }], labs, fmtMil))}${card('GMV (CustomerX)', '', linhas([{ nome: 'GMV', vals: P.map(x => x.gmv) }], labs, fmtMi))}${card('Empresas por IF', '', linhas(['IF0', 'IF1', 'IF2', 'IF3', 'IF4', 'IF5'].map(f => ({ nome: f, vals: P.map(x => x.IFc[f]) })), labs))}</div>`;
+  const per = H.per.map((p, i) => i).reverse();
+  h += `<h3 class="sp">Tabela ${HV2.gran === 'mes' ? 'mês a mês' : 'semana a semana'}</h3>` + tabela(['Indicador', ...per.map(i => labs[i])], [
+    ['Empresas', ...per.map(i => fmtInt(P[i].n))], ['Com contrato ativo', ...per.map(i => fmtInt(P[i].ativos))], ['Health Score médio', ...per.map(i => P[i].hs == null ? '–' : Math.round(P[i].hs))],
+    ['HS crítico (< ' + HEALTH_BANDS.atencao + ')', ...per.map(i => fmtInt(P[i].criticos))], ['MRR', ...per.map(i => fmtMil(P[i].mrr))], ['ARR', ...per.map(i => fmtMil(P[i].arr))],
+    ['GMV (CustomerX)', ...per.map(i => fmtMi(P[i].gmv))], ['Pedidos/mês (soma das médias)', ...per.map(i => fmtInt(P[i].ped))], ['Com motivo de risco', ...per.map(i => fmtInt(P[i].risco))],
+    ...['IF0', 'IF1', 'IF2', 'IF3', 'IF4', 'IF5', 'Sem IF'].map(f => [IF_LABEL[f] || f, ...per.map(i => fmtInt(P[i].IFc[f]))]),
+  ]);
+  if (H.per.length < 2) h += `<p class="note">As fotos começaram a ser gravadas agora. A cada ${HV2.gran === 'mes' ? 'fim de mês' : 'fim de semana'} entra uma nova coluna, e os gráficos passam a mostrar a evolução.</p>`;
+  h += onboarding();
+  return h;
+}
+// Onboarding (entradas no Elite): vem das datas de início/fim de onboarding do CustomerX, então já tem histórico
+function onboarding() {
+  if (!temDados()) return '';
+  const base = ALL.filter(a => (!HV2.carteira || a.csm === HV2.carteira) && (!HV2.empresa || a.id === HV2.empresa));
+  const ini = a => toDate(col(a._r, 'Data de inicio de Onboarting')), fim = a => toDate(col(a._r, 'Data de finalização de onboarding'));
+  const hoje = new Date(), meses = [];
+  for (let i = 11; i >= 0; i--) { const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1); meses.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0')); }
+  const chaveMes = d => d ? d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') : '';
+  const iniciados = meses.map(m => base.filter(a => chaveMes(ini(a)) === m).length), finalizados = meses.map(m => base.filter(a => chaveMes(fim(a)) === m).length);
+  const andamento = base.filter(a => ini(a) && !fim(a) && !finalizada(a));
+  const dur = base.filter(a => ini(a) && fim(a) && fim(a) >= ini(a)).map(a => (fim(a) - ini(a)) / 864e5);
+  if (!iniciados.some(Boolean) && !finalizados.some(Boolean) && !andamento.length) return `<h3 class="sp">Onboarding</h3><p class="note">Nenhuma data de onboarding preenchida no CustomerX para este recorte.</p>`;
+  return `<h2>Onboarding (entradas no Elite)</h2><p class="lead">Pelas datas de início e de finalização de onboarding do CustomerX · últimos 12 meses.</p>
+    <div class="kpis">${kpiBox(fmtInt(andamento.length), `<span class="ck lk" data-l="${reg('Onboarding em andamento', ALL.filter(a => andamento.includes(a)))}">onboardings em andamento</span>`)}${kpiBox(dur.length ? Math.round(dur.reduce((s, x) => s + x, 0) / dur.length) + ' d' : '–', 'duração média do onboarding')}${kpiBox(fmtInt(iniciados[11]), 'iniciados neste mês')}${kpiBox(fmtInt(finalizados[11]), 'finalizados neste mês')}</div>
+    <div class="grid">${card('Onboardings por mês', 'iniciados × finalizados', linhas([{ nome: 'Iniciados', vals: iniciados }, { nome: 'Finalizados', vals: finalizados }], meses.map(rotulo)))}</div>`;
+}
+
+// Comparador: dois gráficos lado a lado, uma linha por carteira
+const METRICAS = [['hs', 'Health Score médio', fmtInt], ['mrr', 'MRR', fmtMil], ['gmv', 'GMV (CustomerX)', fmtMi], ['n', 'Empresas', fmtInt], ['ativos', 'Com contrato ativo', fmtInt],
+  ['risco', 'Com motivo de risco', fmtInt], ['criticos', 'HS crítico', fmtInt], ['if0', 'IF0 · cancelados', fmtInt], ['ped', 'Pedidos/mês (soma)', fmtInt]];
+const CMP = { a: 'hs', b: 'mrr', cart: null };
+document.addEventListener('change', e => {
+  const t = e.target.closest('[data-cmp]'); if (!t) return;
+  if (t.dataset.cmp === 'cart') CMP.cart = [...document.querySelectorAll('[data-cmp="cart"]:checked')].map(x => x.value); else CMP[t.dataset.cmp] = t.value;
+  const y = window.scrollY; renderHistorico(); window.scrollTo(0, y);
+});
+function comparador(H) {
+  if (!H.per.length) return '<p class="note">Ainda não há fotos gravadas.</p>';
+  const ult = H.snap[H.per[H.per.length - 1]];
+  const tam = {}; ult.forEach(x => { if (x.csm) tam[x.csm] = (tam[x.csm] || 0) + 1; });
+  const carteiras = Object.keys(tam).sort();
+  if (!CMP.cart) CMP.cart = ['__todas__', ...Object.entries(tam).sort((p, q) => q[1] - p[1]).slice(0, 3).map(x => x[0])];
+  const ops = v => METRICAS.map(([k, l]) => `<option value="${k}"${k === v ? ' selected' : ''}>${l}</option>`).join('');
+  let h = `<div class="heatctl"><label>Gráfico A: <select data-cmp="a">${ops(CMP.a)}</select></label><label>Gráfico B: <select data-cmp="b">${ops(CMP.b)}</select></label></div>
+    <div class="chips" style="margin:6px 0 10px">${['__todas__', ...carteiras].map(c => `<label><span><input type="checkbox" data-cmp="cart" value="${esc(c)}"${CMP.cart.includes(c) ? ' checked' : ''}> ${c === '__todas__' ? 'Todo o Elite' : esc(c)}</span></label>`).join('')}</div>`;
+  const labs = H.per.map(rotulo), sel = CMP.cart.slice(0, 6);
+  const val = (m, k) => k === 'if0' ? m.IFc.IF0 : m[k];
+  const graf = k => { const [, nome, fmt] = METRICAS.find(x => x[0] === k);
+    return card(nome, 'uma linha por carteira', linhas(sel.map(c => ({ nome: c === '__todas__' ? 'Todo o Elite' : c, vals: H.per.map(p => val(metricas(H.snap[p].filter(x => c === '__todas__' || x.csm === c)), k)) })), labs, fmt, k !== 'hs')); };
+  h += `<div class="grid">${graf(CMP.a)}${graf(CMP.b)}</div>`;
+  if (CMP.cart.length > 6) h += '<p class="note">Mostrando as 6 primeiras carteiras marcadas.</p>';
+  const per = H.per.map((p, i) => i).reverse();
+  h += `<h3 class="sp">Tabela · ${METRICAS.find(x => x[0] === CMP.a)[1]}</h3>` + tabela(['Carteira', ...per.map(i => labs[i])],
+    sel.map(c => [c === '__todas__' ? 'Todo o Elite' : esc(c), ...per.map(i => { const m = metricas(H.snap[H.per[i]].filter(x => c === '__todas__' || x.csm === c)); const v = val(m, CMP.a); return v == null ? '–' : METRICAS.find(x => x[0] === CMP.a)[2](CMP.a === 'hs' ? Math.round(v) : v); })]));
+  return h;
+}
+
+function histCsm(H) {
+  const T = H.tarefas;
+  if (!T) return '<p class="note">O histórico das carteiras aparece depois da primeira coleta completa do CustomerX com a leitura de tarefas (madrugada).</p>';
+  const tab = HV2.gran === 'mes' ? T.mensal : T.semanal, atr = (H.atrasadas && (HV2.gran === 'mes' ? H.atrasadas.mensal : H.atrasadas.semanal)) || {};
+  const pers = Object.keys(tab || {}).sort().slice(HV2.gran === 'mes' ? -12 : -16);
+  const ultSnap = H.per.length ? H.snap[H.per[H.per.length - 1]] : [];
+  // usuários que são responsáveis por alguma empresa Elite vêm primeiro
+  const respEmails = new Set(ultSnap.map(x => x.resp).filter(Boolean));
+  const users = Object.entries(T.usuarios || {}).map(([id, u]) => ({ id, nome: u.nome || u.email, email: S(u.email).toLowerCase() }))
+    .filter(u => pers.some(p => tab[p][u.id])).sort((p, q) => (respEmails.has(q.email) - respEmails.has(p.email)) || p.nome.localeCompare(q.nome));
+  const carteiraDe = u => { const cont = {}; ultSnap.filter(x => x.resp === u.email).forEach(x => { cont[x.csm] = (cont[x.csm] || 0) + 1; }); const top = Object.entries(cont).sort((p, q) => q[1] - p[1])[0]; return top ? top[0] : ''; };
+  const sel = users.find(u => u.id === HV2.csm);
+  let h = `<div class="heatctl"><label>CSM: <select data-h2f="csm"><option value="">Todos (soma)</option>${users.map(u => `<option value="${u.id}"${u.id === HV2.csm ? ' selected' : ''}>${esc(u.nome)}${respEmails.has(u.email) ? '' : ' (sem carteira Elite)'}</option>`).join('')}</select></label></div>`;
+  const soma = (p, k) => (sel ? [sel] : users).reduce((s, u) => s + ((tab[p][u.id] || {})[k] || 0), 0);
+  const atrasP = p => (sel ? [sel] : users).reduce((s, u) => s + (((atr[p] || {})[u.id]) || 0), 0);
+  const cart = sel ? carteiraDe(sel) : '';
+  const hsP = p => { const s = H.snap[p]; if (!s) return null; const a = sel ? s.filter(x => x.resp === sel.email) : s; const m = avg(a, x => /^finalizad/i.test(x.status) ? null : x.hs); return m == null ? null : Math.round(m); };
+  const nP = p => { const s = H.snap[p]; if (!s) return null; return (sel ? s.filter(x => x.resp === sel.email) : s).length; };
+  const labs = pers.map(rotulo);
+  h += `<p class="lead">${sel ? esc(sel.nome) + (cart ? ' · carteira ' + esc(cart) : '') : 'Todos os CSMs'} · tarefas lidas do CustomerX em ${esc(T.gerado_em || '–')}</p>`;
+  h += `<div class="grid">${card('Tarefas', 'criadas, finalizadas e finalizadas fora do prazo', linhas([{ nome: 'Criadas', vals: pers.map(p => soma(p, 'criadas')) }, { nome: 'Finalizadas', vals: pers.map(p => soma(p, 'finalizadas')) }, { nome: 'Finalizadas com atraso', vals: pers.map(p => soma(p, 'finalizadas_com_atraso')), cor: 'var(--rk)' }], labs))}${card('Relacionamento', 'reuniões e empresas contatadas', linhas([{ nome: 'Reuniões', vals: pers.map(p => soma(p, 'reunioes')) }, { nome: 'Empresas contatadas', vals: pers.map(p => soma(p, 'empresas_contatadas')) }], labs))}</div>`;
+  const per = pers.map((p, i) => i).reverse();
+  h += `<h3 class="sp">Tabela ${HV2.gran === 'mes' ? 'mês a mês' : 'semana a semana'}</h3>` + tabela(['Indicador', ...per.map(i => labs[i])], [
+    ['Tarefas criadas', ...per.map(i => fmtInt(soma(pers[i], 'criadas')))], ['Tarefas agendadas', ...per.map(i => fmtInt(soma(pers[i], 'agendadas')))],
+    ['Tarefas finalizadas', ...per.map(i => fmtInt(soma(pers[i], 'finalizadas')))], ['Finalizadas com atraso', ...per.map(i => fmtInt(soma(pers[i], 'finalizadas_com_atraso')))],
+    ['% finalizadas no prazo', ...per.map(i => { const f = soma(pers[i], 'finalizadas'); return f ? pct(f - soma(pers[i], 'finalizadas_com_atraso'), f) : '–'; })],
+    ['Em atraso (foto do fim do período)', ...per.map(i => atr[pers[i]] ? fmtInt(atrasP(pers[i])) : '–')],
+    ['Reuniões realizadas', ...per.map(i => fmtInt(soma(pers[i], 'reunioes')))], ['Empresas contatadas', ...per.map(i => fmtInt(soma(pers[i], 'empresas_contatadas')))],
+    ['Empresas Elite na carteira', ...per.map(i => H.snap[pers[i]] ? fmtInt(nP(pers[i])) : '–')], ['Health Score médio da carteira', ...per.map(i => H.snap[pers[i]] ? (hsP(pers[i]) ?? '–') : '–')],
+  ]);
+  if (!sel) h += `<h3 class="sp">Comparativo por CSM · ${labs[labs.length - 1] || ''}</h3>` + tabela(['CSM', 'Carteira', 'Criadas', 'Agendadas', 'Finalizadas', 'Com atraso', 'Reuniões', 'Empresas contatadas', 'Em atraso agora'],
+    users.filter(u => respEmails.has(u.email)).map(u => { const b = (tab[pers[pers.length - 1]] || {})[u.id] || {}; return [esc(u.nome), esc(carteiraDe(u) || '—'), fmtInt(b.criadas || 0), fmtInt(b.agendadas || 0), fmtInt(b.finalizadas || 0), fmtInt(b.finalizadas_com_atraso || 0), fmtInt(b.reunioes || 0), fmtInt(b.empresas_contatadas || 0), fmtInt((T.atrasadas_agora || {})[u.id] || 0)]; }));
+  h += `<p class="note">Como contamos: <b>criadas</b> pela data de criação, para quem registrou a tarefa; <b>agendadas</b> pela data agendada, para o responsável; <b>finalizadas</b> pela data de conclusão; <b>com atraso</b> quando a conclusão foi depois do prazo; <b>reuniões</b> são tarefas concluídas com "reunião", "check-in", "call", "meet", "kick-off", "apresentação" ou "alinhamento" no título ou nas etiquetas; <b>empresas contatadas</b> são as empresas distintas com tarefa concluída no período. "Em atraso" é uma foto do dia e só tem histórico daqui para frente.</p>`;
+  return h;
+}
+
+// =====================================================================
+// GESTÃO DE CARTEIRA: guias por objetivo + Top 20 em risco + convergência IF × HS
+// =====================================================================
+const TEMAS = [['geral', 'Visão geral da carteira'], ['risco', 'Análise de risco'], ['expansao', 'Expansão'], ['integracoes', 'Integrações'], ['portfolio', 'Portfólio'], ['tudo', 'Tudo']];
+let TEMA = localStorage.getItem('tema') || 'geral', TOP_POR = 'mrr';
+const temaDe = t => /^(Health Score|Visão geral|1\.|2\.)/.test(t) ? 'geral' : /^(3\.|Top 20|Converg)/.test(t) ? 'risco' : /^4\./.test(t) ? 'expansao' : /^8\./.test(t) ? 'integracoes' : 'portfolio';
+function organizarTemas() {
+  $('#temas').innerHTML = TEMAS.map(([k, l]) => `<button type="button" data-tema="${k}" class="${k === TEMA ? 'on' : ''}">${l}</button>`).join('');
+  let atual = 'geral';
+  [...$('#body').children].forEach(el => { if (el.tagName === 'H2') atual = temaDe(el.textContent.trim()); el.dataset.tema = atual; el.hidden = TEMA !== 'tudo' && atual !== TEMA; });
+}
+document.getElementById('temas').addEventListener('click', e => {
+  const b = e.target.closest('button[data-tema]'); if (!b) return;
+  TEMA = b.dataset.tema; try { localStorage.setItem('tema', TEMA); } catch (_) {} organizarTemas();
+});
+const emRisco = a => !finalizada(a) && (a.banda !== 'Saudável' || ['IF1', 'IF2', 'IF3'].includes(a.IF) || !!a.temMotivo);
+const semContato = a => a.diasInteracao == null || a.diasInteracao > 30;
+function extrasCarteira() {
+  const risco = ACC.filter(emRisco), semC = risco.filter(semContato);
+  const top = risco.slice().sort((p, q) => (TOP_POR === 'gmv' ? (q.gmv || 0) - (p.gmv || 0) : (q.mrr || 0) - (p.mrr || 0))).slice(0, 20);
+  const btn = (v, l) => `<button type="button" data-top="${v}" class="${TOP_POR === v ? 'on' : ''}">${l}</button>`;
+  let h = `<h2>Top 20 clientes em risco</h2><p class="lead">Contas não finalizadas com Health Score em Atenção/Crítico, IF1 a IF3 ou motivo de risco registrado · ${$('#csm').value === '__all__' ? 'todas as carteiras' : 'carteira ' + esc($('#csm').value)}.
+    <span class="ck lk" data-l="${reg('Contas em risco', risco)}">${risco.length} contas em risco</span>, das quais <span class="ck lk" data-l="${reg('Em risco e sem interação há mais de 30 dias', semC)}"><b>${semC.length} estão sem interação há mais de 30 dias</b></span>.</p>
+    <div class="heatctl">Ordenar por:<span class="seg">${btn('mrr', 'MRR')}${btn('gmv', 'GMV')}</span></div>`;
+  h += tabela(['#', 'Empresa', 'Carteira', 'IF', 'HS', 'MRR', 'GMV último mês', 'Motivo do risco', 'Sem interação', 'Sem login'],
+    top.map((a, i) => [i + 1, `<span class="lk" data-emp="${esc(a.id)}">${esc(a.nome)}</span>`, esc(a.csm), esc(a.IF), `${a.score} <span class="note" style="margin:0">${esc(a.banda)}</span>`,
+      fmtMoney(a.mrr), fmtMi(a.gmv), esc(S(col(a._r, 'Motivo do risco')) || '—'), semContato(a) ? `<b style="color:var(--rk)">⚠ ${a.diasInteracao == null ? 'sem registro' : a.diasInteracao + ' d'}</b>` : a.diasInteracao + ' d', fmtDays(a.diasLogin)]));
+  // convergência IF × Health Score (para os CSMs validarem)
+  const ativos = ACC.filter(a => !finalizada(a)), bandas = ['Saudável', 'Atenção', 'Crítico'];
+  const diverge = (f, b) => (['IF4', 'IF5'].includes(f) && b === 'Crítico') || (['IF1', 'IF2'].includes(f) && b === 'Saudável');
+  const linhasM = IF_ORDER.filter(f => ativos.some(a => a.IF === f)).map(f => {
+    const g = ativos.filter(a => a.IF === f);
+    return `<tr><td>${esc(IF_LABEL[f] || f)}</td>${bandas.map(b => { const c = g.filter(a => a.banda === b); return `<td class="hm ck${c.length && diverge(f, b) ? ' div' : ''}" data-l="${reg(`${f} · Health Score ${b}`, c)}">${c.length}<span>${pct(c.length, g.length)}</span></td>`; }).join('')}<td class="hm">${g.length}</td></tr>`;
+  }).join('');
+  const nDiv = ativos.filter(a => diverge(a.IF, a.banda)).length;
+  h += `<h2>Convergência entre IF e Health Score</h2><p class="lead">Contas não finalizadas. Em vermelho, combinações que não conversam (IF4/IF5 com HS crítico ou IF1/IF2 com HS saudável): <span class="ck lk" data-l="${reg('IF e Health Score divergentes', ativos.filter(a => diverge(a.IF, a.banda)))}"><b>${nDiv} contas para os CSMs revisarem</b></span>.</p>
+    <div class="tw"><table class="mx"><thead><tr><th>IF</th>${bandas.map(b => `<th>${b}</th>`).join('')}<th>Total</th></tr></thead><tbody>${linhasM}</tbody></table></div>`;
+  $('#body').insertAdjacentHTML('beforeend', h);
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-top]'); if (t) { TOP_POR = t.dataset.top; const y = window.scrollY; render(); window.scrollTo(0, y); return; }
+  const em = e.target.closest('[data-emp]'); if (em) { EMP_ID = em.dataset.emp; trocarAba('empresa'); window.scrollTo(0, document.getElementById('tabs').offsetTop - 10); }
+});
+
+// ===== Fontes dos dados (documentação de origem e frequência) =====
+document.getElementById('fontesBtn').addEventListener('click', () => {
+  const st = (window.ULTIMO_STATUS || {});
+  $('#mtitle').textContent = 'Fontes dos dados, frequência e regras';
+  $('#mbody').innerHTML = tabela(['Fonte', 'O que traz', 'Quando atualiza', 'Observações'], [
+    ['<b>CustomerX (API)</b>', 'Cadastro, carteira, responsável, tags (IF e faixa), Health Score, MRR, ARR, LTV, NPS, CSAT, contratos, campos personalizados, contatos e tarefas', 'Todo dia: coleta começa à 1h (lotes de 5 min, ~1h30 de duração) e é publicada ao terminar; republicada às 7h', 'Somente leitura. Limite de 240 consultas/min. Tarefas: histórico dos últimos 24 meses.'],
+    ['<b>Metabase · "base dash · dados meta v2"</b>', 'GMV e pedidos do último mês, último login, armazenamento, marketplaces, e-commerces, logísticas, adoção de produtos, requisições e saúde da API, aplicativos com uso na API e link do CustomerX', 'Todo dia: o n8n baixa às 06h45 e o painel publica às 7h', 'O n8n roda dentro da rede da Bling (meta.svc) e salva o arquivo na pasta "entrada Metabase". A linha de status mostra a data do arquivo.'],
+    ['<b>Metabase · "lista de tickets abertos (90 dias) · plano Elite"</b>', 'Cada ticket: empresa, CNPJ, data de abertura, tipo, status, prioridade, canal, grupo, módulo, funcionalidade e responsáveis', 'Todo dia: n8n às 06h45, publicado às 7h', 'Cruzada pelo CNPJ (e pelo nome, quando o CNPJ difere). Alimenta "tickets nos últimos 90 dias" e a lista de tickets da empresa.'],
+    ['<b>Exportação manual do CustomerX</b> (opcional)', 'Conferência (?validar=1) e as colunas ainda em validação: Último MRR Ativo, Dias da última tarefa e Responsável', 'Quando alguém coloca um arquivo na pasta "entrada CustomerX"', 'Pode ser dispensada depois da validação final.'],
+    ['<b>Histórico</b>', 'Foto resumida da base (HS, IF, faixa, MRR, ARR, GMV, carteira, motivo de risco)', 'Sobrescrita todo dia: ao virar o mês/semana fica a do último dia', 'Começou a ser gravado em outubro/2026.'],
+    ['<b>Cruzamento</b>', 'CustomerX × Metabase pelo CNPJ e, se faltar, pelo código da empresa', '—', 'Empresas sem par aparecem só com os dados do CustomerX.'],
+    ['<b>Regras</b>', 'HS médio sem contas Finalizadas · IF0 fora da expansão · "em risco" = HS Atenção/Crítico, IF1–IF3 ou motivo de risco · reunião = tarefa com reunião/check-in/call/meet/kick-off/apresentação/alinhamento', '—', 'Ajustáveis no código.'],
+  ]) + (st.ultima_publicacao ? `<p class="note">Última publicação no Drive: ${esc(st.ultima_publicacao)} · ${esc(resumoStatus(st))}</p>` : '');
+  $('#modal').showModal();
+});
+
+// =====================================================================
+// TABELAS: ⋮ em cada coluna (filtrar / mover), arrastar colunas e exportar (CSV ou Excel)
+// =====================================================================
+const TX_ESTADO = {};                                              // ordem e filtros por tabela (sobrevive ao redesenho)
+const txTexto = el => { const c = el.cloneNode(true); c.querySelectorAll('.tx-dots,.mut,.sm').forEach(x => x.remove()); return c.textContent.replace(/\s+/g, ' ').trim(); };
+const txRotulo = th => th.dataset.tx || txTexto(th);
+const txCamada = el => el.closest('dialog[open]') || document.body;   // popups dentro do modal precisam ficar dentro dele
+function txChave(t) {
+  let p = t.closest('.tw') || t, tit = '';
+  for (let el = p.previousElementSibling, i = 0; el && i < 6; el = el.previousElementSibling, i++) if (/^H[23]$/.test(el.tagName)) { tit = el.textContent.trim(); break; }
+  if (!tit) { const c = t.closest('.card'); const h = c && c.querySelector('h3'); tit = h ? h.textContent.trim() : (t.closest('dialog') ? 'modal' : ''); }
+  return tit + '|' + [...t.tHead.rows[0].cells].map(txRotulo).sort().join('¦');
+}
+function txColunaOk(t) { const h = t.tHead && t.tHead.rows; return h && h.length === 1 && ![...h[0].cells].some(c => c.colSpan > 1 || c.rowSpan > 1); }
+function txMover(t, de, para) {
+  if (de === para) return; const n = t.tHead.rows[0].cells.length;
+  [...t.rows].forEach(r => { if (r.cells.length !== n) return; const c = r.cells[de], alvo = r.cells[para]; r.insertBefore(c, de < para ? alvo.nextSibling : alvo); });
+}
+function txAplicarFiltros(t) {
+  const st = TX_ESTADO[t.dataset.txk] || {}, f = st.filtros || {}, hs = [...t.tHead.rows[0].cells], n = hs.length;
+  const idx = hs.map((th, i) => [i, f[txRotulo(th)]]).filter(([, s]) => s);
+  let vis = 0;
+  [...t.tBodies].forEach(tb => [...tb.rows].forEach(r => {
+    const ok = r.cells.length !== n || idx.every(([i, s]) => s.has(txTexto(r.cells[i])));
+    r.style.display = ok ? '' : 'none'; if (ok) vis++;
+  }));
+  hs.forEach(th => { const b = th.querySelector('.tx-dots'); if (b) b.classList.toggle('on', !!f[txRotulo(th)]); });
+  let aviso = t.parentElement.querySelector(':scope > .tx-aviso');
+  if (idx.length) {
+    if (!aviso) { aviso = document.createElement('p'); aviso.className = 'note tx-aviso'; t.parentElement.insertBefore(aviso, t); }
+    aviso.innerHTML = `Filtro ativo em ${idx.map(([i]) => '<b>' + esc(txRotulo(hs[i])) + '</b>').join(', ')} · ${vis} linha(s) · <a href="#" data-txlimpar>limpar filtros</a>`;
+  } else if (aviso) aviso.remove();
+}
+function txPreparar(t) {
+  if (t.dataset.txk || !txColunaOk(t) || t.closest('.tx-pop')) return;
+  const k = txChave(t); t.dataset.txk = k;
+  const st = TX_ESTADO[k] = TX_ESTADO[k] || {};
+  if (t.closest('dialog')) st.filtros = {};                        // listas do modal: filtros começam limpos
+  [...t.tHead.rows[0].cells].forEach(th => {
+    th.dataset.tx = txTexto(th); th.draggable = true;
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'tx-dots'; b.title = 'Opções da coluna'; b.textContent = '⋮';
+    th.appendChild(b);
+  });
+  if (st.ordem) st.ordem.forEach((rot, para) => { const hs = [...t.tHead.rows[0].cells].map(txRotulo), de = hs.indexOf(rot); if (de >= 0 && de !== para && para < hs.length) txMover(t, de, para); });
+  txAplicarFiltros(t);
+}
+const txSalvarOrdem = t => { TX_ESTADO[t.dataset.txk].ordem = [...t.tHead.rows[0].cells].map(txRotulo); };
+let txAgendado = false;
+new MutationObserver(() => { if (txAgendado) return; txAgendado = true; requestAnimationFrame(() => { txAgendado = false; document.querySelectorAll('table').forEach(txPreparar); }); })
+  .observe(document.body, { childList: true, subtree: true });
+
+// ----- popup do ⋮ -----
+function txFecharPop() { document.querySelectorAll('.tx-pop').forEach(p => p.remove()); }
+function txAbrirPop(anchor, html) {
+  txFecharPop(); const p = document.createElement('div'); p.className = 'tx-pop'; p.innerHTML = html;
+  txCamada(anchor).appendChild(p);
+  const r = anchor.getBoundingClientRect(), w = p.offsetWidth, h = p.offsetHeight;
+  p.style.left = Math.max(8, Math.min(r.right - w, innerWidth - w - 8)) + 'px';
+  p.style.top = (r.bottom + h + 8 > innerHeight ? Math.max(8, r.top - h - 4) : r.bottom + 4) + 'px';
+  return p;
+}
+document.addEventListener('click', e => {
+  const lim = e.target.closest('[data-txlimpar]');
+  if (lim) { e.preventDefault(); const t = lim.closest('.tw,div,section').querySelector('table[data-txk]'); if (t) { TX_ESTADO[t.dataset.txk].filtros = {}; txAplicarFiltros(t); } return; }
+  const dots = e.target.closest('.tx-dots');
+  if (dots) {
+    e.preventDefault(); e.stopPropagation();
+    const th = dots.closest('th'), t = th.closest('table'), i = th.cellIndex, n = th.parentElement.cells.length;
+    const p = txAbrirPop(dots, `<b class="tx-tit">${esc(txRotulo(th))}</b><button type="button" data-txa="filtrar">Filtrar</button>${i > 0 ? '<button type="button" data-txa="esq">← Mover para a esquerda</button>' : ''}${i < n - 1 ? '<button type="button" data-txa="dir">Mover para a direita →</button>' : ''}`);
+    p._th = th; p._t = t; return;
+  }
+  const pop = e.target.closest('.tx-pop');
+  if (!pop) { txFecharPop(); return; }
+  const a = e.target.closest('[data-txa]'); if (!a) return;
+  const th = pop._th, t = pop._t, i = th.cellIndex, rot = txRotulo(th), st = TX_ESTADO[t.dataset.txk];
+  if (a.dataset.txa === 'esq' || a.dataset.txa === 'dir') { txMover(t, i, a.dataset.txa === 'esq' ? i - 1 : i + 1); txSalvarOrdem(t); txFecharPop(); return; }
+  if (a.dataset.txa === 'filtrar') {
+    const n = th.parentElement.cells.length, vals = new Map();
+    [...t.tBodies].forEach(tb => [...tb.rows].forEach(r => { if (r.cells.length === n) { const v = txTexto(r.cells[i]); vals.set(v, (vals.get(v) || 0) + 1); } }));
+    const lista = [...vals.entries()].sort((x, y) => x[0].localeCompare(y[0], 'pt-BR', { numeric: true })).slice(0, 1000);
+    const atual = (st.filtros || {})[rot];
+    pop.innerHTML = `<b class="tx-tit">Filtrar: ${esc(rot)}</b><input type="search" class="tx-busca" placeholder="Buscar valor…">
+      <label class="tx-op"><input type="checkbox" class="tx-todos" ${atual ? '' : 'checked'}> <i>Selecionar todos</i></label>
+      <div class="tx-vals">${lista.map(([v, c]) => `<label class="tx-op"><input type="checkbox" value="${esc(v)}" ${!atual || atual.has(v) ? 'checked' : ''}> ${esc(v || '(vazio)')} <span class="mut">${c}</span></label>`).join('')}</div>
+      <div class="tx-acoes"><button type="button" data-txa="limpar">Limpar</button><button type="button" data-txa="aplicar" class="on">Aplicar</button></div>`;
+    pop._th = th; pop._t = t;
+    pop.querySelector('.tx-busca').oninput = ev => { const q = ev.target.value.toLowerCase(); pop.querySelectorAll('.tx-vals .tx-op').forEach(l => { l.style.display = l.textContent.toLowerCase().includes(q) ? '' : 'none'; }); };
+    pop.querySelector('.tx-todos').onchange = ev => pop.querySelectorAll('.tx-vals input').forEach(c => { if (c.closest('.tx-op').style.display !== 'none') c.checked = ev.target.checked; });
+    pop.querySelector('.tx-busca').focus(); return;
+  }
+  st.filtros = st.filtros || {};
+  if (a.dataset.txa === 'limpar') delete st.filtros[rot];
+  if (a.dataset.txa === 'aplicar') {
+    const marc = [...pop.querySelectorAll('.tx-vals input')], sel = marc.filter(c => c.checked).map(c => c.value);
+    if (sel.length === marc.length) delete st.filtros[rot]; else st.filtros[rot] = new Set(sel);
+  }
+  txAplicarFiltros(t); txFecharPop();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') txFecharPop(); });
+window.addEventListener('scroll', txFecharPop, true);
+// arrastar o cabeçalho para mudar a coluna de lugar
+let txArr = null;
+document.addEventListener('dragstart', e => { const th = e.target.closest && e.target.closest('table[data-txk] thead th'); if (!th) return; txArr = th; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', ''); });
+document.addEventListener('dragover', e => { const th = e.target.closest && e.target.closest('table[data-txk] thead th'); if (txArr && th && th.closest('table') === txArr.closest('table')) { e.preventDefault(); document.querySelectorAll('.tx-over').forEach(x => x.classList.remove('tx-over')); th.classList.add('tx-over'); } });
+document.addEventListener('drop', e => { const th = e.target.closest && e.target.closest('table[data-txk] thead th'); document.querySelectorAll('.tx-over').forEach(x => x.classList.remove('tx-over')); if (!txArr || !th || th.closest('table') !== txArr.closest('table')) return; e.preventDefault(); const t = th.closest('table'); txMover(t, txArr.cellIndex, th.cellIndex); txSalvarOrdem(t); txArr = null; });
+document.addEventListener('dragend', () => { txArr = null; document.querySelectorAll('.tx-over').forEach(x => x.classList.remove('tx-over')); });
+
+// ----- exportação -----
+function txValor(s) {                                             // "R$ 1.250" -> 1250 (fica número na planilha); % e datas ficam como texto
+  if (/^-?(R\$\s?)?\d{1,3}(\.\d{3})*(,\d+)?$|^-?(R\$\s?)?\d+(,\d+)?$/.test(s)) { const n = parseNum(s.replace(/R\$\s?/, ''), false); return n == null ? s : n; }
+  return s;
+}
+function txBaixar(nome, linhas, formato, abas) {
+  const data = new Date().toISOString().slice(0, 10), base = nome.replace(/[\\/:*?"<>|]+/g, '').slice(0, 80) + ' ' + data;
+  if (formato === 'csv') {
+    const ws = XLSX.utils.aoa_to_sheet(linhas);
+    const blob = new Blob(['\ufeff' + XLSX.utils.sheet_to_csv(ws, { FS: ';' })], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = base + '.csv'; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  } else {
+    const wb = XLSX.utils.book_new();
+    (abas || [[nome, linhas]]).forEach(([n, l]) => XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(l), n.replace(/[\\/?*[\]:]/g, '').slice(0, 31) || 'Dados'));
+    XLSX.writeFile(wb, base + '.xlsx');
+  }
+}
+function txEscolherFormato(anchor, titulo, fn) {
+  const p = txAbrirPop(anchor, `<b class="tx-tit">${esc(titulo)}</b><button type="button" data-fmt="xlsx">📗 Excel (.xlsx)</button><button type="button" data-fmt="csv">📄 CSV (separado por ;)</button>`);
+  p.addEventListener('click', e => { const b = e.target.closest('[data-fmt]'); if (!b) return; e.stopPropagation(); txFecharPop(); fn(b.dataset.fmt); });
+}
+// exporta a(s) tabela(s) como estão na tela: colunas na ordem atual e só as linhas filtradas
+function txLinhasDaTabela(t) {
+  const n = t.tHead.rows[0].cells.length, out = [[...t.tHead.rows[0].cells].map(txRotulo)];
+  [...t.tBodies].forEach(tb => [...tb.rows].forEach(r => { if (r.style.display === 'none' || r.cells.length !== n) return; out.push([...r.cells].map(c => txValor(txTexto(c)))); }));
+  return out;
+}
+// botão Exportar no modal das listas
+document.querySelector('#modal .mh > button').insertAdjacentHTML('beforebegin', '<button type="button" id="mExport" class="expbtn">⬇ Exportar</button>');
+document.getElementById('mExport').addEventListener('click', e => {
+  e.stopPropagation();
+  const t = document.querySelector('#mbody table'); if (!t) return;
+  txEscolherFormato(e.currentTarget, 'Exportar esta lista', fmt => txBaixar(document.getElementById('mtitle').textContent || 'Lista', txLinhasDaTabela(t), fmt));
+});
+// botão Exportar dados (canto superior direito): todas as empresas, todos os campos
+document.getElementById('exportAll').addEventListener('click', e => {
+  e.stopPropagation();
+  if (!temDados()) { alert('Os dados ainda não foram carregados.'); return; }
+  txEscolherFormato(e.currentTarget, `Exportar todas as ${ALL.length} empresas`, fmt => {
+    const resumoCab = ['Empresa', 'Razão Social', 'Código', 'CNPJ', 'Carteira', 'Status', 'IF', 'Faixa', 'Health Score', 'Faixa do HS', 'Fonte do HS', 'Em risco', 'MRR', 'Fonte do MRR', 'GMV último mês', 'Pedidos último mês',
+      'Pedidos/mês (média 3m)', 'Tickets 90d', 'Dias sem login', 'Dias sem interação', 'Armazenamento %', 'Saúde API %', 'Posição vs faixa', 'Motivo do risco', 'Sinais do Health Score'];
+    const resumo = a => [a.nome, a.razao, a.id, S(col(a._r, 'CNPJ/CPF')), a.csm, a.statusCx, a.IF, a.fx ? 'Faixa ' + a.fx : '', a.score, a.banda, a.scoreFonte, emRisco(a) ? 'Sim' : 'Não',
+      a.mrr, a.mrrFonte || '', a.gmv, a.pedUlt, a.media, a.tickets, a.diasLogin, a.diasInteracao, a.arm, a.api, a.pos, S(col(a._r, 'Motivo do risco')), a.penalidades.map(p => p[0]).join(' · ')];
+    const chaves = obj => Object.keys(obj || {}).filter(k => !k.startsWith('_'));
+    const cxCols = [...new Set(ALL.flatMap(a => chaves(a._r)))], mtCols = [...new Set(ALL.flatMap(a => chaves(a._m)))];
+    const v = x => x instanceof Date ? fmtDate(x) : (x == null ? '' : x);
+    const resumoL = [resumoCab, ...ALL.map(a => resumo(a).map(v))];
+    if (fmt === 'csv') {
+      txBaixar('Carteira Elite - todos os dados', [[...resumoCab, ...cxCols.map(c => 'CX: ' + c), ...mtCols.map(c => 'Metabase: ' + c)],
+        ...ALL.map(a => [...resumo(a).map(v), ...cxCols.map(c => v((a._r || {})[c])), ...mtCols.map(c => v((a._m || {})[c]))])], 'csv');
+    } else {
+      txBaixar('Carteira Elite - todos os dados', null, 'xlsx', [['Resumo', resumoL],
+        ['CustomerX', [cxCols, ...ALL.map(a => cxCols.map(c => v((a._r || {})[c])))]],
+        ['Metabase', [mtCols, ...ALL.filter(a => a._m).map(a => mtCols.map(c => v(a._m[c])))]]]);
+    }
+  });
+});
+</script></body></html>
